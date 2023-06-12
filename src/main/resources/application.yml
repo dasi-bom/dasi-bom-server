@@ -1,0 +1,47 @@
+spring:
+  profiles:
+    active: dev
+#    include:
+#      - oauth
+#      - jwt
+  thymeleaf:
+    enabled: true
+    encoding: UTF-8
+    prefix: /WEB-INF/view/
+    suffix: .html
+    cache: false
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl # myEmail -> my_email
+      use-new-id-generator-mappings: false
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    open-in-view: true
+    show-sql: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  security:
+    user:
+      name: ${SECURITY_USER_NAME}
+      password: ${SECURITY_USER_PASSWORD}
+
+---
+
+spring:
+  config.activate.on-profile: prod
+
+---
+
+spring:
+  config.activate.on-profile: dev
+  datasource:
+    url: jdbc:mysql://${LOCAL_IP}:${MYSQL_LOCAL_PORT}/${MYSQL_LOCAL_DATABASE}?serverTimezone=UTC&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true
+    username: ${MYSQL_LOCAL_USER}
+    password: ${MYSQL_LOCAL_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver

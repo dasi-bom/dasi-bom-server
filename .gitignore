@@ -37,7 +37,6 @@ out/
 .vscode/
 
 .DS_Store
-application.yml
 application-oauth.yml
 application-jwt.yml
 .env
