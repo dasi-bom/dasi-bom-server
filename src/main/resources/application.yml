@@ -28,8 +28,8 @@ spring:
       matching-strategy: ant_path_matcher
   security:
     user:
-      name: ${SECURITY_USER_NAME}
-      password: ${SECURITY_USER_PASSWORD}
+      name: user
+      password: 1234
 
 ---
 
