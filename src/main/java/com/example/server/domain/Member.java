@@ -1,5 +1,6 @@
 package com.example.server.domain;
 
+import com.example.server.config.oauth.provider.OAuth2Provider;
 import java.sql.Timestamp;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -28,6 +29,9 @@ public class Member {
 	private String email;
 	@Enumerated(EnumType.STRING)
 	private RoleType role;
+	@Enumerated(EnumType.STRING)
+	private OAuth2Provider provider;
+	private String providerId;
 	@CreationTimestamp
 	private Timestamp createDate;
 }
