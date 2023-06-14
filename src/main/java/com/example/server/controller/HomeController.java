@@ -11,7 +11,7 @@ public class HomeController {
         return "Dasibom Home Controller";
     }
 
-    @GetMapping("social/login")
+    @GetMapping("/social/login")
     public ModelAndView login() {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("auth/home");
