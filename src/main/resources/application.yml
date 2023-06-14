@@ -4,12 +4,6 @@ spring:
     include:
       - oauth
       - jwt
-  thymeleaf:
-    enabled: true
-    encoding: UTF-8
-    prefix: /WEB-INF/view/
-    suffix: .html
-    cache: false
   jpa:
     hibernate:
       ddl-auto: update

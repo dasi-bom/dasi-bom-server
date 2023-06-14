@@ -14,7 +14,7 @@ public class HomeController {
     @GetMapping("/social/login")
     public ModelAndView login() {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("auth/home");
+        mv.setViewName("home");
         return mv;
     }
 }
