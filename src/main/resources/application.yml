@@ -1,9 +1,9 @@
 spring:
   profiles:
     active: dev
-#    include:
-#      - oauth
-#      - jwt
+    include:
+      - oauth
+      - jwt
   thymeleaf:
     enabled: true
     encoding: UTF-8
