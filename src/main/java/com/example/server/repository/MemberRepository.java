@@ -5,7 +5,7 @@ import com.example.server.domain.Member;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<Member, Integer> {
+public interface MemberRepository extends JpaRepository<Member, Integer> {
 	Member findByUsername(String username);
 	Optional<Member> findByProviderAndProviderId(OAuth2Provider provider, String providerId);
 }
