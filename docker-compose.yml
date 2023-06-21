@@ -7,7 +7,10 @@ services:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_ROOT_HOST=%
-    command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+#    command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+    command:
+      - --character-set-server=utf8
+      - --collation-server=utf8_general_ci
     ports:
       - "${MYSQL_LOCAL_PORT}:${MYSQL_DOCKER_PORT}"
     volumes:
