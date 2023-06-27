@@ -7,17 +7,13 @@ services:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_ROOT_HOST=%
-#    command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
-#    command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
-#    command:
-#      - --character-set-server=utf8
-#      - --collation-server=utf8_general_ci
+    command:
+      - --character-set-server=utf8
+      - --collation-server=utf8_general_ci
     ports:
       - "${MYSQL_LOCAL_PORT}:${MYSQL_DOCKER_PORT}"
     volumes:
-#      - ./docker/data:/var/lib/mysql --user 1000
-#      - ./db/conf.d:/etc/mysql/conf.d
-      - /etc/mysql/conf.d:./db/conf.d # A:B B를 A에 마운트
+      - ./db/conf.d:/etc/mysql/conf.d
       - ./db/data:/var/lib/mysql --user 1000
 #      - ./db/initdb.d:/docker-entrypoint-initdb.d
     restart: always
