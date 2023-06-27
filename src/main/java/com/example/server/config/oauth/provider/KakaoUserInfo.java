@@ -37,32 +37,13 @@ public class KakaoUserInfo extends OAuth2UserInfo{
         return (String) profile.get("nickname");
     }
 
-
-
-//	private Map<String, Object> attributes;
-//
-//    public KakaoUserInfo(Map<String, Object> attributes) {
-//        this.attributes = attributes;
-//    }
-//
-//    @Override
-//    public String getProviderId() {
-//        return (String) attributes.get("id");
-//    }
-//
-//    @Override
-//    public String getName() {
-//        return (String) attributes.get("username");
-//    }
-//
-//    @Override
-//    public String getEmail() {
-//        return (String) attributes.get("email");
-//    }
-//
-//	@Override
-//	public String getProvider() {
-//		return "kakao";
-//	}
+    @Override
+    public String getMobile() {
+        Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
+        if (account == null) {
+            return null;
+        }
+        return (String) account.get("phone_number");
+    }
 
 }

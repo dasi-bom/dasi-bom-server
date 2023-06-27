@@ -3,6 +3,7 @@ package com.example.server.config.jwt;
 import com.example.server.config.jwt.dto.AuthResponse;
 import com.example.server.config.oauth.CustomOAuth2User;
 import com.example.server.config.oauth.provider.KakaoUserInfo;
+import com.example.server.config.oauth.provider.NaverUserInfo;
 import com.example.server.config.oauth.provider.OAuth2Provider;
 import com.example.server.config.oauth.provider.OAuth2UserInfo;
 import com.example.server.domain.Member;
@@ -47,6 +48,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         OAuth2UserInfo oAuth2UserInfo = null;
         if (providerName.equals(OAuth2Provider.KAKAO.getProviderName())) {
             oAuth2UserInfo = new KakaoUserInfo(oauth2user.getAttributes());
+        } else if (providerName.equals(OAuth2Provider.NAVER.getProviderName())) {
+            oAuth2UserInfo = new NaverUserInfo(oauth2user.getAttributes());
         }
 
         // JWT 생성

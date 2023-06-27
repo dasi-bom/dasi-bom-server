@@ -27,6 +27,7 @@ public class Member {
 	private String username; // 아이디
 	private String password;
 	private String email;
+	private String mobile;
 	@Enumerated(EnumType.STRING)
 	private RoleType role;
 	@Enumerated(EnumType.STRING)
