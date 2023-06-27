@@ -17,7 +17,7 @@ services:
     volumes:
 #      - ./docker/data:/var/lib/mysql --user 1000
 #      - ./db/conf.d:/etc/mysql/conf.d
-      - - /etc/mysql/conf.d:./db/conf.d # A:B B를 A에 마운트
+      - /etc/mysql/conf.d:./db/conf.d # A:B B를 A에 마운트
       - ./db/data:/var/lib/mysql --user 1000
 #      - ./db/initdb.d:/docker-entrypoint-initdb.d
     restart: always
