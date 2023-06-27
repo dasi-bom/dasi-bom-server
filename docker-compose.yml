@@ -8,14 +8,17 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_ROOT_HOST=%
 #    command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
-    command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+#    command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
 #    command:
 #      - --character-set-server=utf8
 #      - --collation-server=utf8_general_ci
     ports:
       - "${MYSQL_LOCAL_PORT}:${MYSQL_DOCKER_PORT}"
     volumes:
-      - ./docker/data:/var/lib/mysql --user 1000
+#      - ./docker/data:/var/lib/mysql --user 1000
+      - ./db/conf.d:/etc/mysql/conf.d
+      - ./db/data:/var/lib/mysql --user 1000
+      - ./db/initdb.d:/docker-entrypoint-initdb.d
     restart: always
     networks:
       - test_network
