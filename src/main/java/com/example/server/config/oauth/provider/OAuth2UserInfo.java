@@ -4,13 +4,6 @@ package com.example.server.config.oauth.provider;
 
 import java.util.Map;
 
-//public interface OAuth2UserInfo {
-//	String getProviderId();
-//	String getProvider();
-//	String getEmail();
-//	String getName();
-//}
-
 public abstract class OAuth2UserInfo {
 
 	protected Map<String, Object> attributes;
@@ -24,6 +17,8 @@ public abstract class OAuth2UserInfo {
 	public abstract OAuth2Provider getProvider();
 
 	public abstract String getEmail();
+
+	public abstract String getMobile();
 
 	public abstract String getName();
 
