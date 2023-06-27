@@ -2,6 +2,7 @@ package com.example.server.config.oauth;
 
 
 import com.example.server.config.oauth.provider.KakaoUserInfo;
+import com.example.server.config.oauth.provider.NaverUserInfo;
 import com.example.server.config.oauth.provider.OAuth2Provider;
 import com.example.server.config.oauth.provider.OAuth2UserInfo;
 import com.example.server.domain.Member;
@@ -35,6 +36,8 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 		String registrationId = userRequest.getClientRegistration().getRegistrationId();
 		if (registrationId.equals(OAuth2Provider.KAKAO.getProviderName())) {
 			oAuth2UserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
+		} else if (registrationId.equals(OAuth2Provider.NAVER.getProviderName())){
+			oAuth2UserInfo = new NaverUserInfo(oAuth2User.getAttributes());
 		}
 
 		Optional<Member> userOptional =
@@ -54,6 +57,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 					.name(oAuth2UserInfo.getName())
 					.username(oAuth2UserInfo.getProvider().getProviderName() + "_" + oAuth2UserInfo.getProviderId())
 					.email(oAuth2UserInfo.getEmail())
+					.mobile(oAuth2UserInfo.getMobile())
 					.role(RoleType.ROLE_USER)
 					.provider(oAuth2UserInfo.getProvider())
 					.providerId(oAuth2UserInfo.getProviderId())
