@@ -22,13 +22,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthTokenProvider {
 
-    @Value("${app.auth.tokenExpiry}")
+    @Value("${jwt.token.accessTokenExpiry}")
     private String expiry;
 
     private final Key key;
     private static final String AUTHORITIES_KEY = "role";
 
-    public AuthTokenProvider(@Value("${app.auth.tokenSecret}") String secretKey) {
+    public AuthTokenProvider(@Value("${jwt.secret}") String secretKey) {
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
