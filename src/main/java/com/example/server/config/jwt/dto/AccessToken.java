@@ -1,25 +1,18 @@
-package com.example.server.config.jwt;
+package com.example.server.config.jwt.dto;
 
-import com.example.server.config.jwt.repository.RefreshTokenRepository;
-import com.example.server.domain.RoleType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import java.security.Key;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 
 @Slf4j
 @RequiredArgsConstructor
-//@Component
-public class AuthToken {
+public class AccessToken {
 
     @Getter
     private final String token;
@@ -34,7 +27,7 @@ public class AuthToken {
 
 //    private final RefreshTokenRepository refreshTokenRepository;
 
-//    private final RedisTemplate<String, String> redisTemplate; // TODO: redisTemplate 주입
+//    private final RedisTemplate<String, String> redisTemplate;
 //
 //    @Autowired
 //    private RedisTemplate<String, String> redisTemplate;
