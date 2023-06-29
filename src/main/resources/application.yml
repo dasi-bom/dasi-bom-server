@@ -25,8 +25,7 @@ spring:
       name: user
       password: 1234
   redis:
-#    host: redis
-    host: localhost
+    host: ${REDIS_HOST}
     port: ${REDIS_LOCAL_PORT}
 
 ---
