@@ -1,12 +1,14 @@
 package com.example.server.config.jwt;
 
 import com.example.server.config.jwt.dto.AuthResponse;
+import com.example.server.config.jwt.service.JwtService;
 import com.example.server.config.oauth.CustomOAuth2User;
 import com.example.server.config.oauth.provider.KakaoUserInfo;
 import com.example.server.config.oauth.provider.NaverUserInfo;
 import com.example.server.config.oauth.provider.OAuth2Provider;
 import com.example.server.config.oauth.provider.OAuth2UserInfo;
 import com.example.server.domain.Member;
+import com.example.server.domain.RoleType;
 import com.example.server.repository.MemberRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import groovy.util.logging.Slf4j;
@@ -29,7 +31,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private final AuthTokenProvider authTokenProvider;
+    private final JwtService jwtService;
     private final MemberRepository userRepository;
 
     @Override
@@ -53,17 +55,22 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
 
         // JWT 생성
-        AuthToken appToken = authTokenProvider.createUserAppToken(oAuth2UserInfo.getProviderId());
+        String accessToken = jwtService.createAccessToken(oAuth2UserInfo.getProviderId(),
+                RoleType.ROLE_USER.toString());
+        String refreshToken = jwtService.createRefreshToken(oAuth2UserInfo.getProviderId(),
+                RoleType.ROLE_USER.toString());
 
         AuthResponse authResponse;
         if (oUser.isEmpty()) {
             authResponse = AuthResponse.builder()
-                    .appToken(appToken.getToken())
+                    .accessToken(accessToken)
+                    .refreshToken(refreshToken)
                     .isNewMember(Boolean.TRUE)
                     .build();
         } else {
             authResponse = AuthResponse.builder()
-                    .appToken(appToken.getToken())
+                    .accessToken(accessToken)
+                    .refreshToken(refreshToken)
                     .isNewMember(Boolean.FALSE)
                     .build();
         }

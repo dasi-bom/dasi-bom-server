@@ -1,6 +1,6 @@
 package com.example.server.config;
 
-import com.example.server.config.jwt.AuthTokenProvider;
+import com.example.server.config.jwt.AccessTokenUtil;
 import com.example.server.config.jwt.JwtAuthenticationFilter;
 import com.example.server.config.jwt.OAuth2AuthenticationSuccessHandler;
 import com.example.server.config.oauth.PrincipalOauth2UserService;
@@ -21,7 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class SecurityConfig {
 
-	private final AuthTokenProvider authTokenProvider;
+	private final AccessTokenUtil accessTokenUtil;
 	@Autowired
 	private PrincipalOauth2UserService principalOauth2UserService;
 	@Autowired
@@ -60,7 +60,7 @@ public class SecurityConfig {
 				.and()
 				.successHandler(oAuth2AuthenticationSuccessHandler)
 				.and()
-				.addFilterBefore(new JwtAuthenticationFilter(authTokenProvider), UsernamePasswordAuthenticationFilter.class);
+				.addFilterBefore(new JwtAuthenticationFilter(accessTokenUtil), UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}
