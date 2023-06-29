@@ -29,14 +29,6 @@ public class RefreshTokenRepository {
                 refreshToken.getMemberId()
         );
 
-//        redisTemplate.opsForValue().set(
-//                refreshToken.getMemberId(),
-//                refreshToken.getRefreshToken(),
-//                Long.parseLong(refreshToken.getExpiry()),
-//                TimeUnit.MILLISECONDS
-//        );
-//        redisTemplate.expire(refreshToken.getRefreshToken(), 60L, TimeUnit.SECONDS);
-
         redisTemplate.expire(refreshToken.getRefreshToken(), Long.parseLong(refreshTokenExpiry), TimeUnit.MILLISECONDS);
     }
 

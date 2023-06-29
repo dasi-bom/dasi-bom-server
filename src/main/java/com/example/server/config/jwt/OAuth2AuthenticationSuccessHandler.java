@@ -59,8 +59,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 RoleType.ROLE_USER.toString());
         String refreshToken = jwtService.createRefreshToken(oAuth2UserInfo.getProviderId(),
                 RoleType.ROLE_USER.toString());
-//        AuthToken accessToken = authTokenProvider.createUserAccessToken(oAuth2UserInfo.getProviderId());
-//        AuthToken refreshToken = authTokenProvider.createUserRefreshToken(oAuth2UserInfo.getProviderId());
 
         AuthResponse authResponse;
         if (oUser.isEmpty()) {
