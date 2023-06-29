@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class AuthTokenProvider {
+public class AccessTokenUtil {
 
 //    @Value("${jwt.token.accessTokenExpiry}")
 //    private String accessTokenExpiry;
@@ -30,7 +30,7 @@ public class AuthTokenProvider {
     private final Key key;
     private static final String AUTHORITIES_KEY = "role";
 
-    public AuthTokenProvider(@Value("${jwt.secret}") String secretKey) {
+    public AccessTokenUtil(@Value("${jwt.secret}") String secretKey) {
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
@@ -93,7 +93,7 @@ public class AuthTokenProvider {
 //        return createToken(id, RoleType.ROLE_ADMIN, accessTokenExpiry, true);
 //    }
 
-    public AccessToken convertAuthToken(String token) {
+    public AccessToken convertAccessToken(String token) {
         return new AccessToken(token, key);
     }
 
@@ -103,7 +103,7 @@ public class AuthTokenProvider {
 
     public Authentication getAuthentication(AccessToken authToken) {
 
-        if(authToken.validate()) {
+        if (authToken.validate()) {
 
             Claims claims = authToken.getTokenClaims();
             Collection<? extends GrantedAuthority> authorities =
