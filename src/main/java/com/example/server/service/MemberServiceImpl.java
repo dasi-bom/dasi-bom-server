@@ -1,9 +1,11 @@
 package com.example.server.service;
 
+import static com.example.server.exception.ErrorCode.MEMBER_NOT_FOUND;
+
 import com.example.server.domain.Member;
 import com.example.server.dto.MemberDto;
+import com.example.server.exception.CustomException;
 import com.example.server.repository.MemberRepository;
-import java.util.Optional;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,12 +20,8 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional
     public void updateProfile(MemberDto.ProfileSaveRequest reqDto, UserDetails userDetails) {
-        System.out.println(userDetails.getUsername());
-        Optional<Member> oMember = memberRepository.findByProviderId(userDetails.getUsername());
-
-        if (oMember.isPresent()) {
-            Member member = oMember.get();
-            member.updateProfile(reqDto.getNickname());
-        }
+        Member member = memberRepository.findByProviderId(userDetails.getUsername())
+                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+        member.updateProfile(reqDto.getNickname());
     }
 }
