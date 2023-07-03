@@ -5,9 +5,13 @@ import java.sql.Timestamp;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +23,7 @@ import org.hibernate.annotations.CreationTimestamp;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "member_tb")
 public class Member {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +38,10 @@ public class Member {
 	@Enumerated(EnumType.STRING)
 	private OAuth2Provider provider;
 	private String providerId;
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "profile_image_id", referencedColumnName = "id")
+	private ProfileImage profileImage;
+	private String nickname;
 	@CreationTimestamp
 	private Timestamp createDate;
 }
