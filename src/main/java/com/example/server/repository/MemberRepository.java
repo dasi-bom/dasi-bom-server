@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberRepository extends JpaRepository<Member, Integer> {
-	Member findByUsername(String username);
+	Optional<Member> findByProviderId(String providerId);
 	Optional<Member> findByProviderAndProviderId(OAuth2Provider provider, String providerId);
 }
 

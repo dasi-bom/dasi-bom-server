@@ -1,4 +1,4 @@
-package com.example.server.config.jwt;
+package com.example.server.dto;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

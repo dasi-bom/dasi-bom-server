@@ -1,6 +1,7 @@
 package com.example.server.domain;
 
 import com.example.server.config.oauth.provider.OAuth2Provider;
+import com.nimbusds.oauth2.sdk.util.StringUtils;
 import java.sql.Timestamp;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -44,4 +45,10 @@ public class Member {
 	private String nickname;
 	@CreationTimestamp
 	private Timestamp createDate;
+
+	public void updateProfile(String nickname) {
+		if (StringUtils.isNotBlank(nickname)) {
+			this.nickname = nickname;
+		}
+	}
 }
