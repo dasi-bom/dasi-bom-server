@@ -1,4 +1,4 @@
-package com.example.server.config.jwt;
+package com.example.server.config.jwt.handler;
 
 import com.example.server.config.jwt.dto.AuthResponse;
 import com.example.server.config.jwt.service.JwtService;

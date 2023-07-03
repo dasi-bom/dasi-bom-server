@@ -2,7 +2,8 @@ package com.example.server.config;
 
 import com.example.server.config.jwt.AccessTokenUtil;
 import com.example.server.config.jwt.JwtAuthenticationFilter;
-import com.example.server.config.jwt.OAuth2AuthenticationSuccessHandler;
+import com.example.server.config.jwt.handler.OAuth2AuthenticationFailureHandler;
+import com.example.server.config.jwt.handler.OAuth2AuthenticationSuccessHandler;
 import com.example.server.config.oauth.PrincipalOauth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class SecurityConfig {
 	private PrincipalOauth2UserService principalOauth2UserService;
 	@Autowired
 	private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+
+	@Autowired
+	private OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
 	@Bean
 	public BCryptPasswordEncoder encodePwd() {
@@ -61,6 +65,7 @@ public class SecurityConfig {
 				.userService(principalOauth2UserService)
 				.and()
 				.successHandler(oAuth2AuthenticationSuccessHandler)
+				.failureHandler(oAuth2AuthenticationFailureHandler)
 				.and()
 				.addFilterBefore(new JwtAuthenticationFilter(accessTokenUtil), UsernamePasswordAuthenticationFilter.class);
 
