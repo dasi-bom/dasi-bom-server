@@ -16,6 +16,9 @@ public enum ErrorCode {
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 유저 정보를 찾을 수 없습니다"),
 
+    /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
+    CONFLICT_NICKNAME(HttpStatus.CONFLICT, "이미 사용중인 nickname 입니다"),
+
     /* 500 INTERNAL_SERVER_ERROR : 서버 에러 */
     SOCIAL_LOGIN_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "소셜 로그인에 실패했습니다."),
 

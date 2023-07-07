@@ -1,5 +1,6 @@
 package com.example.server.service;
 
+import static com.example.server.exception.ErrorCode.CONFLICT_NICKNAME;
 import static com.example.server.exception.ErrorCode.MEMBER_NOT_FOUND;
 
 import com.example.server.domain.Image;
@@ -26,6 +27,9 @@ public class MemberServiceImpl implements MemberService {
     public void updateProfile(MemberDto.ProfileSaveRequest reqDto, UserDetails userDetails) {
         Member member = memberRepository.findByProviderId(userDetails.getUsername())
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+        if (memberRepository.existsByNickname(reqDto.getNickname())) {
+            throw new CustomException(CONFLICT_NICKNAME);
+        }
         member.updateProfileInfo(reqDto.getNickname());
     }
 
