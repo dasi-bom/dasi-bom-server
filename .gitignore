@@ -39,4 +39,5 @@ out/
 .DS_Store
 application-oauth.yml
 application-jwt.yml
+application-s3.yml
 .env
