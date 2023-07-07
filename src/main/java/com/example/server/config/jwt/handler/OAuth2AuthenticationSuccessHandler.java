@@ -1,4 +1,4 @@
-package com.example.server.config.jwt;
+package com.example.server.config.jwt.handler;
 
 import com.example.server.config.jwt.dto.AuthResponse;
 import com.example.server.config.jwt.service.JwtService;
@@ -44,7 +44,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         CustomOAuth2User oauth2user = (CustomOAuth2User) authentication.getPrincipal();
         String userName = oauth2user.getName(); //authentication 의 name
 
-        Optional<Member> oUser = userRepository.findById(Integer.parseInt(userName));
+        Optional<Member> oUser = userRepository.findById(Long.parseLong(userName));
 
         String providerName = oauth2user.getProviderName(); //authentication 의 name
         OAuth2UserInfo oAuth2UserInfo = null;
