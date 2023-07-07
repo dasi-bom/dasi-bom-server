@@ -1,5 +1,15 @@
 version: '3'
 services:
+  redis:
+    image: redis
+    container_name: my_redis
+    restart: always
+    hostname: redis
+    ports:
+      - "${REDIS_LOCAL_PORT}:${REDIS_DOCKER_PORT}"
+    networks:
+      - test_network
+
   database:
     container_name: my_mysql
     image: mysql
@@ -7,11 +17,15 @@ services:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_ROOT_HOST=%
-    command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+    command:
+      - --character-set-server=utf8
+      - --collation-server=utf8_general_ci
     ports:
       - "${MYSQL_LOCAL_PORT}:${MYSQL_DOCKER_PORT}"
     volumes:
-      - ./docker/data:/var/lib/mysql --user 1000
+      - ./db/conf.d:/etc/mysql/conf.d
+      - ./db/data:/var/lib/mysql --user 1000
+#      - ./db/initdb.d:/docker-entrypoint-initdb.d
     restart: always
     networks:
       - test_network
@@ -30,6 +44,7 @@ services:
     restart: always
     depends_on:
       - database
+      - redis
     networks:
       - test_network
 
