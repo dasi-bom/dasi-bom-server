@@ -1,6 +1,5 @@
 package com.example.server.domain;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,15 +11,12 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "profile_image_tb")
-public class ProfileImage {
+@Table(name = "image_tb")
+public class Image {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String imgUrl;
     private String fileName;
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "memberId")
-//    private Member member;
 }

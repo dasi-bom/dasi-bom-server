@@ -28,7 +28,7 @@ import org.hibernate.annotations.CreationTimestamp;
 public class Member {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Long id;
 	private String name; // 사용자명
 	private String username; // 아이디
 	private String password;
@@ -40,15 +40,19 @@ public class Member {
 	private OAuth2Provider provider;
 	private String providerId;
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "profile_image_id", referencedColumnName = "id")
-	private ProfileImage profileImage;
+	@JoinColumn(name = "image_id")
+	private Image profileImage;
 	private String nickname;
 	@CreationTimestamp
 	private Timestamp createDate;
 
-	public void updateProfile(String nickname) {
+	public void updateProfileInfo(String nickname) {
 		if (StringUtils.isNotBlank(nickname)) {
 			this.nickname = nickname;
 		}
+	}
+
+	public void updateProfileImage(Image image) {
+		this.profileImage = image;
 	}
 }
