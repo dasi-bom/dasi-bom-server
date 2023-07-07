@@ -4,6 +4,7 @@ spring:
     include:
       - oauth
       - jwt
+      - s3
   jpa:
     hibernate:
       ddl-auto: update
@@ -24,6 +25,8 @@ spring:
     user:
       name: user
       password: 1234
+logging.level:
+  org.hibernate.SQL: debug
 
 ---
 
