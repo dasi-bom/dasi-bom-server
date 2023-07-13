@@ -47,9 +47,7 @@ public class Member {
 	private Timestamp createDate;
 
 	public void updateProfileInfo(String nickname) {
-		if (StringUtils.isNotBlank(nickname)) {
-			this.nickname = nickname;
-		}
+		this.nickname = nickname;
 	}
 
 	public void updateProfileImage(Image image) {

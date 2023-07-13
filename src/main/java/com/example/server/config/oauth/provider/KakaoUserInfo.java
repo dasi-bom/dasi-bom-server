@@ -1,6 +1,7 @@
 package com.example.server.config.oauth.provider;
 
 import java.util.Map;
+import java.util.Optional;
 
 public class KakaoUserInfo extends OAuth2UserInfo{
 
@@ -20,30 +21,24 @@ public class KakaoUserInfo extends OAuth2UserInfo{
 
     @Override
     public String getEmail() {
-        Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
-        if (account == null) {
-            return null;
-        }
-        return (String) account.get("email");
+        return Optional.ofNullable(attributes.get("kakao_account"))
+                .map(account -> (String) ((Map<String, Object>) account).get("email"))
+                .orElse(null);
     }
 
     @Override
     public String getName() {
-        Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
-        Map<String, Object> profile = (Map<String, Object>) account.get("profile");
-        if (account == null || profile == null) {
-            return null;
-        }
-        return (String) profile.get("nickname");
+        return Optional.ofNullable(attributes.get("kakao_account"))
+                .map(account -> ((Map<String, Object>) account).get("profile"))
+                .map(profile -> (String) ((Map<String, Object>) profile).get("nickname"))
+                .orElse(null);
     }
 
     @Override
     public String getMobile() {
-        Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
-        if (account == null) {
-            return null;
-        }
-        return (String) account.get("phone_number");
+        return Optional.ofNullable(attributes.get("kakao_account"))
+                .map(account -> (String) ((Map<String, Object>) account).get("phone_number"))
+                .orElse(null);
     }
 
 }
