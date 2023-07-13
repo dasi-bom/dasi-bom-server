@@ -8,6 +8,7 @@ import com.example.server.domain.Member;
 import com.example.server.dto.MemberDto;
 import com.example.server.exception.CustomException;
 import com.example.server.repository.MemberRepository;
+import com.nimbusds.oauth2.sdk.util.StringUtils;
 import java.io.IOException;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,9 @@ public class MemberServiceImpl implements MemberService {
         if (memberRepository.existsByNickname(reqDto.getNickname())) {
             throw new CustomException(CONFLICT_NICKNAME);
         }
-        member.updateProfileInfo(reqDto.getNickname());
+        if (StringUtils.isNotBlank(reqDto.getNickname())) {
+            member.updateProfileInfo(reqDto.getNickname());
+        }
     }
 
     @Override
