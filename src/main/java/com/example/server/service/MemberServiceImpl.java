@@ -28,10 +28,8 @@ public class MemberServiceImpl implements MemberService {
     public void updateProfile(MemberDto.ProfileSaveRequest reqDto, UserDetails userDetails) {
         Member member = memberRepository.findByProviderId(userDetails.getUsername())
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
-        if (memberRepository.existsByNickname(reqDto.getNickname())) {
-            throw new CustomException(CONFLICT_NICKNAME);
-        }
         if (StringUtils.isNotBlank(reqDto.getNickname())) {
+            validateDuplicatedNickname(reqDto.getNickname());
             member.updateProfileInfo(reqDto.getNickname());
         }
     }
@@ -43,5 +41,11 @@ public class MemberServiceImpl implements MemberService {
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
         Image img = s3Service.uploadSingleImage(multipartFile, dirName);
         member.updateProfileImage(img);
+    }
+
+    private void validateDuplicatedNickname(String nickname) {
+        if (memberRepository.existsByNickname(nickname)) {
+            throw new CustomException(CONFLICT_NICKNAME);
+        }
     }
 }
