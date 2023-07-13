@@ -1,6 +1,7 @@
 package com.example.server.config.oauth.provider;
 
 import java.util.Map;
+import java.util.Optional;
 
 public class NaverUserInfo extends OAuth2UserInfo{
 
@@ -10,11 +11,9 @@ public class NaverUserInfo extends OAuth2UserInfo{
 
     @Override
     public String getProviderId() {
-        Map<String, Object> response = (Map<String, Object>) attributes.get("response");
-        if (response == null) {
-            return null;
-        }
-        return (String) response.get("id");
+        return Optional.ofNullable(attributes.get("response"))
+                .map(account -> (String) ((Map<String, Object>) account).get("id"))
+                .orElse(null);
     }
 
     @Override
@@ -24,29 +23,23 @@ public class NaverUserInfo extends OAuth2UserInfo{
 
     @Override
     public String getEmail() {
-        Map<String, Object> response = (Map<String, Object>) attributes.get("response");
-        if (response == null) {
-            return null;
-        }
-        return (String) response.get("email");
+        return Optional.ofNullable(attributes.get("response"))
+                .map(account -> (String) ((Map<String, Object>) account).get("email"))
+                .orElse(null);
     }
 
     @Override
     public String getName() {
-        Map<String, Object> response = (Map<String, Object>) attributes.get("response");
-        if (response == null) {
-            return null;
-        }
-        return (String) response.get("name");
+        return Optional.ofNullable(attributes.get("response"))
+                .map(account -> (String) ((Map<String, Object>) account).get("name"))
+                .orElse(null);
     }
 
     @Override
     public String getMobile() {
-        Map<String, Object> response = (Map<String, Object>) attributes.get("response");
-        if (response == null) {
-            return null;
-        }
-        return (String) response.get("mobile");
+        return Optional.ofNullable(attributes.get("response"))
+                .map(account -> (String) ((Map<String, Object>) account).get("mobile"))
+                .orElse(null);
     }
 
 }
