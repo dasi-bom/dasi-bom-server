@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
 	@Autowired
-	private MemberRepository userRepository;
+	private MemberRepository memberRepository;
 
 	// userRequest 는 code를 받아서 accessToken을 응답 받은 객체
 	@Override
@@ -41,7 +41,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 		}
 
 		Optional<Member> userOptional =
-				userRepository.findByProviderAndProviderId(oAuth2UserInfo.getProvider(), oAuth2UserInfo.getProviderId());
+				memberRepository.findByProviderAndProviderId(oAuth2UserInfo.getProvider(), oAuth2UserInfo.getProviderId());
 		
 		Member user;
 		boolean isFirst; // 최초 로그인 여부
@@ -49,7 +49,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 			isFirst = false;
 			user = userOptional.get();
 			user.setEmail(oAuth2UserInfo.getEmail());
-			userRepository.save(user);
+			memberRepository.save(user);
 		} else {
 			isFirst = true;
 			// user의 패스워드가 null이기 때문에 OAuth 유저는 일반적인 로그인을 할 수 없음.
@@ -62,7 +62,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 					.provider(oAuth2UserInfo.getProvider())
 					.providerId(oAuth2UserInfo.getProviderId())
 					.build();
-			userRepository.save(user);
+			memberRepository.save(user);
 		}
 
 		return new CustomOAuth2User(oAuth2UserInfo, user, isFirst);
