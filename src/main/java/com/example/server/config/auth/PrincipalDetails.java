@@ -18,7 +18,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User{
 		this.user = user;
 		this.attributes = attributes;
 	}
-
+	
 	public Member getUser() {
 		return user;
 	}
@@ -52,7 +52,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User{
 	public boolean isEnabled() {
 		return true;
 	}
-
+	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Collection<GrantedAuthority> collet = new ArrayList<GrantedAuthority>();
@@ -71,5 +71,5 @@ public class PrincipalDetails implements UserDetails, OAuth2User{
 	public String getName() {
 		return user.getId() + "";
 	}
-
+	
 }
