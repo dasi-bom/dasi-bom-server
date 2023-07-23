@@ -1,8 +1,7 @@
 package com.example.server.domain;
 
-import com.example.server.config.oauth.provider.OAuth2Provider;
-import com.nimbusds.oauth2.sdk.util.StringUtils;
 import java.sql.Timestamp;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -13,11 +12,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.CreationTimestamp;
+
+import com.example.server.config.oauth.provider.OAuth2Provider;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 
 @Builder
 @Data

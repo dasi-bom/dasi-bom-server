@@ -1,13 +1,9 @@
 package com.example.server.controller;
 
-import static com.example.server.exception.ErrorCode.FILE_NOT_EXIST_ERROR;
+import static com.example.server.exception.ErrorCode.*;
 
-import com.example.server.dto.ApiResponse;
-import com.example.server.dto.MemberDto;
-import com.example.server.exception.CustomException;
-import com.example.server.service.MemberService;
 import java.io.IOException;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,29 +16,36 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.server.dto.ApiResponse;
+import com.example.server.dto.MemberDto;
+import com.example.server.exception.CustomException;
+import com.example.server.service.MemberService;
+
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/member")
 @RequiredArgsConstructor
 public class MemberController {
 
-    private final MemberService memberService;
+	private final MemberService memberService;
 
-    @PatchMapping("/profile")
-    public ResponseEntity<Void> updateProfile(@RequestBody MemberDto.ProfileSaveRequest reqDto,
-            @AuthenticationPrincipal UserDetails userDetails) {
-        memberService.updateProfile(reqDto, userDetails);
-        return ApiResponse.success(null);
-    }
+	@PatchMapping("/profile")
+	public ResponseEntity<Void> updateProfile(@RequestBody MemberDto.ProfileSaveRequest reqDto,
+		@AuthenticationPrincipal UserDetails userDetails) {
+		memberService.updateProfile(reqDto, userDetails);
+		return ApiResponse.success(null);
+	}
 
-    @PostMapping(value = "/profile/images", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Void> uploadProfileImage(@RequestPart(required = false) MultipartFile multipartFile,
-            @AuthenticationPrincipal UserDetails userDetails) throws IOException {
-        if (multipartFile == null) {
-            throw new CustomException(FILE_NOT_EXIST_ERROR);
-        }
-        memberService.uploadProfileImage(userDetails, multipartFile, "Profile/Member");
+	@PostMapping(value = "/profile/images", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	public ResponseEntity<Void> uploadProfileImage(@RequestPart(required = false) MultipartFile multipartFile,
+		@AuthenticationPrincipal UserDetails userDetails) throws IOException {
+		if (multipartFile == null) {
+			throw new CustomException(FILE_NOT_EXIST_ERROR);
+		}
+		memberService.uploadProfileImage(userDetails, multipartFile, "Profile/Member");
 
-        return ApiResponse.success(null);
-    }
+		return ApiResponse.success(null);
+	}
 
 }

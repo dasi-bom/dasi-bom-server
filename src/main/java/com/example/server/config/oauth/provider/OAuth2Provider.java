@@ -10,10 +10,10 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum OAuth2Provider {
-    KAKAO("kakao", "id"),
-    NAVER("naver", "response"),
-    GOOGLE("google", "sub");
+	KAKAO("kakao", "id"),
+	NAVER("naver", "response"),
+	GOOGLE("google", "sub");
 
-    private final String providerName;
-    private final String attributeKey;
+	private final String providerName;
+	private final String attributeKey;
 }
