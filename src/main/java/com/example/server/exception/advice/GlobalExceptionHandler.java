@@ -1,40 +1,29 @@
 package com.example.server.exception.advice;
 
 
-import static com.example.server.exception.ErrorCode.CONSTRAINT_VIOLATION;
-import static com.example.server.exception.ErrorCode.METHOD_ARG_NOT_VALID;
-
-import com.example.server.exception.CustomException;
+import com.example.server.exception.BusinessException;
 import com.example.server.exception.ErrorResponse;
-import java.util.Objects;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import static com.example.server.exception.ErrorCode.GLOBAL_INTERNAL_SERVER_ERROR;
 
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected Object handleMethodArgumentNotValidException(MethodArgumentNotValidException ex,
-        HttpServletRequest request) {
-        String defaultMessage = Objects.requireNonNull(ex.getBindingResult().getFieldError()).getDefaultMessage();
-        return ErrorResponse.toResponseEntity(METHOD_ARG_NOT_VALID, defaultMessage);
-    }
 
-    @ExceptionHandler(value = {ConstraintViolationException.class, DataIntegrityViolationException.class})
-    protected ResponseEntity<ErrorResponse> handleDataException() {
-        log.error("handleDataException throw Exception : {}", CONSTRAINT_VIOLATION);
-        return ErrorResponse.toResponseEntity(CONSTRAINT_VIOLATION);
-    }
-
-    @ExceptionHandler(CustomException.class)
-    protected ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
-        log.error("handleCustomException throw CustomException : {}", e.getErrorCode());
+    @ExceptionHandler(BusinessException.class)
+    protected ResponseEntity<ErrorResponse> handleCustomException(BusinessException e) {
+        log.error("handleCustomException throw BusinessException : {}", e.getErrorCode());
         return ErrorResponse.toResponseEntity(e.getErrorCode());
     }
+
+    @ExceptionHandler(Exception.class)
+    protected ResponseEntity<ErrorResponse> handleGlobalException(Exception e) {
+        log.error("handleException", e);
+        return ErrorResponse.toResponseEntity(GLOBAL_INTERNAL_SERVER_ERROR, e.getLocalizedMessage());
+    }
+
 }
