@@ -9,7 +9,7 @@ import com.example.server.config.oauth.provider.OAuth2Provider;
 import com.example.server.config.oauth.provider.OAuth2UserInfo;
 import com.example.server.domain.Member;
 import com.example.server.domain.RoleType;
-import com.example.server.repository.MemberRepository;
+import com.example.server.repository.MemberQueryRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import groovy.util.logging.Slf4j;
 import java.io.IOException;
@@ -32,7 +32,7 @@ import org.springframework.stereotype.Component;
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JwtService jwtService;
-    private final MemberRepository userRepository;
+    private final MemberQueryRepository userRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {

@@ -7,20 +7,23 @@ import com.example.server.config.oauth.provider.OAuth2Provider;
 import com.example.server.config.oauth.provider.OAuth2UserInfo;
 import com.example.server.domain.Member;
 import com.example.server.domain.RoleType;
+import com.example.server.repository.MemberQueryRepository;
 import com.example.server.repository.MemberRepository;
-import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
+@AllArgsConstructor
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
-	@Autowired
-	private MemberRepository memberRepository;
+	private final MemberRepository memberRepository;
+	private final MemberQueryRepository memberQueryRepository;
 
 	// userRequest 는 code를 받아서 accessToken을 응답 받은 객체
 	@Override
@@ -41,13 +44,14 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 		}
 
 		Optional<Member> userOptional =
-				memberRepository.findByProviderAndProviderId(oAuth2UserInfo.getProvider(), oAuth2UserInfo.getProviderId());
+				memberQueryRepository.findByProviderAndProviderId(oAuth2UserInfo.getProvider(), oAuth2UserInfo.getProviderId());
 		
 		Member user;
 		boolean isFirst; // 최초 로그인 여부
 		if (userOptional.isPresent()) { // 이미 가입한 회원이라면
 			isFirst = false;
 			user = userOptional.get();
+			//todo should setter to utility Method
 			user.setEmail(oAuth2UserInfo.getEmail());
 			memberRepository.save(user);
 		} else {
