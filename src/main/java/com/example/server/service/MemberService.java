@@ -9,7 +9,7 @@ import com.example.server.dto.MemberDto;
 
 public interface MemberService {
 
-	void updateProfile(MemberDto.ProfileSaveRequest reqDto, UserDetails userDetails);
+	void updateProfile(MemberDto.ProfileSaveRequest reqDto, String username);
 
 	void uploadProfileImage(UserDetails userDetails, MultipartFile multipartFile, String dirName) throws IOException;
 }

@@ -28,8 +28,8 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	@Transactional
-	public void updateProfile(MemberDto.ProfileSaveRequest reqDto, UserDetails userDetails) {
-		Member member = memberRepository.findByProviderId(userDetails.getUsername())
+	public void updateProfile(MemberDto.ProfileSaveRequest reqDto, String username) {
+		Member member = memberRepository.findByProviderId(username)
 			.orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
 		if (StringUtils.isNotBlank(reqDto.getNickname())) {
 			validateDuplicatedNickname(reqDto.getNickname());

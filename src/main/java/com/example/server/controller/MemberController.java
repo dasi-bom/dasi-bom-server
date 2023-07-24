@@ -33,7 +33,7 @@ public class MemberController {
 	@PatchMapping("/profile")
 	public ResponseEntity<Void> updateProfile(@RequestBody MemberDto.ProfileSaveRequest reqDto,
 		@AuthenticationPrincipal UserDetails userDetails) {
-		memberService.updateProfile(reqDto, userDetails);
+		memberService.updateProfile(reqDto, userDetails.getUsername());
 		return ApiResponse.success(null);
 	}
 
