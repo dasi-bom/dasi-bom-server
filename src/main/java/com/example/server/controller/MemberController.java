@@ -4,9 +4,11 @@ import static com.example.server.exception.ErrorCode.FILE_NOT_EXIST_ERROR;
 
 import com.example.server.dto.ApiResponse;
 import com.example.server.dto.MemberDto;
-import com.example.server.exception.CustomException;
+import com.example.server.exception.BusinessException;
 import com.example.server.service.MemberService;
+
 import java.io.IOException;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,16 +31,16 @@ public class MemberController {
 
     @PatchMapping("/profile")
     public ResponseEntity<Void> updateProfile(@RequestBody MemberDto.ProfileSaveRequest reqDto,
-            @AuthenticationPrincipal UserDetails userDetails) {
+                                              @AuthenticationPrincipal UserDetails userDetails) {
         memberService.updateProfile(reqDto, userDetails);
         return ApiResponse.success(null);
     }
 
     @PostMapping(value = "/profile/images", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Void> uploadProfileImage(@RequestPart(required = false) MultipartFile multipartFile,
-            @AuthenticationPrincipal UserDetails userDetails) throws IOException {
+                                                   @AuthenticationPrincipal UserDetails userDetails) throws IOException {
         if (multipartFile == null) {
-            throw new CustomException(FILE_NOT_EXIST_ERROR);
+            throw new BusinessException(FILE_NOT_EXIST_ERROR);
         }
         memberService.uploadProfileImage(userDetails, multipartFile, "Profile/Member");
 

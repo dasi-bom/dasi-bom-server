@@ -4,6 +4,10 @@ import lombok.Builder;
 import lombok.Getter;
 import org.springframework.http.ResponseEntity;
 
+import java.time.LocalDateTime;
+
+import static java.time.LocalDateTime.now;
+
 @Getter
 @Builder
 public class ErrorResponse {
