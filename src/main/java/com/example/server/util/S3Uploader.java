@@ -12,7 +12,6 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.example.server.domain.Image;
 import com.example.server.repository.ImageRepository;
-import com.example.server.service.S3Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,14 +19,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class S3Uploader implements S3Service {
+public class S3Uploader {
 
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucket;
 	private final AmazonS3 amazonS3;
 	private final ImageRepository imageRepository;
 
-	@Override
 	public Image uploadSingleImage(MultipartFile multipartFile, String dirName) throws IOException {
 
 		String s3FileName = createFileName(multipartFile.getOriginalFilename(), dirName);
