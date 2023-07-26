@@ -6,7 +6,6 @@ import java.io.IOException;
 
 import javax.transaction.Transactional;
 
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,6 +14,7 @@ import com.example.server.domain.Member;
 import com.example.server.dto.MemberDto;
 import com.example.server.exception.CustomException;
 import com.example.server.repository.MemberRepository;
+import com.example.server.util.S3Uploader;
 import com.nimbusds.oauth2.sdk.util.StringUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
-	private final S3Service s3Service;
+	private final S3Uploader s3Uploader;
 	private final MemberRepository memberRepository;
 
 	@Override
@@ -39,11 +39,12 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	@Transactional
-	public void uploadProfileImage(UserDetails userDetails, MultipartFile multipartFile, String dirName) throws
+	// public void uploadProfileImage(UserDetails userDetails, MultipartFile multipartFile, String dirName) throws
+	public void uploadProfileImage(String username, MultipartFile multipartFile, String dirName) throws
 		IOException {
-		Member member = memberRepository.findByProviderId(userDetails.getUsername())
+		Member member = memberRepository.findByProviderId(username)
 			.orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
-		Image img = s3Service.uploadSingleImage(multipartFile, dirName);
+		Image img = s3Uploader.uploadSingleImage(multipartFile, dirName);
 		member.updateProfileImage(img);
 	}
 

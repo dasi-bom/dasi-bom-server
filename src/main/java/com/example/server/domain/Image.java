@@ -6,12 +6,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @Table(name = "image_tb")
 public class Image {
 
@@ -20,4 +23,10 @@ public class Image {
 	private Long id;
 	private String imgUrl;
 	private String fileName;
+
+	@Builder
+	public Image(String imgUrl, String fileName) {
+		this.imgUrl = imgUrl;
+		this.fileName = fileName;
+	}
 }
