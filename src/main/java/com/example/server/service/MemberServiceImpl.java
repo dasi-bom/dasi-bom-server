@@ -39,7 +39,6 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	@Transactional
-	// public void uploadProfileImage(UserDetails userDetails, MultipartFile multipartFile, String dirName) throws
 	public void uploadProfileImage(String username, MultipartFile multipartFile, String dirName) throws
 		IOException {
 		Member member = memberRepository.findByProviderId(username)

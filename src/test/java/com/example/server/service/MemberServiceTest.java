@@ -88,9 +88,7 @@ public class MemberServiceTest {
 	@Test
 	public void failed_회원을_찾을_수_없는_경우_예외가_발생한다() {
 		MemberDto.ProfileSaveRequest profileSaveRequest = createProfileSaveRequest();
-		// doThrow(new CustomException(MEMBER_NOT_FOUND)).when(memberRepository)
-		// 	.findByProviderId("stranger");
-
+		
 		assertThatThrownBy(() -> memberService.updateProfile(profileSaveRequest, "stranger"))
 			.isInstanceOf(CustomException.class);
 
@@ -115,5 +113,20 @@ public class MemberServiceTest {
 		assertAll(
 			() -> assertThat(member.getProfileImage()).isEqualTo(expected)
 		);
+	}
+
+	@Test
+	void failed_IOException이_발생하여_이미지를_업로드할_수_없다() throws IOException {
+		Image expected = createImage();
+		String dirName = "Test";
+
+		FileInputStream fileInputStream = new FileInputStream("src/test/resources/images/" + expected.getFileName());
+		MockMultipartFile mockMultipartFile = new MockMultipartFile("test_img", expected.getFileName(),
+			"png", fileInputStream);
+
+		when(s3Uploader.uploadSingleImage(mockMultipartFile, dirName)).thenThrow(IOException.class);
+
+		assertThatThrownBy(() -> s3Uploader.uploadSingleImage(mockMultipartFile, dirName))
+			.isInstanceOf(IOException.class);
 	}
 }
