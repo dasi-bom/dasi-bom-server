@@ -44,7 +44,6 @@ public class MemberController {
 			throw new CustomException(FILE_NOT_EXIST_ERROR);
 		}
 		memberService.uploadProfileImage(userDetails.getUsername(), multipartFile, "Profile/Member");
-		// memberService.uploadProfileImage(userDetails, multipartFile, "Profile/Member");
 
 		return ApiResponse.success(null);
 	}

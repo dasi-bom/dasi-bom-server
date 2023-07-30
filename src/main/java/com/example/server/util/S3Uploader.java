@@ -36,8 +36,8 @@ public class S3Uploader {
 		String url = URLDecoder.decode(amazonS3.getUrl(bucket, s3FileName).toString(), "utf-8");
 
 		Image img = new Image();
-		img.setImgUrl(url);
-		img.setFileName(s3FileName);
+		img.updateImage(url, s3FileName);
+		
 		imageRepository.save(img);
 
 		return img;
