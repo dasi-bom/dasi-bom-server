@@ -31,18 +31,18 @@ public class MemberController {
 
     @PatchMapping("/profile")
     public ResponseEntity<Void> updateProfile(@RequestBody MemberDto.ProfileSaveRequest reqDto,
-                                              @AuthenticationPrincipal UserDetails userDetails) {
-        memberService.updateProfile(reqDto, userDetails);
+        @AuthenticationPrincipal UserDetails userDetails) {
+        memberService.updateProfile(reqDto, userDetails.getUsername());
         return ApiResponse.success(null);
     }
 
     @PostMapping(value = "/profile/images", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Void> uploadProfileImage(@RequestPart(required = false) MultipartFile multipartFile,
-                                                   @AuthenticationPrincipal UserDetails userDetails) throws IOException {
+        @AuthenticationPrincipal UserDetails userDetails) throws IOException {
         if (multipartFile == null) {
             throw new BusinessException(FILE_NOT_EXIST_ERROR);
         }
-        memberService.uploadProfileImage(userDetails, multipartFile, "Profile/Member");
+        memberService.uploadProfileImage(userDetails.getUsername(), multipartFile, "Profile/Member");
 
         return ApiResponse.success(null);
     }

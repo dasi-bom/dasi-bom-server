@@ -56,23 +56,23 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         // JWT 생성
         String accessToken = jwtService.createAccessToken(oAuth2UserInfo.getProviderId(),
-                RoleType.ROLE_USER.toString());
+            RoleType.ROLE_USER.toString());
         String refreshToken = jwtService.createRefreshToken(oAuth2UserInfo.getProviderId(),
-                RoleType.ROLE_USER.toString());
+            RoleType.ROLE_USER.toString());
 
         AuthResponse authResponse;
         if (oUser.isEmpty()) {
             authResponse = AuthResponse.builder()
-                    .accessToken(accessToken)
-                    .refreshToken(refreshToken)
-                    .isNewMember(Boolean.TRUE)
-                    .build();
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .isNewMember(Boolean.TRUE)
+                .build();
         } else {
             authResponse = AuthResponse.builder()
-                    .accessToken(accessToken)
-                    .refreshToken(refreshToken)
-                    .isNewMember(Boolean.FALSE)
-                    .build();
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .isNewMember(Boolean.FALSE)
+                .build();
         }
 
         ObjectMapper objectMapper = new ObjectMapper();

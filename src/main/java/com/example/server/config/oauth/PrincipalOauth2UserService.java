@@ -44,8 +44,8 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 		}
 
 		Optional<Member> userOptional =
-				memberQueryRepository.findByProviderAndProviderId(oAuth2UserInfo.getProvider(), oAuth2UserInfo.getProviderId());
-		
+			memberQueryRepository.findByProviderAndProviderId(oAuth2UserInfo.getProvider(), oAuth2UserInfo.getProviderId());
+
 		Member user;
 		boolean isFirst; // 최초 로그인 여부
 		if (userOptional.isPresent()) { // 이미 가입한 회원이라면
@@ -58,14 +58,14 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 			isFirst = true;
 			// user의 패스워드가 null이기 때문에 OAuth 유저는 일반적인 로그인을 할 수 없음.
 			user = Member.builder()
-					.name(oAuth2UserInfo.getName())
-					.username(oAuth2UserInfo.getProvider().getProviderName() + "_" + oAuth2UserInfo.getProviderId())
-					.email(oAuth2UserInfo.getEmail())
-					.mobile(oAuth2UserInfo.getMobile())
-					.role(RoleType.ROLE_USER)
-					.provider(oAuth2UserInfo.getProvider())
-					.providerId(oAuth2UserInfo.getProviderId())
-					.build();
+				.name(oAuth2UserInfo.getName())
+				.username(oAuth2UserInfo.getProvider().getProviderName() + "_" + oAuth2UserInfo.getProviderId())
+				.email(oAuth2UserInfo.getEmail())
+				.mobile(oAuth2UserInfo.getMobile())
+				.role(RoleType.ROLE_USER)
+				.provider(oAuth2UserInfo.getProvider())
+				.providerId(oAuth2UserInfo.getProviderId())
+				.build();
 			memberRepository.save(user);
 		}
 

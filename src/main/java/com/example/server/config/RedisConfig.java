@@ -10,26 +10,26 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 public class RedisConfig {
-    private final String redisHost;
-    private final int redisPort;
+	private final String redisHost;
+	private final int redisPort;
 
-    public RedisConfig(@Value("${spring.redis.host}") final String redisHost,
-            @Value("${spring.redis.port}") final int redisPort){
-        this.redisHost = redisHost;
-        this.redisPort = redisPort;
-    }
+	public RedisConfig(@Value("${spring.redis.host}") final String redisHost,
+		@Value("${spring.redis.port}") final int redisPort) {
+		this.redisHost = redisHost;
+		this.redisPort = redisPort;
+	}
 
-    @Bean
-    public RedisConnectionFactory redisConnectionFactory(){
-        return new LettuceConnectionFactory(redisHost, redisPort);
-    }
+	@Bean
+	public RedisConnectionFactory redisConnectionFactory() {
+		return new LettuceConnectionFactory(redisHost, redisPort);
+	}
 
-    @Bean
-    public RedisTemplate<?, ?> redisTemplate(){
-        RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new StringRedisSerializer());
-        redisTemplate.setConnectionFactory(redisConnectionFactory());
-        return redisTemplate;
-    }
+	@Bean
+	public RedisTemplate<?, ?> redisTemplate() {
+		RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();
+		redisTemplate.setKeySerializer(new StringRedisSerializer());
+		redisTemplate.setValueSerializer(new StringRedisSerializer());
+		redisTemplate.setConnectionFactory(redisConnectionFactory());
+		return redisTemplate;
+	}
 }
