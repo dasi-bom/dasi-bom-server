@@ -1,12 +1,14 @@
-package com.example.server.repository.pet;
+package com.example.server.persistence.member;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.server.domain.pet.Pet;
+import com.example.server.domain.member.Member;
 
 @Repository
-@Transactional(readOnly = true)
-public interface PetQueryRepository extends JpaRepository<Pet, Long> {
+@Transactional
+public interface MemberRepository extends JpaRepository<Member, Long> {
 }
+
+

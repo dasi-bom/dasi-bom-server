@@ -36,7 +36,6 @@ public class MemberController {
 		memberService.updateProfile(reqDto, userDetails.getUsername());
 		return ApiResponse.success(null);
 	}
-
 	@PostMapping(value = "/profile/images", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity<Void> uploadProfileImage(@RequestPart(required = false) MultipartFile multipartFile,
 		@AuthenticationPrincipal UserDetails userDetails) throws IOException {

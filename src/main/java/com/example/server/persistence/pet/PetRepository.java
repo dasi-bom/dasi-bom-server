@@ -1,4 +1,4 @@
-package com.example.server.repository.pet;
+package com.example.server.persistence.pet;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

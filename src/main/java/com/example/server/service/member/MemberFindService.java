@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.server.domain.member.Member;
 import com.example.server.exception.BusinessException;
 import com.example.server.exception.ErrorCode;
-import com.example.server.repository.member.MemberQueryRepository;
+import com.example.server.persistence.member.MemberQueryRepository;
 
 import lombok.RequiredArgsConstructor;
 

@@ -1,4 +1,4 @@
-package com.example.server.repository.image;
+package com.example.server.persistence.image;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

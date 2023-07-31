@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.server.domain.member.Member;
 import com.example.server.domain.pet.Pet;
 import com.example.server.dto.pet.PetProfileRequest;
-import com.example.server.repository.pet.PetRepository;
+import com.example.server.persistence.pet.PetRepository;
 import com.example.server.service.member.MemberFindService;
 
 import lombok.RequiredArgsConstructor;
