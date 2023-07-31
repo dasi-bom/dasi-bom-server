@@ -10,8 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.example.server.domain.Image;
-import com.example.server.repository.ImageRepository;
+import com.example.server.domain.image.Image;
+import com.example.server.repository.image.ImageRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +37,7 @@ public class S3Uploader {
 
 		Image img = new Image();
 		img.updateImage(url, s3FileName);
-		
+
 		imageRepository.save(img);
 
 		return img;
