@@ -1,14 +1,14 @@
-package com.example.server.service;
+package com.example.server.service.member;
 
 import static com.example.server.exception.ErrorCode.CONFLICT_NICKNAME;
 import static com.example.server.exception.ErrorCode.MEMBER_NOT_FOUND;
 
-import com.example.server.domain.Image;
-import com.example.server.domain.Member;
+import com.example.server.domain.image.Image;
+import com.example.server.domain.member.Member;
 import com.example.server.dto.MemberDto;
 import com.example.server.exception.BusinessException;
-import com.example.server.repository.MemberQueryRepository;
-import com.example.server.util.S3Uploader;
+import com.example.server.repository.member.MemberQueryRepository;
+import com.example.server.service.s3.S3Service;
 import com.nimbusds.oauth2.sdk.util.StringUtils;
 
 import java.io.IOException;
@@ -23,14 +23,14 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
-    private final S3Uploader s3Uploader;
+    private final S3Service s3Service;
     private final MemberQueryRepository memberQueryRepository;
 
     @Override
     @Transactional
-    public void updateProfile(MemberDto.ProfileSaveRequest reqDto, String username) {
-        Member member = memberQueryRepository.findByProviderId(username)
-            .orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
+    public void updateProfile(MemberDto.ProfileSaveRequest reqDto, UserDetails userDetails) {
+        Member member = memberQueryRepository.findByProviderId(userDetails.getUsername())
+                .orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
         if (StringUtils.isNotBlank(reqDto.getNickname())) {
             validateDuplicatedNickname(reqDto.getNickname());
             member.updateProfileInfo(reqDto.getNickname());
@@ -39,10 +39,10 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public void uploadProfileImage(String username, MultipartFile multipartFile, String dirName) throws IOException {
-        Member member = memberQueryRepository.findByProviderId(username)
-            .orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
-        Image img = s3Uploader.uploadSingleImage(multipartFile, dirName);
+    public void uploadProfileImage(UserDetails userDetails, MultipartFile multipartFile, String dirName) throws IOException {
+        Member member = memberQueryRepository.findByProviderId(userDetails.getUsername())
+                .orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
+        Image img = s3Service.uploadSingleImage(multipartFile, dirName);
         member.updateProfileImage(img);
     }
 
