@@ -5,7 +5,7 @@ import static com.example.server.exception.ErrorCode.FILE_NOT_EXIST_ERROR;
 import com.example.server.dto.ApiResponse;
 import com.example.server.dto.MemberDto;
 import com.example.server.exception.BusinessException;
-import com.example.server.service.MemberService;
+import com.example.server.service.member.MemberService;
 
 import java.io.IOException;
 

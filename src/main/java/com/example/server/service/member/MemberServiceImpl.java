@@ -1,13 +1,14 @@
-package com.example.server.service;
+package com.example.server.service.member;
 
 import static com.example.server.exception.ErrorCode.CONFLICT_NICKNAME;
 import static com.example.server.exception.ErrorCode.MEMBER_NOT_FOUND;
 
-import com.example.server.domain.Image;
-import com.example.server.domain.Member;
+import com.example.server.domain.image.Image;
+import com.example.server.domain.member.Member;
 import com.example.server.dto.MemberDto;
 import com.example.server.exception.BusinessException;
-import com.example.server.repository.MemberQueryRepository;
+import com.example.server.repository.member.MemberQueryRepository;
+import com.example.server.service.s3.S3Service;
 import com.nimbusds.oauth2.sdk.util.StringUtils;
 
 import java.io.IOException;

@@ -1,7 +1,7 @@
 package com.example.server.config.oauth;
 
 import com.example.server.config.oauth.provider.OAuth2UserInfo;
-import com.example.server.domain.Member;
+import com.example.server.domain.member.Member;
 import java.util.List;
 import lombok.Getter;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

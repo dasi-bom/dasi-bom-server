@@ -1,4 +1,4 @@
-package com.example.server.domain;
+package com.example.server.domain.image;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

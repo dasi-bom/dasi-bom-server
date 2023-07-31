@@ -1,6 +1,6 @@
 package com.example.server.config.auth;
 
-import com.example.server.domain.Member;
+import com.example.server.domain.member.Member;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;

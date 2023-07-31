@@ -1,9 +1,10 @@
-package com.example.server.service;
+package com.example.server.service.s3;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.example.server.domain.Image;
-import com.example.server.repository.ImageRepository;
+import com.example.server.domain.image.Image;
+import com.example.server.repository.image.ImageRepository;
+
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.util.UUID;

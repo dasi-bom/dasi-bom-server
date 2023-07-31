@@ -1,4 +1,4 @@
-package com.example.server.service;
+package com.example.server.service.member;
 
 import com.example.server.dto.MemberDto;
 import java.io.IOException;
