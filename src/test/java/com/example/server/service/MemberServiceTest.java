@@ -16,11 +16,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 
-import com.example.server.domain.Image;
-import com.example.server.domain.Member;
+import com.example.server.domain.image.Image;
+import com.example.server.domain.member.Member;
 import com.example.server.dto.MemberDto;
 import com.example.server.exception.BusinessException;
-import com.example.server.repository.MemberQueryRepository;
+import com.example.server.repository.member.MemberQueryRepository;
+import com.example.server.service.member.MemberServiceImpl;
 import com.example.server.util.S3Uploader;
 
 @ExtendWith(MockitoExtension.class)
