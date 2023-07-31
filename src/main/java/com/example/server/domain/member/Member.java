@@ -1,9 +1,10 @@
 package com.example.server.domain.member;
 
-import com.example.server.config.oauth.provider.OAuth2Provider;
-import com.example.server.domain.image.Image;
+import static javax.persistence.GenerationType.*;
+import static lombok.AccessLevel.*;
 
 import java.sql.Timestamp;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -14,11 +15,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import static javax.persistence.GenerationType.IDENTITY;
-import static lombok.AccessLevel.PROTECTED;
+import com.example.server.config.oauth.provider.OAuth2Provider;
+import com.example.server.domain.image.Image;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Builder
 @Data
@@ -57,7 +62,6 @@ public class Member {
 
 	@CreationTimestamp
 	private Timestamp createDate;
-
 
 	//== static factory method ==//
 

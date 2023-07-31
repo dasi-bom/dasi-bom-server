@@ -1,5 +1,12 @@
 package com.example.server.config.oauth;
 
+import java.util.Optional;
+
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.stereotype.Service;
 
 import com.example.server.config.oauth.provider.KakaoUserInfo;
 import com.example.server.config.oauth.provider.NaverUserInfo;
@@ -9,14 +16,8 @@ import com.example.server.domain.member.Member;
 import com.example.server.domain.member.RoleType;
 import com.example.server.repository.member.MemberQueryRepository;
 import com.example.server.repository.member.MemberRepository;
-import lombok.AllArgsConstructor;
-import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
@@ -39,12 +40,13 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 		String registrationId = userRequest.getClientRegistration().getRegistrationId();
 		if (registrationId.equals(OAuth2Provider.KAKAO.getProviderName())) {
 			oAuth2UserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
-		} else if (registrationId.equals(OAuth2Provider.NAVER.getProviderName())){
+		} else if (registrationId.equals(OAuth2Provider.NAVER.getProviderName())) {
 			oAuth2UserInfo = new NaverUserInfo(oAuth2User.getAttributes());
 		}
 
 		Optional<Member> userOptional =
-			memberQueryRepository.findByProviderAndProviderId(oAuth2UserInfo.getProvider(), oAuth2UserInfo.getProviderId());
+			memberQueryRepository.findByProviderAndProviderId(oAuth2UserInfo.getProvider(),
+				oAuth2UserInfo.getProviderId());
 
 		Member user;
 		boolean isFirst; // 최초 로그인 여부

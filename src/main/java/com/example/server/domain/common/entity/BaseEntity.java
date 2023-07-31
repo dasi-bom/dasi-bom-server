@@ -20,12 +20,12 @@ import lombok.Getter;
 @MappedSuperclass
 public abstract class BaseEntity {
 
-    @CreatedDate
-    @JsonFormat(shape = STRING, pattern = "yyyy-MM-dd a HH:mm")
-    private LocalDateTime createDate;
+	@CreatedDate
+	@JsonFormat(shape = STRING, pattern = "yyyy-MM-dd a HH:mm")
+	private LocalDateTime createDate;
 
-    @LastModifiedDate
-    @JsonFormat(shape = STRING, pattern = "yyyy-MM-dd a HH:mm")
-    private LocalDateTime updateDate;
+	@LastModifiedDate
+	@JsonFormat(shape = STRING, pattern = "yyyy-MM-dd a HH:mm")
+	private LocalDateTime updateDate;
 }
 
