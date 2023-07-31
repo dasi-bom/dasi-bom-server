@@ -21,10 +21,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class S3Uploader {
 
-	@Value("${cloud.aws.s3.bucket}")
-	private String bucket;
 	private final AmazonS3 amazonS3;
 	private final ImageRepository imageRepository;
+	@Value("${cloud.aws.s3.bucket}")
+	private String bucket;
 
 	public Image uploadSingleImage(MultipartFile multipartFile, String dirName) throws IOException {
 

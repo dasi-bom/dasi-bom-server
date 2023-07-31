@@ -17,20 +17,22 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtService {
 
-	@Value("${jwt.secret}")
-	private String secret;
-
-	@Value("${jwt.token.accessTokenExpiry}")
-	private String accessTokenExpiry;
-
-	@Value("${jwt.token.refreshTokenExpiry}")
-	private String refreshTokenExpiry;
 	private static final String AUTHORITIES_KEY = "role";
 	private final RefreshTokenRepository refreshTokenRepository;
+	@Value("${jwt.secret}")
+	private String secret;
+	@Value("${jwt.token.accessTokenExpiry}")
+	private String accessTokenExpiry;
+	@Value("${jwt.token.refreshTokenExpiry}")
+	private String refreshTokenExpiry;
 
 	@Autowired
 	public JwtService(RefreshTokenRepository refreshTokenRepository) {
 		this.refreshTokenRepository = refreshTokenRepository;
+	}
+
+	public static Date getExpiryDate(String expiry) {
+		return new Date(System.currentTimeMillis() + Long.parseLong(expiry));
 	}
 
 	public String createAccessToken(String socialId, String role) {
@@ -57,9 +59,5 @@ public class JwtService {
 		RefreshToken refreshToken = new RefreshToken(jwtToken, socialId);
 		refreshTokenRepository.save(refreshToken);
 		return refreshToken.getRefreshToken();
-	}
-
-	public static Date getExpiryDate(String expiry) {
-		return new Date(System.currentTimeMillis() + Long.parseLong(expiry));
 	}
 }
