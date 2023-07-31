@@ -14,10 +14,9 @@ import com.example.server.config.jwt.dto.RefreshToken;
 @Repository
 public class RefreshTokenRepository {
 
+	private final RedisTemplate redisTemplate;
 	@Value("${jwt.token.refreshTokenExpiry}")
 	private String refreshTokenExpiry;
-
-	private final RedisTemplate redisTemplate;
 
 	public RefreshTokenRepository(final RedisTemplate redisTemplate) {
 		this.redisTemplate = redisTemplate;

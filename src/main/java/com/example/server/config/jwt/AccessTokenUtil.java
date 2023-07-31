@@ -24,8 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class AccessTokenUtil {
 
-	private final Key key;
 	private static final String AUTHORITIES_KEY = "role";
+	private final Key key;
 
 	public AccessTokenUtil(@Value("${jwt.secret}") String secretKey) {
 		this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
