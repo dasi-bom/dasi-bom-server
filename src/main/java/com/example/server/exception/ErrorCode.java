@@ -1,11 +1,11 @@
 package com.example.server.exception;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import static org.springframework.http.HttpStatus.*;
 
 import org.springframework.http.HttpStatus;
 
-import static org.springframework.http.HttpStatus.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
