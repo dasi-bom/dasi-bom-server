@@ -1,4 +1,4 @@
-package com.example.server.repository.member;
+package com.example.server.persistence.member;
 
 import java.util.Optional;
 

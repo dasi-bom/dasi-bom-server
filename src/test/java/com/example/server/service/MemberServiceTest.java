@@ -20,8 +20,8 @@ import com.example.server.domain.image.Image;
 import com.example.server.domain.member.Member;
 import com.example.server.dto.MemberDto;
 import com.example.server.exception.BusinessException;
-import com.example.server.repository.member.MemberQueryRepository;
-import com.example.server.service.member.MemberServiceImpl;
+import com.example.server.persistence.member.MemberQueryRepository;
+import com.example.server.service.member.MemberService;
 import com.example.server.util.S3Uploader;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,7 +31,7 @@ public class MemberServiceTest {
 	MemberQueryRepository memberQueryRepository;
 
 	@InjectMocks
-	MemberServiceImpl memberService;
+	MemberService memberService;
 
 	@Mock
 	S3Uploader s3Uploader;
@@ -98,7 +98,7 @@ public class MemberServiceTest {
 	}
 
 	@Test
-	void pssed_프로필_이미지를_s3에_업로드한다() throws IOException {
+	void passed_프로필_이미지를_s3에_업로드한다() throws IOException {
 		Image expected = createImage();
 		Member member = createMember();
 		String dirName = "Test";

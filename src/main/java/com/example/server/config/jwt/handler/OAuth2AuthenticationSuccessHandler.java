@@ -21,7 +21,7 @@ import com.example.server.config.oauth.provider.OAuth2Provider;
 import com.example.server.config.oauth.provider.OAuth2UserInfo;
 import com.example.server.domain.member.Member;
 import com.example.server.domain.member.RoleType;
-import com.example.server.repository.member.MemberQueryRepository;
+import com.example.server.persistence.member.MemberQueryRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import groovy.util.logging.Slf4j;
