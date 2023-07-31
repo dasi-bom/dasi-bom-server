@@ -18,25 +18,25 @@ public class ErrorResponse {
 
     public static ResponseEntity<ErrorResponse> toResponseEntity(ErrorCode errorCode) {
         return ResponseEntity
-                .status(errorCode.getHttpStatus())
-                .body(ErrorResponse.builder()
-                        .status(errorCode.getHttpStatus().value())
-                        .message(errorCode.getMessage())
-                        .code(errorCode.getCode())
-                        .timestamp(now())
-                        .build()
-                );
+            .status(errorCode.getHttpStatus())
+            .body(ErrorResponse.builder()
+                .status(errorCode.getHttpStatus().value())
+                .message(errorCode.getMessage())
+                .code(errorCode.getCode())
+                .timestamp(now())
+                .build()
+            );
     }
 
     public static ResponseEntity<ErrorResponse> toResponseEntity(ErrorCode errorCode, String errorMessage) {
         return ResponseEntity
-                .status(errorCode.getHttpStatus())
-                .body(ErrorResponse.builder()
-                        .status(errorCode.getHttpStatus().value())
-                        .message(errorMessage)
-                        .code(errorCode.getCode())
-                        .timestamp(now())
-                        .build()
-                );
+            .status(errorCode.getHttpStatus())
+            .body(ErrorResponse.builder()
+                .status(errorCode.getHttpStatus().value())
+                .message(errorMessage)
+                .code(errorCode.getCode())
+                .timestamp(now())
+                .build()
+            );
     }
 }

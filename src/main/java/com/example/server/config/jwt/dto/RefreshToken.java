@@ -1,6 +1,7 @@
 package com.example.server.config.jwt.dto;
 
 import javax.persistence.Id;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -8,7 +9,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class RefreshToken {
 
-    @Id
-    private String refreshToken;
-    private String memberId; // socialId
+	@Id
+	private String refreshToken;
+	private String memberId; // socialId
 }

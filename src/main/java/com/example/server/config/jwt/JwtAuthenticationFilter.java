@@ -26,9 +26,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain) throws ServletException, IOException {
+        HttpServletRequest request,
+        HttpServletResponse response,
+        FilterChain filterChain) throws ServletException, IOException {
 
         // 1. Request Header 에서 JWT 토큰 추출
         final String authorizationHeader = request.getHeader("Authorization");
@@ -45,10 +45,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             } catch (RedisConnectionFailureException e) {
                 SecurityContextHolder.clearContext();
                 e.printStackTrace();
-//                throw new BaseException(REDIS_ERROR);
+                //                throw new BaseException(REDIS_ERROR);
             } catch (Exception e) {
                 e.printStackTrace();
-//                throw new BaseException(INVALID_JWT);
+                //                throw new BaseException(INVALID_JWT);
             }
         } else {
             SecurityContextHolder.getContext().setAuthentication(null);

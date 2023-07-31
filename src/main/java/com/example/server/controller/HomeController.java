@@ -6,15 +6,15 @@ import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 public class HomeController {
-    @GetMapping({"", "/"})
-    public String home() {
-        return "Dasibom Home Controller";
-    }
+	@GetMapping({"", "/"})
+	public String home() {
+		return "Dasibom Home Controller";
+	}
 
-    @GetMapping("/social/login")
-    public ModelAndView login() {
-        ModelAndView mv = new ModelAndView();
-        mv.setViewName("home");
-        return mv;
-    }
+	@GetMapping("/social/login")
+	public ModelAndView login() {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("home");
+		return mv;
+	}
 }
