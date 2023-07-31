@@ -1,7 +1,7 @@
-package com.example.server.repository;
+package com.example.server.repository.member;
 
 import com.example.server.config.oauth.provider.OAuth2Provider;
-import com.example.server.domain.Member;
+import com.example.server.domain.member.Member;
 
 import java.util.Optional;
 
