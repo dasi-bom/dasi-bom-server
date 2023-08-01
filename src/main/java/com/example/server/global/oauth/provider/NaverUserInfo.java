@@ -3,6 +3,8 @@ package com.example.server.global.oauth.provider;
 import java.util.Map;
 import java.util.Optional;
 
+import com.example.server.global.oauth.provider.constants.OAuth2Provider;
+
 public class NaverUserInfo extends OAuth2UserInfo {
 
 	public NaverUserInfo(Map<String, Object> attributes) {

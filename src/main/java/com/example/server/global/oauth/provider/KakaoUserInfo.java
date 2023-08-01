@@ -3,6 +3,8 @@ package com.example.server.global.oauth.provider;
 import java.util.Map;
 import java.util.Optional;
 
+import com.example.server.global.oauth.provider.constants.OAuth2Provider;
+
 public class KakaoUserInfo extends OAuth2UserInfo {
 
 	public KakaoUserInfo(Map<String, Object> attributes) {
