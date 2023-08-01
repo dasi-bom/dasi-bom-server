@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.server.domain.member.api.dto.ProfileSaveRequest;
 import com.example.server.global.dto.ApiResponse;
-import com.example.server.global.dto.MemberDto;
 import com.example.server.global.exception.BusinessException;
 import com.example.server.domain.member.application.MemberService;
 
@@ -31,7 +31,7 @@ public class MemberController {
 	private final MemberService memberService;
 
 	@PatchMapping("/profile")
-	public ResponseEntity<Void> updateProfile(@RequestBody MemberDto.ProfileSaveRequest reqDto,
+	public ResponseEntity<Void> updateProfile(@RequestBody ProfileSaveRequest reqDto,
 		@AuthenticationPrincipal UserDetails userDetails) {
 		memberService.updateProfile(reqDto, userDetails.getUsername());
 		return ApiResponse.success(null);

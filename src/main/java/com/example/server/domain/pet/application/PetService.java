@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.server.domain.member.model.Member;
 import com.example.server.domain.pet.model.Pet;
-import com.example.server.global.dto.pet.PetProfileRequest;
+import com.example.server.domain.pet.api.dto.PetProfileRequest;
 import com.example.server.domain.pet.persistence.PetRepository;
 import com.example.server.domain.member.application.MemberFindService;
 

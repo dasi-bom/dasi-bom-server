@@ -1,4 +1,4 @@
-package com.example.server.global.dto.pet;
+package com.example.server.domain.pet.api.dto;
 
 import static lombok.AccessLevel.*;
 
