@@ -19,7 +19,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import com.example.server.domain.image.model.Image;
 import com.example.server.domain.member.model.constants.RoleType;
-import com.example.server.global.oauth.provider.OAuth2Provider;
+import com.example.server.global.oauth.provider.constants.OAuth2Provider;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

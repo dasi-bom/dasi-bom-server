@@ -14,7 +14,7 @@ import com.example.server.domain.member.persistence.MemberQueryRepository;
 import com.example.server.domain.member.persistence.MemberRepository;
 import com.example.server.global.oauth.provider.KakaoUserInfo;
 import com.example.server.global.oauth.provider.NaverUserInfo;
-import com.example.server.global.oauth.provider.OAuth2Provider;
+import com.example.server.global.oauth.provider.constants.OAuth2Provider;
 import com.example.server.global.oauth.provider.OAuth2UserInfo;
 
 import lombok.AllArgsConstructor;

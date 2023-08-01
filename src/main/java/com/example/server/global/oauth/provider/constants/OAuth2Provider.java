@@ -1,4 +1,4 @@
-package com.example.server.global.oauth.provider;
+package com.example.server.global.oauth.provider.constants;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -4,6 +4,8 @@ package com.example.server.global.oauth.provider;
 
 import java.util.Map;
 
+import com.example.server.global.oauth.provider.constants.OAuth2Provider;
+
 public abstract class OAuth2UserInfo {
 
 	protected Map<String, Object> attributes;

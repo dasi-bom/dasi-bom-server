@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.server.domain.member.model.Member;
-import com.example.server.global.oauth.provider.OAuth2Provider;
+import com.example.server.global.oauth.provider.constants.OAuth2Provider;
 
 @Repository
 @Transactional(readOnly = true)

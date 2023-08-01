@@ -20,7 +20,7 @@ import com.example.server.global.jwt.service.JwtService;
 import com.example.server.global.oauth.CustomOAuth2User;
 import com.example.server.global.oauth.provider.KakaoUserInfo;
 import com.example.server.global.oauth.provider.NaverUserInfo;
-import com.example.server.global.oauth.provider.OAuth2Provider;
+import com.example.server.global.oauth.provider.constants.OAuth2Provider;
 import com.example.server.global.oauth.provider.OAuth2UserInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
