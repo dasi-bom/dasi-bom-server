@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.server.domain.image.model.Image;
+import com.example.server.domain.member.api.dto.MemberProfileSaveRequest;
 import com.example.server.domain.member.model.Member;
-import com.example.server.domain.member.api.dto.ProfileSaveRequest;
-import com.example.server.global.exception.BusinessException;
 import com.example.server.domain.member.persistence.MemberQueryRepository;
+import com.example.server.global.exception.BusinessException;
 import com.example.server.global.util.S3Uploader;
 import com.nimbusds.oauth2.sdk.util.StringUtils;
 
@@ -27,7 +27,7 @@ public class MemberService {
 	private final MemberQueryRepository memberQueryRepository;
 
 	@Transactional
-	public void updateProfile(ProfileSaveRequest reqDto, String username) {
+	public void updateProfile(MemberProfileSaveRequest reqDto, String username) {
 		Member member = memberQueryRepository.findByProviderId(username)
 			.orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
 		if (StringUtils.isNotBlank(reqDto.getNickname())) {

@@ -17,11 +17,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 
 import com.example.server.domain.image.model.Image;
-import com.example.server.domain.member.model.Member;
-import com.example.server.domain.member.api.dto.ProfileSaveRequest;
-import com.example.server.global.exception.BusinessException;
-import com.example.server.domain.member.persistence.MemberQueryRepository;
+import com.example.server.domain.member.api.dto.MemberProfileSaveRequest;
 import com.example.server.domain.member.application.MemberService;
+import com.example.server.domain.member.model.Member;
+import com.example.server.domain.member.persistence.MemberQueryRepository;
+import com.example.server.global.exception.BusinessException;
 import com.example.server.global.util.S3Uploader;
 
 @ExtendWith(MockitoExtension.class)
@@ -43,14 +43,14 @@ public class MemberServiceTest {
 			.build();
 	}
 
-	private ProfileSaveRequest.ProfileSaveRequest createProfileSaveRequest() {
-		return ProfileSaveRequest.ProfileSaveRequest.builder()
+	private MemberProfileSaveRequest.ProfileSaveRequest createProfileSaveRequest() {
+		return MemberProfileSaveRequest.ProfileSaveRequest.builder()
 			.nickname("테스트닉네임")
 			.build();
 	}
 
-	private ProfileSaveRequest.ProfileSaveRequest createBlankedProfileSaveRequest() {
-		return ProfileSaveRequest.ProfileSaveRequest.builder()
+	private MemberProfileSaveRequest.ProfileSaveRequest createBlankedProfileSaveRequest() {
+		return MemberProfileSaveRequest.ProfileSaveRequest.builder()
 			.build();
 	}
 
@@ -64,7 +64,7 @@ public class MemberServiceTest {
 	@Test
 	public void passed_닉네임을_포함한_프로필_정보를_등록한다() {
 		Member member = createMember();
-		ProfileSaveRequest.ProfileSaveRequest profileSaveRequest = createProfileSaveRequest();
+		MemberProfileSaveRequest.ProfileSaveRequest profileSaveRequest = createProfileSaveRequest();
 		when(memberQueryRepository.findByProviderId(member.getUsername())).thenReturn(Optional.of(member));
 		when(memberQueryRepository.existsByNickname(profileSaveRequest.getNickname())).thenReturn(false);
 
@@ -77,7 +77,7 @@ public class MemberServiceTest {
 	@Test
 	public void passed_요청필드가_비어있다면_수정하지_않는다() {
 		Member member = createMember();
-		ProfileSaveRequest.ProfileSaveRequest blankedProfileSaveRequest = createBlankedProfileSaveRequest();
+		MemberProfileSaveRequest.ProfileSaveRequest blankedProfileSaveRequest = createBlankedProfileSaveRequest();
 		when(memberQueryRepository.findByProviderId(member.getUsername())).thenReturn(Optional.of(member));
 
 		memberService.updateProfile(blankedProfileSaveRequest, member.getUsername());
@@ -88,7 +88,7 @@ public class MemberServiceTest {
 
 	@Test
 	public void failed_회원을_찾을_수_없는_경우_예외가_발생한다() {
-		ProfileSaveRequest.ProfileSaveRequest profileSaveRequest = createProfileSaveRequest();
+		MemberProfileSaveRequest.ProfileSaveRequest profileSaveRequest = createProfileSaveRequest();
 
 		assertThatThrownBy(() -> memberService.updateProfile(profileSaveRequest, "stranger"))
 			.isInstanceOf(BusinessException.class);
