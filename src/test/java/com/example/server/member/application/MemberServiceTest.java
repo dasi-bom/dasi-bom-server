@@ -1,4 +1,4 @@
-package com.example.server.member.api;
+package com.example.server.member.application;
 
 import static com.example.server.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
