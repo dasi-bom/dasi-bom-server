@@ -23,10 +23,10 @@ import javax.persistence.Table;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.example.server.global.entity.BaseEntity;
 import com.example.server.domain.image.model.Image;
 import com.example.server.domain.member.model.Member;
 import com.example.server.domain.pet.model.constants.Sex;
+import com.example.server.global.auditing.BaseEntity;
 import com.example.server.global.exception.BusinessException;
 import com.fasterxml.jackson.annotation.JsonFormat;
 

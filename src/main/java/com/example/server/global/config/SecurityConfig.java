@@ -12,11 +12,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.example.server.global.config.jwt.AccessTokenUtil;
-import com.example.server.global.config.jwt.JwtAuthenticationFilter;
-import com.example.server.global.config.jwt.handler.OAuth2AuthenticationFailureHandler;
-import com.example.server.global.config.jwt.handler.OAuth2AuthenticationSuccessHandler;
-import com.example.server.global.config.oauth.PrincipalOauth2UserService;
+import com.example.server.global.jwt.AccessTokenUtil;
+import com.example.server.global.jwt.JwtAuthenticationFilter;
+import com.example.server.global.jwt.handler.OAuth2AuthenticationFailureHandler;
+import com.example.server.global.jwt.handler.OAuth2AuthenticationSuccessHandler;
+import com.example.server.global.oauth.PrincipalOauth2UserService;
 
 import lombok.RequiredArgsConstructor;
 

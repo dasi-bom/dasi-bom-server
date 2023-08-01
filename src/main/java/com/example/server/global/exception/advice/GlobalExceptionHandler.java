@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.example.server.global.exception.BusinessException;
-import com.example.server.global.exception.ErrorResponse;
 import com.example.server.global.exception.ErrorCode;
+import com.example.server.global.exception.ErrorResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
