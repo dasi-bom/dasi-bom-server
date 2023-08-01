@@ -43,14 +43,14 @@ public class MemberServiceTest {
 			.build();
 	}
 
-	private MemberProfileSaveRequest.ProfileSaveRequest createProfileSaveRequest() {
-		return MemberProfileSaveRequest.ProfileSaveRequest.builder()
+	private MemberProfileSaveRequest createProfileSaveRequest() {
+		return MemberProfileSaveRequest.builder()
 			.nickname("테스트닉네임")
 			.build();
 	}
 
-	private MemberProfileSaveRequest.ProfileSaveRequest createBlankedProfileSaveRequest() {
-		return MemberProfileSaveRequest.ProfileSaveRequest.builder()
+	private MemberProfileSaveRequest createBlankedProfileSaveRequest() {
+		return MemberProfileSaveRequest.builder()
 			.build();
 	}
 
@@ -64,7 +64,7 @@ public class MemberServiceTest {
 	@Test
 	public void passed_닉네임을_포함한_프로필_정보를_등록한다() {
 		Member member = createMember();
-		MemberProfileSaveRequest.ProfileSaveRequest profileSaveRequest = createProfileSaveRequest();
+		MemberProfileSaveRequest profileSaveRequest = createProfileSaveRequest();
 		when(memberQueryRepository.findByProviderId(member.getUsername())).thenReturn(Optional.of(member));
 		when(memberQueryRepository.existsByNickname(profileSaveRequest.getNickname())).thenReturn(false);
 
@@ -77,7 +77,7 @@ public class MemberServiceTest {
 	@Test
 	public void passed_요청필드가_비어있다면_수정하지_않는다() {
 		Member member = createMember();
-		MemberProfileSaveRequest.ProfileSaveRequest blankedProfileSaveRequest = createBlankedProfileSaveRequest();
+		MemberProfileSaveRequest blankedProfileSaveRequest = createBlankedProfileSaveRequest();
 		when(memberQueryRepository.findByProviderId(member.getUsername())).thenReturn(Optional.of(member));
 
 		memberService.updateProfile(blankedProfileSaveRequest, member.getUsername());
@@ -88,7 +88,7 @@ public class MemberServiceTest {
 
 	@Test
 	public void failed_회원을_찾을_수_없는_경우_예외가_발생한다() {
-		MemberProfileSaveRequest.ProfileSaveRequest profileSaveRequest = createProfileSaveRequest();
+		MemberProfileSaveRequest profileSaveRequest = createProfileSaveRequest();
 
 		assertThatThrownBy(() -> memberService.updateProfile(profileSaveRequest, "stranger"))
 			.isInstanceOf(BusinessException.class);
