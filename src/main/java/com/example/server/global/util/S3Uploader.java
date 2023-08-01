@@ -26,6 +26,7 @@ public class S3Uploader {
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucket;
 
+	// 서비스 로직의 향기가 강하긴 한데...
 	public Image uploadSingleImage(MultipartFile multipartFile, String dirName) throws IOException {
 
 		String s3FileName = createFileName(multipartFile.getOriginalFilename(), dirName);
