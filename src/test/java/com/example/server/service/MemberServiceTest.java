@@ -1,6 +1,6 @@
 package com.example.server.service;
 
-import static com.example.server.exception.ErrorCode.*;
+import static com.example.server.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -16,13 +16,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 
-import com.example.server.domain.image.Image;
-import com.example.server.domain.member.Member;
-import com.example.server.dto.MemberDto;
-import com.example.server.exception.BusinessException;
-import com.example.server.persistence.member.MemberQueryRepository;
-import com.example.server.service.member.MemberService;
-import com.example.server.util.S3Uploader;
+import com.example.server.domain.image.model.Image;
+import com.example.server.domain.member.model.Member;
+import com.example.server.global.dto.MemberDto;
+import com.example.server.global.exception.BusinessException;
+import com.example.server.domain.member.persistence.MemberQueryRepository;
+import com.example.server.domain.member.application.MemberService;
+import com.example.server.global.util.S3Uploader;
 
 @ExtendWith(MockitoExtension.class)
 public class MemberServiceTest {
