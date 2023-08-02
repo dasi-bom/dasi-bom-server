@@ -4,6 +4,7 @@ import static com.example.server.global.exception.ErrorCode.*;
 
 import java.io.IOException;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,8 +37,8 @@ public class MemberController {
 		return ApiResponse.success(null);
 	}
 
-	// @PostMapping(value = "/profile/images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	@PostMapping(value = "/profile/images")
+	// @PostMapping(value = "/profile/images")
+	@PostMapping(value = "/profile/images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Void> uploadProfileImage(@RequestParam MultipartFile multipartFile,
 		@AuthenticationPrincipal UserDetails userDetails) throws IOException {
 		if (multipartFile == null) {
