@@ -4,7 +4,6 @@ import static com.example.server.global.exception.ErrorCode.*;
 
 import java.io.IOException;
 
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,8 +36,10 @@ public class MemberController {
 		return ApiResponse.success(null);
 	}
 
-	@PostMapping(value = "/profile/images", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public ResponseEntity<Void> uploadProfileImage(@RequestPart(required = false) MultipartFile multipartFile,
+
+	// @PostMapping(value = "/profile/images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PostMapping(value = "/profile/images")
+	public ResponseEntity<Void> uploadProfileImage(@RequestParam MultipartFile multipartFile,
 		@AuthenticationPrincipal UserDetails userDetails) throws IOException {
 		if (multipartFile == null) {
 			throw new BusinessException(FILE_NOT_EXIST_ERROR);
@@ -47,5 +48,23 @@ public class MemberController {
 
 		return ApiResponse.success(null);
 	}
+
+
+	// @PostMapping(value = "/profile/images",
+	// 	consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+	// 	produces = MediaType.APPLICATION_JSON_VALUE)
+
+	// @PostMapping(value = "/profile/images",
+	// 	consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	// public ResponseEntity<Void> uploadProfileImage(@RequestPart(required = false) MultipartFile multipartFile,
+	// 	@AuthenticationPrincipal UserDetails userDetails) throws IOException {
+	// 	if (multipartFile == null) {
+	// 		throw new BusinessException(FILE_NOT_EXIST_ERROR);
+	// 	}
+	// 	memberService.uploadProfileImage(userDetails.getUsername(), multipartFile, "Profile/Member");
+	//
+	// 	return ApiResponse.success(null);
+	// }
+
 
 }
