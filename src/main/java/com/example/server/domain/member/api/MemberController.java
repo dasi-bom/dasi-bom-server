@@ -37,7 +37,6 @@ public class MemberController {
 		return ApiResponse.success(null);
 	}
 
-	// @PostMapping(value = "/profile/images")
 	@PostMapping(value = "/profile/images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Void> uploadProfileImage(@RequestParam MultipartFile multipartFile,
 		@AuthenticationPrincipal UserDetails userDetails) throws IOException {
@@ -48,21 +47,5 @@ public class MemberController {
 
 		return ApiResponse.success(null);
 	}
-
-	// @PostMapping(value = "/profile/images",
-	// 	consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
-	// 	produces = MediaType.APPLICATION_JSON_VALUE)
-
-	// @PostMapping(value = "/profile/images",
-	// 	consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	// public ResponseEntity<Void> uploadProfileImage(@RequestPart(required = false) MultipartFile multipartFile,
-	// 	@AuthenticationPrincipal UserDetails userDetails) throws IOException {
-	// 	if (multipartFile == null) {
-	// 		throw new BusinessException(FILE_NOT_EXIST_ERROR);
-	// 	}
-	// 	memberService.uploadProfileImage(userDetails.getUsername(), multipartFile, "Profile/Member");
-	//
-	// 	return ApiResponse.success(null);
-	// }
 
 }
