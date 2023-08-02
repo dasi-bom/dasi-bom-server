@@ -36,7 +36,6 @@ public class MemberController {
 		return ApiResponse.success(null);
 	}
 
-
 	// @PostMapping(value = "/profile/images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	@PostMapping(value = "/profile/images")
 	public ResponseEntity<Void> uploadProfileImage(@RequestParam MultipartFile multipartFile,
@@ -48,7 +47,6 @@ public class MemberController {
 
 		return ApiResponse.success(null);
 	}
-
 
 	// @PostMapping(value = "/profile/images",
 	// 	consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
@@ -65,6 +63,5 @@ public class MemberController {
 	//
 	// 	return ApiResponse.success(null);
 	// }
-
 
 }
