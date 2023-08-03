@@ -42,7 +42,9 @@ public enum ErrorCode {
 	PET_BIO_TOO_LONG("PE-06-01", BAD_REQUEST, "반려동물의 이름은 20자 이하여야 합니다."),
 
 	// PE-07 -> Protected Date Error
-	PET_PROTECTED_DATE_INVALID("PE-07-01", BAD_REQUEST, "반려동물 임시보호 시작일이 유효하지 않습니다.");
+	PET_PROTECTED_DATE_TOO_EARLY("PE-07-01", BAD_REQUEST, "반려동물 임시보호 시작일이 너무 이전입니다."),
+	PET_PROTECTED_DATE_IN_FUTURE("PE-07-02", BAD_REQUEST, "반려동물 임시보호 시작일은 미래일 수 없습니다."),
+	PET_PROTECTED_DATE_INVALID("PE-07-03", BAD_REQUEST, "반려동물 임시보호 시작일이 유효하지 않습니다.");
 
 	private final String code;
 	private final HttpStatus httpStatus;

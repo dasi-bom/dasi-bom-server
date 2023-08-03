@@ -2,11 +2,9 @@ package com.example.server.domain.pet.api.dto;
 
 import static lombok.AccessLevel.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
-import org.springframework.web.multipart.MultipartFile;
-
-import com.example.server.domain.pet.model.constants.Sex;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,11 +14,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
 public class PetProfileRegisterRequest {
+
 	private String type;
-	private MultipartFile multipartFile;
+
 	private String name;
+
 	private Integer age;
-	private Sex sex;
+
+	private String sex;
+
 	private String bio;
-	private LocalDateTime startTempProtectedDate;
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate startTempProtectedDate;
 }

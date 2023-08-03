@@ -2,13 +2,12 @@ package com.example.server.domain.pet.model;
 
 import static com.example.server.global.exception.ErrorCode.*;
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.*;
-import static java.time.LocalDateTime.*;
 import static java.util.Objects.*;
 import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -67,11 +66,11 @@ public class Pet extends BaseEntity {
 
 	private String bio;
 
-	@JsonFormat(shape = STRING, pattern = "yyyy-MM-dd")
-	private LocalDateTime startTempProtectedDate;
+	@JsonFormat(shape = STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	private LocalDate startTempProtectedDate;
 
-	@JsonFormat(shape = STRING, pattern = "yyyy-MM-dd")
-	private LocalDateTime endTempProtectedDate;
+	@JsonFormat(shape = STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	private LocalDate endTempProtectedDate;
 
 	//== validation constructor ==//
 	@Builder
@@ -80,7 +79,8 @@ public class Pet extends BaseEntity {
 		final String type,
 		final Image profileImage,
 		final String name,
-		final LocalDateTime startTempProtectedDate,
+		final Sex sex,
+		final LocalDate startTempProtectedDate,
 		final Integer age,
 		final String bio
 	) {
@@ -94,6 +94,7 @@ public class Pet extends BaseEntity {
 		this.type = type;
 		this.profileImage = profileImage;
 		this.name = name;
+		this.sex = sex;
 		this.startTempProtectedDate = startTempProtectedDate;
 		this.age = age;
 		this.bio = bio;
@@ -103,17 +104,17 @@ public class Pet extends BaseEntity {
 	public static Pet of(
 		final Member owner,
 		final String type,
-		final Image profileImage,
 		final String name,
-		final LocalDateTime startTempProtectedDate,
+		final Sex sex,
+		final LocalDate startTempProtectedDate,
 		final Integer age,
 		final String bio
 	) {
 		return Pet.builder()
 			.owner(owner)
 			.type(type)
-			.profileImage(profileImage)
 			.name(name)
+			.sex(sex)
 			.startTempProtectedDate(startTempProtectedDate)
 			.age(age)
 			.bio(bio)
@@ -155,11 +156,14 @@ public class Pet extends BaseEntity {
 		}
 	}
 
-	private void validateStartTempProtectedDate(final LocalDateTime tempProtectedDate) {
-		if (tempProtectedDate.isBefore(
-			LocalDateTime.of(1900, 1, 1, 0, 0)) ||
-			tempProtectedDate.isAfter(now())) {
+	private void validateStartTempProtectedDate(final LocalDate tempProtectedDate) {
+		if (isNull(tempProtectedDate)) {
 			throw new BusinessException(PET_PROTECTED_DATE_INVALID);
+		} else if (tempProtectedDate.isBefore(
+			LocalDate.of(1900, 1, 1))) {
+			throw new BusinessException(PET_PROTECTED_DATE_TOO_EARLY);
+		} else if (tempProtectedDate.isAfter(LocalDate.now())) {
+			throw new BusinessException(PET_PROTECTED_DATE_IN_FUTURE);
 		}
 	}
 }
