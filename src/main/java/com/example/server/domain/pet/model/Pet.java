@@ -2,6 +2,7 @@ package com.example.server.domain.pet.model;
 
 import static com.example.server.global.exception.ErrorCode.*;
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.*;
+import static java.time.LocalDateTime.*;
 import static java.util.Objects.*;
 import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
@@ -64,6 +65,8 @@ public class Pet extends BaseEntity {
 	@Column(nullable = false)
 	private Sex sex;
 
+	private String bio;
+
 	@JsonFormat(shape = STRING, pattern = "yyyy-MM-dd")
 	private LocalDateTime startTempProtectedDate;
 
@@ -77,18 +80,23 @@ public class Pet extends BaseEntity {
 		final String type,
 		final Image profileImage,
 		final String name,
-		final Integer age
+		final LocalDateTime startTempProtectedDate,
+		final Integer age,
+		final String bio
 	) {
 		validateOwner(owner);
 		validateType(type);
 		validateName(name);
-		// todo 이미지 검증 로직
+		validateStartTempProtectedDate(startTempProtectedDate);
 		validateAge(age);
+		validateBio(bio);
 		this.owner = owner;
 		this.type = type;
 		this.profileImage = profileImage;
 		this.name = name;
+		this.startTempProtectedDate = startTempProtectedDate;
 		this.age = age;
+		this.bio = bio;
 	}
 
 	//== static factory method ==//
@@ -97,14 +105,18 @@ public class Pet extends BaseEntity {
 		final String type,
 		final Image profileImage,
 		final String name,
-		final Integer age
+		final LocalDateTime startTempProtectedDate,
+		final Integer age,
+		final String bio
 	) {
 		return Pet.builder()
 			.owner(owner)
 			.type(type)
 			.profileImage(profileImage)
 			.name(name)
+			.startTempProtectedDate(startTempProtectedDate)
 			.age(age)
+			.bio(bio)
 			.build();
 	}
 
@@ -132,7 +144,22 @@ public class Pet extends BaseEntity {
 	}
 
 	private void validateAge(final Integer age) {
-		if (age < 1 || age > 100)
+		if (age < 1 || age > 100) {
 			throw new BusinessException(PET_AGE_INVALID);
+		}
+	}
+
+	private void validateBio(final String bio) {
+		if (!isNull(bio) && bio.length() > 300) {
+			throw new BusinessException(PET_BIO_TOO_LONG);
+		}
+	}
+
+	private void validateStartTempProtectedDate(final LocalDateTime tempProtectedDate) {
+		if (tempProtectedDate.isBefore(
+			LocalDateTime.of(1900, 1, 1, 0, 0)) ||
+			tempProtectedDate.isAfter(now())) {
+			throw new BusinessException(PET_PROTECTED_DATE_INVALID);
+		}
 	}
 }

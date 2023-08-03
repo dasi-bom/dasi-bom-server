@@ -14,8 +14,8 @@ import com.example.server.domain.member.persistence.MemberQueryRepository;
 import com.example.server.domain.member.persistence.MemberRepository;
 import com.example.server.global.oauth.provider.KakaoUserInfo;
 import com.example.server.global.oauth.provider.NaverUserInfo;
-import com.example.server.global.oauth.provider.constants.OAuth2Provider;
 import com.example.server.global.oauth.provider.OAuth2UserInfo;
+import com.example.server.global.oauth.provider.constants.OAuth2Provider;
 
 import lombok.AllArgsConstructor;
 
@@ -36,6 +36,8 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 	private OAuth2User processOAuth2User(OAuth2UserRequest userRequest, OAuth2User oAuth2User) {
 		OAuth2UserInfo oAuth2UserInfo = null;
 
+		Member user;
+
 		// OAuth2 서비스 제공자 구분
 		String registrationId = userRequest.getClientRegistration().getRegistrationId();
 		if (registrationId.equals(OAuth2Provider.KAKAO.getProviderName())) {
@@ -48,16 +50,15 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 			memberQueryRepository.findByProviderAndProviderId(oAuth2UserInfo.getProvider(),
 				oAuth2UserInfo.getProviderId());
 
-		Member user;
 		boolean isFirst; // 최초 로그인 여부
 		if (userOptional.isPresent()) { // 이미 가입한 회원이라면
 			isFirst = false;
 			user = userOptional.get();
-			//todo should setter to utility Method
-			user.setEmail(oAuth2UserInfo.getEmail());
+			user.updateEmail(oAuth2UserInfo.getEmail());
 			memberRepository.save(user);
 		} else {
 			isFirst = true;
+
 			// user의 패스워드가 null이기 때문에 OAuth 유저는 일반적인 로그인을 할 수 없음.
 			user = Member.builder()
 				.name(oAuth2UserInfo.getName())

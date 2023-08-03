@@ -2,14 +2,19 @@ package com.example.server.domain.pet.application;
 
 import static com.example.server.domain.pet.model.Pet.*;
 
+import java.io.IOException;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.server.domain.image.model.Image;
 import com.example.server.domain.member.application.MemberFindService;
+import com.example.server.domain.member.application.MemberService;
 import com.example.server.domain.member.model.Member;
-import com.example.server.domain.pet.api.dto.PetProfileSaveRequest;
+import com.example.server.domain.pet.api.dto.PetProfileRegisterRequest;
 import com.example.server.domain.pet.model.Pet;
 import com.example.server.domain.pet.persistence.PetRepository;
+import com.example.server.global.util.S3Uploader;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,15 +23,23 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class PetService {
 
+	private static final String DIR_PATH = "Profile/Pet";
+
 	private final PetRepository petRepository;
+	private final MemberService memberService;
+	private final S3Uploader s3Uploader;
 	private final MemberFindService memberFindService;
 
-	@Transactional
-	// todo 한 사용자가 중복된 이름의 반려동물을 생성하는 경우?
-	public void createProfile(PetProfileSaveRequest req, Long memberId) {
-		Member owner = memberFindService.findByUserId(memberId);
-		Pet pet = of(owner, req.getType(), req.getProfileImage(), req.getName(), req.getAge());
-		// todo 프로필 사진 S3 등록 로직 추가 예정
-		petRepository.save(pet);
+	public Pet createProfile(PetProfileRegisterRequest req, String username) throws IOException {
+		Member owner = memberFindService.findBySecurityUsername(username);
+		Image profileImage = s3Uploader.uploadSingleImage(req.getMultipartFile(), DIR_PATH);
+		return petRepository.save(
+			of(owner,
+				req.getType(),
+				profileImage,
+				req.getName(),
+				req.getStartTempProtectedDate(),
+				req.getAge(),
+				req.getBio()));
 	}
 }

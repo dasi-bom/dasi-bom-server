@@ -35,9 +35,14 @@ public enum ErrorCode {
 	PET_TYPE_NULL("PE-03-03", BAD_REQUEST, "반려동물의 종류가 요청되지 않았습니다."),
 
 	// PE-04 -> Pet Age Error
-	PET_AGE_INVALID("PE-04-01", BAD_REQUEST, "반려동물의 나이는 1~100 사이의 정수여야 합니다.");
+	PET_AGE_INVALID("PE-04-01", BAD_REQUEST, "반려동물의 나이는 1~100 사이의 정수여야 합니다."),
 
 	// PE-05 -> Pet Profile Image Error
+	// PE-06 -> Pet Bio Error
+	PET_BIO_TOO_LONG("PE-06-01", BAD_REQUEST, "반려동물의 이름은 20자 이하여야 합니다."),
+
+	// PE-07 -> Protected Date Error
+	PET_PROTECTED_DATE_INVALID("PE-07-01", BAD_REQUEST, "반려동물 임시보호 시작일이 유효하지 않습니다.");
 
 	private final String code;
 	private final HttpStatus httpStatus;
