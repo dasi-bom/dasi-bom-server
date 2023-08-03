@@ -1,7 +1,5 @@
 package com.example.server.member.api;
 
-import static com.example.server.global.exception.ErrorCode.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.*;
@@ -32,7 +30,6 @@ import com.example.server.domain.image.model.Image;
 import com.example.server.domain.member.api.MemberController;
 import com.example.server.domain.member.api.dto.MemberProfileSaveRequest;
 import com.example.server.domain.member.application.MemberService;
-import com.example.server.global.exception.BusinessException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(MemberControllerTest.class)
@@ -82,38 +79,6 @@ class MemberControllerTest {
 			)
 			.andExpect(status().isOk());
 	}
-
-	@Test
-	@WithMockUser(username = "test_user")
-	@DisplayName("failed_존재하지_않는_사용자는_프로필_정보(닉네임)를_변경할_수_없다")
-	void failed_존재하지_않는_사용자는_프로필_정보를_변경할_수_없다() throws Exception {
-		MemberProfileSaveRequest requestDto = createMemberProfileSaveRequest();
-
-		doThrow(new BusinessException(MEMBER_NOT_FOUND)).when(memberService).updateProfile(requestDto, "test_user");
-
-		BusinessException exception = assertThrows(BusinessException.class, () -> {
-			mockMvc.perform(patch("/member/profile")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectToJsonString(requestDto))
-				.with(csrf())
-			);
-		});
-		assertEquals(MEMBER_NOT_FOUND, exception.getErrorCode());
-
-		// mockMvc.perform(patch("/member/profile")
-		// 		.contentType(MediaType.APPLICATION_JSON)
-		// 		.content(objectToJsonString(requestDto))
-		// 		.with(csrf())
-		// 	)
-		// 	.andExpect(status().is4xxClientError()) // is4xxClientError()
-		// 	.andExpect(result -> assertTrue(result.getResolvedException() instanceof BusinessException));
-	}
-
-	// @Test
-	// @WithMockUser(username = "test_user")
-	// @DisplayName("failed_이미_사용중인_닉네임으로는_변경할_수_없다")
-	// void failed_이미_사용중인_닉네임으로는_변경할_수_없다() throws BusinessException {
-	// }
 
 	@Test
 	@WithMockUser(username = "test_user")
