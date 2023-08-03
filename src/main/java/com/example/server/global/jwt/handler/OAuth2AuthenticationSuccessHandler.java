@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.example.server.domain.member.model.Member;
 import com.example.server.domain.member.model.constants.RoleType;
@@ -94,17 +95,18 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 		// // Write JSON response to the response body
 		// response.getWriter().write(jsonResponse);
 
-		// String url = makeRedirectUrl(accessToken);
-		// System.out.println("---------> url: " + url);
-		// getRedirectStrategy().sendRedirect(request, response, url);
+		String url = makeRedirectUrl(accessToken);
+		System.out.println("---------> url: " + url);
+		getRedirectStrategy().sendRedirect(request, response, url);
 
 	}
 
-	// private String makeRedirectUrl(String token) {
-	// 	// return UriComponentsBuilder.fromUriString("redirect:webauthcallback://success?accessToken=" + token)
-	// 	// 	.build().toUriString();
-	// 	return UriComponentsBuilder.fromUriString("http://localhost:3000/oauth2/redirect/" + token)
-	// 		.build().toUriString();
-	// }
+	private String makeRedirectUrl(String token) {
+		// return UriComponentsBuilder.fromUriString("redirect:webauthcallback://success?accessToken=" + token)
+		// 	.build().toUriString();
+
+		return UriComponentsBuilder.fromUriString("com.example.dasi-bom-client?accessToken=" + token)
+			.build().toUriString();
+	}
 
 }
