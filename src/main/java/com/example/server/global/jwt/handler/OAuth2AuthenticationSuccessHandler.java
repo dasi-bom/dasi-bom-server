@@ -20,8 +20,8 @@ import com.example.server.global.jwt.service.JwtService;
 import com.example.server.global.oauth.CustomOAuth2User;
 import com.example.server.global.oauth.provider.KakaoUserInfo;
 import com.example.server.global.oauth.provider.NaverUserInfo;
-import com.example.server.global.oauth.provider.constants.OAuth2Provider;
 import com.example.server.global.oauth.provider.OAuth2UserInfo;
+import com.example.server.global.oauth.provider.constants.OAuth2Provider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import groovy.util.logging.Slf4j;
@@ -41,10 +41,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 		Authentication authentication) throws IOException, ServletException {
-		writeTokenResponse(response, authentication);
+		writeTokenResponse(request, response, authentication);
 	}
 
-	private void writeTokenResponse(HttpServletResponse response, Authentication authentication) throws IOException {
+	private void writeTokenResponse(HttpServletRequest request, HttpServletResponse response,
+		Authentication authentication) throws IOException {
 
 		CustomOAuth2User oauth2user = (CustomOAuth2User)authentication.getPrincipal();
 		String userName = oauth2user.getName(); //authentication 의 name
@@ -85,6 +86,25 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 		response.setCharacterEncoding("UTF-8");
 		objectMapper.writeValue(response.getWriter(), authResponse);
 
+		// ObjectMapper objectMapper = new ObjectMapper();
+		// String jsonResponse = objectMapper.writeValueAsString(authResponse);
+		// // Set HTTP response headers
+		// response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+		// response.setCharacterEncoding("UTF-8");
+		// // Write JSON response to the response body
+		// response.getWriter().write(jsonResponse);
+
+		// String url = makeRedirectUrl(accessToken);
+		// System.out.println("---------> url: " + url);
+		// getRedirectStrategy().sendRedirect(request, response, url);
+
 	}
+
+	// private String makeRedirectUrl(String token) {
+	// 	// return UriComponentsBuilder.fromUriString("redirect:webauthcallback://success?accessToken=" + token)
+	// 	// 	.build().toUriString();
+	// 	return UriComponentsBuilder.fromUriString("http://localhost:3000/oauth2/redirect/" + token)
+	// 		.build().toUriString();
+	// }
 
 }

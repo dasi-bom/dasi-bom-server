@@ -63,7 +63,8 @@ public class SecurityConfig {
 
 			.and()
 			.oauth2Login()
-			.loginPage("/social/login")
+			.loginPage("/login")
+			// .loginPage("/social/login")
 			.userInfoEndpoint()
 			.userService(principalOauth2UserService)
 			.and()
