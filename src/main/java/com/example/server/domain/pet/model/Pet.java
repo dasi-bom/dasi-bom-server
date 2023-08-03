@@ -1,7 +1,6 @@
 package com.example.server.domain.pet.model;
 
 import static com.example.server.global.exception.ErrorCode.*;
-import static com.fasterxml.jackson.annotation.JsonFormat.Shape.*;
 import static java.util.Objects.*;
 import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
@@ -25,6 +24,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import com.example.server.domain.image.model.Image;
 import com.example.server.domain.member.model.Member;
+import com.example.server.domain.pet.api.dto.PetProfileRequest;
 import com.example.server.domain.pet.model.constants.Sex;
 import com.example.server.global.auditing.BaseEntity;
 import com.example.server.global.exception.BusinessException;
@@ -64,12 +64,13 @@ public class Pet extends BaseEntity {
 	@Column(nullable = false)
 	private Sex sex;
 
+	@Column(length = 511)
 	private String bio;
 
-	@JsonFormat(shape = STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	private LocalDate startTempProtectedDate;
 
-	@JsonFormat(shape = STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	private LocalDate endTempProtectedDate;
 
 	//== validation constructor ==//
@@ -158,12 +159,39 @@ public class Pet extends BaseEntity {
 
 	private void validateStartTempProtectedDate(final LocalDate tempProtectedDate) {
 		if (isNull(tempProtectedDate)) {
-			throw new BusinessException(PET_PROTECTED_DATE_INVALID);
+			throw new BusinessException(PET_TEMP_PROTECTED_SRT_DATE_INVALID);
 		} else if (tempProtectedDate.isBefore(
 			LocalDate.of(1900, 1, 1))) {
-			throw new BusinessException(PET_PROTECTED_DATE_TOO_EARLY);
+			throw new BusinessException(PET_TEMP_PROTECTED_SRT_DATE_TOO_EARLY);
 		} else if (tempProtectedDate.isAfter(LocalDate.now())) {
-			throw new BusinessException(PET_PROTECTED_DATE_IN_FUTURE);
+			throw new BusinessException(PET_TEMP_PROTECTED_SRT_DATE_IN_FUTURE);
 		}
+	}
+
+	private void validateProfileImage(final Image image) {
+		if (isNull(image)) {
+			throw new BusinessException(PET_PROFILE_IMAGE_INVALID);
+		}
+	}
+
+	//==utility method==//
+	public void updateProfileImage(Image image) {
+		validateProfileImage(image);
+		this.profileImage = image;
+	}
+
+	public void updateProfile(PetProfileRequest petReq) {
+		validateType(petReq.getType());
+		validateName(petReq.getName());
+		validateStartTempProtectedDate(petReq.getStartTempProtectedDate());
+		validateAge(petReq.getAge());
+		validateBio(petReq.getBio());
+
+		this.type = petReq.getType();
+		this.name = petReq.getName();
+		this.sex = Sex.valueOf(petReq.getSex());
+		this.startTempProtectedDate = petReq.getStartTempProtectedDate();
+		this.age = petReq.getAge();
+		this.bio = petReq.getBio();
 	}
 }

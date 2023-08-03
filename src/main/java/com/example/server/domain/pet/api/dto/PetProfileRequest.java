@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
-public class PetProfileRegisterRequest {
+public class PetProfileRequest {
 
 	private String type;
 

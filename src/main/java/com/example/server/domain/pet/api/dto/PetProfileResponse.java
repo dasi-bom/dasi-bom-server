@@ -14,18 +14,19 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
-public class PetProfileRegisterResponse {
+public class PetProfileResponse {
+
 	Long petId;
 	String petName;
 	Boolean isSuccess;
 	LocalDateTime timestamp;
 
 	//== static factory method ==//
-	public static PetProfileRegisterResponse of(
+	public static PetProfileResponse of(
 		Long petId,
 		String petName
 	) {
-		return PetProfileRegisterResponse.builder()
+		return PetProfileResponse.builder()
 			.petId(petId)
 			.petName(petName)
 			.isSuccess(true)
