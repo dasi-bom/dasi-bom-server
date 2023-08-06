@@ -14,16 +14,15 @@ import static lombok.AccessLevel.PROTECTED;
 @AllArgsConstructor
 public class PetProfileUpdateRequest {
 
-	private String type;
-
 	private String name;
-
 	private Integer age;
-
+	private String type;
 	private String sex;
-
 	private String bio;
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate startTempProtectedDate;
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate endTempProtectedDate;
 }
