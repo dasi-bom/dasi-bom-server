@@ -4,12 +4,12 @@ import static com.example.server.global.exception.ErrorCode.*;
 
 import java.util.List;
 
+import com.example.server.domain.pet.api.dto.PetProfileUpdateRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.server.domain.member.application.MemberFindService;
 import com.example.server.domain.member.model.Member;
-import com.example.server.domain.pet.api.dto.PetProfileRequest;
 import com.example.server.domain.pet.model.Pet;
 import com.example.server.domain.pet.persistence.PetRepository;
 import com.example.server.global.exception.BusinessException;
@@ -21,20 +21,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PetUpdateService {
 
-	private final PetRepository petRepository;
 	private final MemberFindService memberFindService;
 	private final PetFindService petFindService;
 
-	public Pet savePetProfile(Pet pet) {
-		return petRepository.save(pet);
-	}
-
 	public Pet updatePetProfile(
-		PetProfileRequest reqDto,
+		PetProfileUpdateRequest reqDto,
 		String username,
 		Long petId
 	) {
-		Member owner = memberFindService.findBySecurityUsername(username);
+		Member owner = memberFindService.findMemberByProviderId(username);
 		Pet pet = petFindService.findByPetId(petId);
 		List<Long> petIds = petFindService.findPetsByOwner(owner);
 

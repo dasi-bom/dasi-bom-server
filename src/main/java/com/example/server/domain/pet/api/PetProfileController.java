@@ -6,6 +6,7 @@ import static org.springframework.http.MediaType.*;
 
 import java.io.IOException;
 
+import com.example.server.domain.pet.api.dto.PetProfileUpdateRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.server.domain.pet.api.dto.PetProfileRequest;
+import com.example.server.domain.pet.api.dto.PetProfileCreateRequest;
 import com.example.server.domain.pet.api.dto.PetProfileResponse;
 import com.example.server.domain.pet.application.PetService;
 import com.example.server.domain.pet.application.PetUpdateService;
@@ -37,7 +38,7 @@ public class PetProfileController {
 
 	@PostMapping("/profile")
 	public ResponseEntity<PetProfileResponse> createPetProfile(
-		@RequestBody PetProfileRequest reqDto,
+		@RequestBody PetProfileCreateRequest reqDto,
 		@AuthenticationPrincipal UserDetails userDetails
 	) {
 		Pet pet = petService.createProfile(reqDto, userDetails.getUsername());
@@ -54,13 +55,13 @@ public class PetProfileController {
 			throw new BusinessException(FILE_NOT_EXIST_ERROR);
 		}
 		petService.uploadProfileImage(userDetails.getUsername(), petId, multipartFile);
-		return ApiResponse.success(null);
+		return ApiResponse.created(null);
 	}
 
 	@PatchMapping("/profile")
 	public ResponseEntity<PetProfileResponse> updatePetProfile(
 		@RequestParam Long petId,
-		@RequestBody PetProfileRequest reqDto,
+		@RequestBody PetProfileUpdateRequest reqDto,
 		@AuthenticationPrincipal UserDetails userDetails
 	) {
 		Pet pet = petUpdateService.updatePetProfile(reqDto, userDetails.getUsername(), petId);
