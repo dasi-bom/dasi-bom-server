@@ -69,26 +69,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 		String refreshToken = jwtService.createRefreshToken(oAuth2UserInfo.getProviderId(),
 			RoleType.ROLE_USER.toString());
 
-		// AuthResponse authResponse;
-		// if (oUser.isEmpty()) {
-		// 	authResponse = AuthResponse.builder()
-		// 		.accessToken(accessToken)
-		// 		.refreshToken(refreshToken)
-		// 		.isNewMember(Boolean.TRUE)
-		// 		.build();
-		// } else {
-		// 	authResponse = AuthResponse.builder()
-		// 		.accessToken(accessToken)
-		// 		.refreshToken(refreshToken)
-		// 		.isNewMember(Boolean.FALSE)
-		// 		.build();
-		// }
-		//
-		// ObjectMapper objectMapper = new ObjectMapper();
-		// response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-		// response.setCharacterEncoding("UTF-8");
-		// objectMapper.writeValue(response.getWriter(), authResponse);
-
 		String targetUrl;
 		if (oUser.isEmpty()) {
 			targetUrl = createTargetUrl(accessToken, Boolean.TRUE);
