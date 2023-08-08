@@ -41,6 +41,7 @@ public enum ErrorCode {
 
 	// PE-03 -> Pet Type Error
 	PET_TYPE_NULL("PE-03-01", BAD_REQUEST, "반려동물의 종류가 요청되지 않았습니다."),
+	PET_TYPE_INVALID("PE-03-02", BAD_REQUEST, "반려동물의 종류가 유효하지 않습니다."),
 
 	// PE-04 -> Pet Age Error
 	PET_AGE_INVALID("PE-04-01", BAD_REQUEST, "반려동물의 나이는 1~100 사이의 정수여야 합니다."),
@@ -57,7 +58,10 @@ public enum ErrorCode {
 	PET_TEMP_PROTECTED_SRT_DATE_INVALID("PE-07-03", BAD_REQUEST, "반려동물 임시보호 시작일이 유효하지 않습니다."),
 
 	// PE-08 -> Pet Entity Error
-	PET_NOT_FOUND("PE-08-01", NOT_FOUND, "반려 동물 정보를 찾을 수 없습니다.");
+	PET_NOT_FOUND("PE-08-01", NOT_FOUND, "반려 동물 정보를 찾을 수 없습니다."),
+
+	// PE-09 -> Pet Sex Error
+	PET_SEX_INVALID("PE-08-01", NOT_FOUND, "반려 동물 성별이 유효하지 않습니다.");
 
 	private final String code;
 	private final HttpStatus httpStatus;

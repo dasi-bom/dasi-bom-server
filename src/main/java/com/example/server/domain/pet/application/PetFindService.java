@@ -21,7 +21,7 @@ public class PetFindService {
 
 	private final PetQueryRepository petQueryRepository;
 
-	public Pet findByPetId(Long petId) {
+	public Pet findPetById(Long petId) {
 		return petQueryRepository.findById(petId)
 			.orElseThrow(() -> new BusinessException(PET_NOT_FOUND));
 	}

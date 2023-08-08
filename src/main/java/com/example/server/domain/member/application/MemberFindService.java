@@ -18,12 +18,7 @@ public class MemberFindService {
 
 	private final MemberQueryRepository memberQueryRepository;
 
-	public Member findByUserId(Long userId) {
-		return memberQueryRepository.findById(userId)
-			.orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
-	}
-
-	public Member findBySecurityUsername(String username) {
+	public Member findMemberByProviderId(String username) {
 		return memberQueryRepository.findByProviderId(username)
 			.orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
 	}

@@ -14,7 +14,7 @@ import com.example.server.domain.pet.model.Pet;
 @Repository
 @Transactional(readOnly = true)
 public interface PetQueryRepository extends JpaRepository<Pet, Long> {
-	Optional<Pet> findById(Long id);
+//	Optional<Pet> findById(Long id);
 
 	@Query("SELECT p.id FROM Pet p WHERE p.owner =:owner")
 	List<Long> findPetIdsByOwnerId(Member owner);
