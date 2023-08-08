@@ -40,6 +40,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 	@Value("${root-url}")
 	private String rootUrl;
 
+	private String tmp = "dasibomapp://";
+
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 		Authentication authentication) throws IOException, ServletException {
@@ -88,7 +90,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 		// response.setCharacterEncoding("UTF-8");
 		// objectMapper.writeValue(response.getWriter(), authResponse);
 
-		String targetUrl = UriComponentsBuilder.fromUriString(rootUrl + "/auth/success-login")
+		// String targetUrl = UriComponentsBuilder.fromUriString(rootUrl + "/auth/success-login")
+		String targetUrl = UriComponentsBuilder.fromUriString(tmp + "auth/success-login")
 			.queryParam("token", accessToken)
 			.queryParam("name", userName)
 			.build().toUriString();
