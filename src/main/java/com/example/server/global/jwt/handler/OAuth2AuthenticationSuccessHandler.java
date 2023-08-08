@@ -1,6 +1,7 @@
 package com.example.server.global.jwt.handler;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Optional;
 
 import javax.servlet.ServletException;
@@ -37,10 +38,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 	private final JwtService jwtService;
 	private final MemberQueryRepository userRepository;
 
-	@Value("${root-url}")
-	private String rootUrl;
-
-	private String tmp = "dasibomapp://";
+	@Value("${callback-url-scheme}")
+	private String callbackUrlScheme;
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -90,13 +89,23 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 		// response.setCharacterEncoding("UTF-8");
 		// objectMapper.writeValue(response.getWriter(), authResponse);
 
-		// String targetUrl = UriComponentsBuilder.fromUriString(rootUrl + "/auth/success-login")
-		String targetUrl = UriComponentsBuilder.fromUriString(tmp + "auth/success-login")
-			.queryParam("token", accessToken)
-			.queryParam("name", userName)
-			.build().toUriString();
+		String targetUrl;
+		if (oUser.isEmpty()) {
+			targetUrl = createTargetUrl(accessToken, Boolean.TRUE);
+		} else {
+			targetUrl = createTargetUrl(accessToken, Boolean.FALSE);
+		}
 
 		getRedirectStrategy().sendRedirect(request, response, targetUrl);
+	}
+
+	private String createTargetUrl(String accessToken, Boolean isNewMember)
+		throws UnsupportedEncodingException {
+		return UriComponentsBuilder
+			.fromUriString(callbackUrlScheme + "auth/success-login") // /auth 아니고 auth
+			.queryParam("token", accessToken)
+			.queryParam("isNewMember", isNewMember)
+			.build().toUriString();
 	}
 
 }
