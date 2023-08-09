@@ -3,36 +3,26 @@ package com.example.server.domain.member.model;
 import static javax.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
-import java.sql.Timestamp;
-
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.CreationTimestamp;
+import javax.persistence.*;
 
 import com.example.server.domain.image.model.Image;
 import com.example.server.domain.member.model.constants.RoleType;
+import com.example.server.global.auditing.BaseEntity;
 import com.example.server.global.oauth.provider.constants.OAuth2Provider;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Builder
-@Data
 @Entity
+@Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
-@AllArgsConstructor // todo how about refactor to static factory method??
 @Table(name = "member_tb")
-public class Member {
+public class Member extends BaseEntity {
+
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	private Long id;
@@ -61,9 +51,6 @@ public class Member {
 
 	private String nickname;
 
-	@CreationTimestamp
-	private Timestamp createDate;
-
 	//== static factory method ==//
 
 	//== utility method ==//
@@ -73,5 +60,9 @@ public class Member {
 
 	public void updateProfileImage(Image image) {
 		this.profileImage = image;
+	}
+
+	public void updateEmail(String email) {
+		this.email = email;
 	}
 }

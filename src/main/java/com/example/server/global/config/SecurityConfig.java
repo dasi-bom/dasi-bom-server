@@ -76,25 +76,6 @@ public class SecurityConfig {
 			)
 			.addFilterBefore(new JwtAuthenticationFilter(accessTokenUtil), UsernamePasswordAuthenticationFilter.class);
 
-		// http.authorizeRequests()
-		// 	.antMatchers(HttpMethod.OPTIONS).permitAll()
-		// 	.antMatchers("/").permitAll()
-		// 	.antMatchers("/social/login").permitAll()
-		// 	.antMatchers("/member/**").hasAnyRole("USER", "ADMIN") // 권한이 있어야 하는 페이지에 권한 없는 사람이 접속하면 로그인 페이지로 redirect
-		// 	.antMatchers("/admin/**").hasRole("ADMIN")
-		// 	.anyRequest().authenticated()
-		//
-		// 	.and()
-		// 	.oauth2Login()
-		// 	.loginPage("/social/login")
-		// 	.userInfoEndpoint()
-		// 	.userService(principalOauth2UserService)
-		// 	.and()
-		// 	.successHandler(oAuth2AuthenticationSuccessHandler)
-		// 	.failureHandler(oAuth2AuthenticationFailureHandler)
-		// 	.and()
-		// 	.addFilterBefore(new JwtAuthenticationFilter(accessTokenUtil), UsernamePasswordAuthenticationFilter.class);
-
 		return http.build();
 	}
 }
