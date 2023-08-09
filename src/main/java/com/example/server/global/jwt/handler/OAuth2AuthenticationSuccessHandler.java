@@ -1,28 +1,28 @@
 package com.example.server.global.jwt.handler;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Optional;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.http.MediaType;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.example.server.domain.member.model.Member;
 import com.example.server.domain.member.model.constants.RoleType;
 import com.example.server.domain.member.persistence.MemberQueryRepository;
-import com.example.server.global.jwt.dto.AuthResponse;
 import com.example.server.global.jwt.service.JwtService;
 import com.example.server.global.oauth.CustomOAuth2User;
 import com.example.server.global.oauth.provider.KakaoUserInfo;
 import com.example.server.global.oauth.provider.NaverUserInfo;
 import com.example.server.global.oauth.provider.OAuth2UserInfo;
 import com.example.server.global.oauth.provider.constants.OAuth2Provider;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import groovy.util.logging.Slf4j;
 import lombok.RequiredArgsConstructor;
@@ -38,13 +38,17 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 	private final JwtService jwtService;
 	private final MemberQueryRepository userRepository;
 
+	@Value("${callback-url-scheme}")
+	private String callbackUrlScheme;
+
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 		Authentication authentication) throws IOException, ServletException {
-		writeTokenResponse(response, authentication);
+		writeTokenResponse(request, response, authentication);
 	}
 
-	private void writeTokenResponse(HttpServletResponse response, Authentication authentication) throws IOException {
+	private void writeTokenResponse(HttpServletRequest request, HttpServletResponse response,
+		Authentication authentication) throws IOException {
 
 		CustomOAuth2User oauth2user = (CustomOAuth2User)authentication.getPrincipal();
 		String userName = oauth2user.getName(); //authentication 의 name
@@ -65,26 +69,23 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 		String refreshToken = jwtService.createRefreshToken(oAuth2UserInfo.getProviderId(),
 			RoleType.ROLE_USER.toString());
 
-		AuthResponse authResponse;
+		String targetUrl;
 		if (oUser.isEmpty()) {
-			authResponse = AuthResponse.builder()
-				.accessToken(accessToken)
-				.refreshToken(refreshToken)
-				.isNewMember(Boolean.TRUE)
-				.build();
+			targetUrl = createTargetUrl(accessToken, Boolean.TRUE);
 		} else {
-			authResponse = AuthResponse.builder()
-				.accessToken(accessToken)
-				.refreshToken(refreshToken)
-				.isNewMember(Boolean.FALSE)
-				.build();
+			targetUrl = createTargetUrl(accessToken, Boolean.FALSE);
 		}
 
-		ObjectMapper objectMapper = new ObjectMapper();
-		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-		response.setCharacterEncoding("UTF-8");
-		objectMapper.writeValue(response.getWriter(), authResponse);
+		getRedirectStrategy().sendRedirect(request, response, targetUrl);
+	}
 
+	private String createTargetUrl(String accessToken, Boolean isNewMember)
+		throws UnsupportedEncodingException {
+		return UriComponentsBuilder
+			.fromUriString(callbackUrlScheme + "auth/success-login") // /auth 아니고 auth
+			.queryParam("token", accessToken)
+			.queryParam("isNewMember", isNewMember)
+			.build().toUriString();
 	}
 
 }
