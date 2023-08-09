@@ -53,26 +53,23 @@ public class SecurityConfig {
 			.and()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-		http
-			.authorizeRequests(authorizeRequests ->
-				authorizeRequests
-					.antMatchers(HttpMethod.OPTIONS).permitAll()
-					.antMatchers("/").permitAll()
-					.antMatchers("/auth/**").permitAll()
-					.antMatchers("/social/login").permitAll()
-					.antMatchers("/member/**").hasAnyRole("USER", "ADMIN")
-					.antMatchers("/admin/**").hasRole("ADMIN")
-					.anyRequest().authenticated()
+		http.authorizeRequests(authorizeRequests -> authorizeRequests
+				.antMatchers(HttpMethod.OPTIONS).permitAll()
+				.antMatchers("/").permitAll()
+				.antMatchers("/auth/**").permitAll()
+				.antMatchers("/social/login").permitAll()
+				.antMatchers("/member/**").hasAnyRole("USER", "ADMIN")
+				.antMatchers("/admin/**").hasRole("ADMIN")
+				.anyRequest().authenticated()
 			)
-			.oauth2Login(oauth2Login ->
-				oauth2Login
-					.defaultSuccessUrl("/login-success")
-					.loginPage("/social/login")
-					.userInfoEndpoint(userInfoEndpoint ->
-						userInfoEndpoint.userService(principalOauth2UserService)
-					)
-					.successHandler(oAuth2AuthenticationSuccessHandler)
-					.failureHandler(oAuth2AuthenticationFailureHandler)
+			.oauth2Login(oauth2Login -> oauth2Login
+				.defaultSuccessUrl("/login-success")
+				.loginPage("/social/login")
+				.userInfoEndpoint(userInfoEndpoint ->
+					userInfoEndpoint.userService(principalOauth2UserService)
+				)
+				.successHandler(oAuth2AuthenticationSuccessHandler)
+				.failureHandler(oAuth2AuthenticationFailureHandler)
 			)
 			.addFilterBefore(new JwtAuthenticationFilter(accessTokenUtil), UsernamePasswordAuthenticationFilter.class);
 
