@@ -30,7 +30,7 @@ spring:
       name: user
       password: 1234
 logging.level:
-  org.hibernate.SQL: debug
+  org.hibernate.SQL: trace
 
 ---
 
