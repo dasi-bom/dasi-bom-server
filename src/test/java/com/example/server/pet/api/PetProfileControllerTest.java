@@ -43,7 +43,6 @@ class PetProfileControllerTest extends ControllerTestSupport {
         return Pet.builder()
                 .id(1L)
                 .owner(createMember())
-                .profileImage(null)
                 .petInfo(PetInfoFixture.VALID_PET.toEntity())
                 .petTempProtectedInfo(PetTempProtectedInfoFixture.VALID_PET.toEntity())
                 .build();
