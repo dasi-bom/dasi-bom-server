@@ -42,7 +42,7 @@ spring:
 spring:
   config.activate.on-profile: dev
   datasource:
-    url: jdbc:mysql://${LOCAL_IP}:${MYSQL_LOCAL_PORT}/${MYSQL_LOCAL_DATABASE}?serverTimezone=UTC&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://${LOCAL_IP}:${MYSQL_LOCAL_PORT}/${MYSQL_LOCAL_DATABASE}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true
     username: ${MYSQL_LOCAL_USER}
     password: ${MYSQL_LOCAL_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
