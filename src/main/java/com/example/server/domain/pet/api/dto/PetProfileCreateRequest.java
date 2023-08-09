@@ -4,10 +4,10 @@ import static lombok.AccessLevel.*;
 
 import java.time.LocalDate;
 
+
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-@Builder
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
