@@ -4,12 +4,10 @@ import static lombok.AccessLevel.*;
 
 import java.time.LocalDate;
 
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
+@Builder
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
@@ -23,7 +21,4 @@ public class PetProfileCreateRequest {
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate startTempProtectedDate;
-
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private LocalDate endTempProtectedDate;
 }
