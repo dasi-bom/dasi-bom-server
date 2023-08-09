@@ -1,6 +1,5 @@
 package com.example.server.domain.pet.model;
 
-import com.example.server.domain.image.model.Image;
 import com.example.server.domain.member.model.Member;
 import com.example.server.global.auditing.BaseEntity;
 import com.example.server.global.exception.BusinessException;
@@ -17,6 +16,7 @@ import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
+@Builder
 @Entity
 @Getter
 @Table(name = "pet_tb")
@@ -29,12 +29,7 @@ public class Pet extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "owner_id")
     private Member owner;
-
-    @OneToOne(fetch = LAZY)
-    @JoinColumn(name = "image_id")
-    private Image profileImage;
 
     @Embedded
     private PetInfo petInfo;
