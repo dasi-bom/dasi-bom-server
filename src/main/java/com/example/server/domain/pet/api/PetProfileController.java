@@ -32,7 +32,6 @@ public class PetProfileController {
         return ApiResponse.created(of(
                 pet.getId(),
                 userDetails.getUsername(),
-                pet.getProfileImage(),
                 pet.getPetInfo(),
                 pet.getPetTempProtectedInfo()));
     }

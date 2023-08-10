@@ -25,6 +25,7 @@ public class Member extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
+	@Column(name = "member_id")
 	private Long id;
 
 	private String name; // Username
@@ -45,7 +46,7 @@ public class Member extends BaseEntity {
 
 	private String providerId;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne
 	@JoinColumn(name = "image_id")
 	private Image profileImage;
 
