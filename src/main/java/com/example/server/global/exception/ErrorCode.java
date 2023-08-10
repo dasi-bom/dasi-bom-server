@@ -61,7 +61,23 @@ public enum ErrorCode {
 	PET_NOT_FOUND("PE-08-01", NOT_FOUND, "반려 동물 정보를 찾을 수 없습니다."),
 
 	// PE-09 -> Pet Sex Error
-	PET_SEX_INVALID("PE-08-01", NOT_FOUND, "반려 동물 성별이 유효하지 않습니다.");
+	PET_SEX_INVALID("PE-08-01", NOT_FOUND, "반려 동물 성별이 유효하지 않습니다."),
+
+	/**
+	 * STAMP ERROR CODE (ME)
+	 */
+	STAMP_INVALID("ST-01-01", NOT_FOUND, "스탬프가 유효하지 않습니다"),
+
+	/**
+	 * CATEGORY ERROR CODE (CA)
+	 */
+	CATEGORY_INVALID("CA-01-01", NOT_FOUND, "카테고리가 유효하지 않습니다"),
+
+	/**
+	 * CHALLENGE ERROR CODE (CH)
+	 */
+	CHALLENGE_TOPIC_INVALID("CH-01-01", NOT_FOUND, "챌린지가 유효하지 않습니다"),
+	;
 
 	private final String code;
 	private final HttpStatus httpStatus;

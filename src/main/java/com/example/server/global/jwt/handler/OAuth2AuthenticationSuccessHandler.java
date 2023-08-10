@@ -38,7 +38,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 	private final JwtService jwtService;
 	private final MemberQueryRepository userRepository;
 
-	@Value("${callback-url-scheme}")
+	@Value("${callback-url-scheme.web}")
+	// @Value("${callback-url-scheme.app}")
 	private String callbackUrlScheme;
 
 	@Override
