@@ -46,7 +46,7 @@ public class Member extends BaseEntity {
 
 	private String providerId;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne
 	@JoinColumn(name = "image_id")
 	private Image profileImage;
 
