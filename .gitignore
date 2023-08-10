@@ -40,4 +40,5 @@ out/
 application-oauth.yml
 application-jwt.yml
 application-s3.yml
+application-test.yml
 .env
