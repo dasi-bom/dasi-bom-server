@@ -12,8 +12,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.example.server.global.jwt.AccessTokenUtil;
 import com.example.server.global.jwt.JwtAuthenticationFilter;
+import com.example.server.global.jwt.TokenProvider;
 import com.example.server.global.jwt.handler.OAuth2AuthenticationFailureHandler;
 import com.example.server.global.jwt.handler.OAuth2AuthenticationSuccessHandler;
 import com.example.server.global.oauth.PrincipalOauth2UserService;
@@ -24,7 +24,8 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 public class SecurityConfig {
 
-	private final AccessTokenUtil accessTokenUtil;
+	// private final AccessTokenUtil accessTokenUtil;
+	private final TokenProvider tokenProvider;
 	@Autowired
 	private PrincipalOauth2UserService principalOauth2UserService;
 	@Autowired
@@ -71,7 +72,7 @@ public class SecurityConfig {
 				.successHandler(oAuth2AuthenticationSuccessHandler)
 				.failureHandler(oAuth2AuthenticationFailureHandler)
 			)
-			.addFilterBefore(new JwtAuthenticationFilter(accessTokenUtil), UsernamePasswordAuthenticationFilter.class);
+			.addFilterBefore(new JwtAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}

@@ -7,12 +7,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.example.server.global.jwt.dto.AccessToken;
+import com.example.server.global.exception.BusinessException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,37 +23,65 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-	private final AccessTokenUtil tokenProvider;
+	private final TokenProvider tokenProvider;
 
 	@Override
-	protected void doFilterInternal(
-		HttpServletRequest request,
-		HttpServletResponse response,
-		FilterChain filterChain) throws ServletException, IOException {
-
-		// 1. Request Header 에서 JWT 토큰 추출
-		final String authorizationHeader = request.getHeader("Authorization");
-
-		// 2. validateToken 으로 토큰 유효성 검사
-		if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-			String tokenStr = JwtHeaderUtil.getAccessToken(request);
-			AccessToken token = tokenProvider.convertAccessToken(tokenStr);
-			try {
-				if (token.validate()) {
-					Authentication authentication = tokenProvider.getAuthentication(token);
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+		throws ServletException, IOException {
+		String accessToken = tokenProvider.resolveToken(request);
+		try {
+			if (accessToken != null) {
+				AuthToken authToken = tokenProvider.convertAuthToken(accessToken);
+				if (authToken.validateToken()) {
+					Authentication authentication = tokenProvider.getAuthentication(authToken);
 					SecurityContextHolder.getContext().setAuthentication(authentication);
 				}
-			} catch (RedisConnectionFailureException e) {
-				SecurityContextHolder.clearContext();
-				e.printStackTrace();
-				//                throw new BaseException(REDIS_ERROR);
-			} catch (Exception e) {
-				e.printStackTrace();
-				//                throw new BaseException(INVALID_JWT);
 			}
-		} else {
-			SecurityContextHolder.getContext().setAuthentication(null);
+		} catch (BusinessException e) {
+			SecurityContextHolder.clearContext();
+			response.sendError(e.getErrorCode().getHttpStatus().value(), e.getMessage());
+			return;
 		}
+
 		filterChain.doFilter(request, response);
 	}
 }
+
+// @Slf4j
+// @RequiredArgsConstructor
+// public class JwtAuthenticationFilter extends OncePerRequestFilter {
+//
+// 	private final AccessTokenUtil tokenProvider;
+//
+// 	@Override
+// 	protected void doFilterInternal(
+// 		HttpServletRequest request,
+// 		HttpServletResponse response,
+// 		FilterChain filterChain) throws ServletException, IOException {
+//
+// 		// 1. Request Header 에서 JWT 토큰 추출
+// 		final String authorizationHeader = request.getHeader("Authorization");
+//
+// 		// 2. validateToken 으로 토큰 유효성 검사
+// 		if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+// 			String tokenStr = JwtHeaderUtil.getAccessToken(request);
+// 			AccessToken token = tokenProvider.convertAccessToken(tokenStr);
+// 			try {
+// 				if (token.validate()) {
+// 					Authentication authentication = tokenProvider.getAuthentication(token);
+// 					SecurityContextHolder.getContext().setAuthentication(authentication);
+// 				}
+// 			} catch (RedisConnectionFailureException e) {
+// 				SecurityContextHolder.clearContext();
+// 				e.printStackTrace();
+// 				//                throw new BaseException(REDIS_ERROR);
+// 			} catch (Exception e) {
+// 				e.printStackTrace();
+// 				//                throw new BaseException(INVALID_JWT);
+// 			}
+// 		} else {
+// 			SecurityContextHolder.getContext().setAuthentication(null);
+// 		}
+// 		filterChain.doFilter(request, response);
+// 	}
+// }
