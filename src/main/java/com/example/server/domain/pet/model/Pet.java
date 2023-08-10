@@ -17,6 +17,7 @@ import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
+@Builder
 @Entity
 @Getter
 @Table(name = "pet_tb")
@@ -34,7 +35,7 @@ public class Pet extends BaseEntity {
 
     @OneToOne(fetch = LAZY)
     @JoinColumn(name = "image_id")
-    private Image profileImage;
+    private Image Profile;
 
     @Embedded
     private PetInfo petInfo;

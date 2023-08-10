@@ -1,0 +1,10 @@
+= Dasi Bom RestDocs [API]
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+
+[[pet]]
+= (A). Pet
+include::pet/pet.adoc[]
