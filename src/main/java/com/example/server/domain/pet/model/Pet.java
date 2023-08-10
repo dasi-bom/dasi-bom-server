@@ -1,5 +1,6 @@
 package com.example.server.domain.pet.model;
 
+import com.example.server.domain.image.model.Image;
 import com.example.server.domain.member.model.Member;
 import com.example.server.global.auditing.BaseEntity;
 import com.example.server.global.exception.BusinessException;
@@ -29,7 +30,12 @@ public class Pet extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "owner_id")
     private Member owner;
+
+    @OneToOne
+    @JoinColumn(name = "image_id")
+    private Image Profile;
 
     @Embedded
     private PetInfo petInfo;

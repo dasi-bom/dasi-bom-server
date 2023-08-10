@@ -33,6 +33,7 @@ public class PetInfo {
     @Column(nullable = false)
     private PetSex sex;
 
+    @Column(length = 300)
     private String bio;
 
     //== validation constructor ==//
