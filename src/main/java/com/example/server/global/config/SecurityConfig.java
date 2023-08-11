@@ -1,6 +1,5 @@
 package com.example.server.global.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -25,13 +24,10 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 
 	private final TokenProvider tokenProvider;
-	@Autowired
-	private PrincipalOauth2UserService principalOauth2UserService;
-	@Autowired
-	private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+	private final PrincipalOauth2UserService principalOauth2UserService;
+	private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
-	@Autowired
-	private OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
+	private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
 	@Bean
 	public BCryptPasswordEncoder encodePwd() {
