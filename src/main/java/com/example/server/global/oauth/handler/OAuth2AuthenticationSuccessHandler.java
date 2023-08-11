@@ -1,4 +1,4 @@
-package com.example.server.global.jwt.handler;
+package com.example.server.global.oauth.handler;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -14,12 +14,12 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.example.server.domain.auth.application.RefreshTokenService;
 import com.example.server.domain.member.model.Member;
 import com.example.server.domain.member.model.constants.RoleType;
 import com.example.server.domain.member.persistence.MemberQueryRepository;
 import com.example.server.global.jwt.AuthToken;
 import com.example.server.global.jwt.TokenProvider;
+import com.example.server.global.jwt.application.RefreshTokenService;
 import com.example.server.global.oauth.CustomOAuth2User;
 import com.example.server.global.oauth.provider.KakaoUserInfo;
 import com.example.server.global.oauth.provider.NaverUserInfo;
@@ -37,7 +37,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-	// private final JwtService jwtService;
 	private final TokenProvider tokenProvider;
 	private final RefreshTokenService refreshTokenService;
 	private final MemberQueryRepository userRepository;

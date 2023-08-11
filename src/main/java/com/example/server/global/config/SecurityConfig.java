@@ -14,9 +14,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.example.server.global.jwt.JwtAuthenticationFilter;
 import com.example.server.global.jwt.TokenProvider;
-import com.example.server.global.jwt.handler.OAuth2AuthenticationFailureHandler;
-import com.example.server.global.jwt.handler.OAuth2AuthenticationSuccessHandler;
 import com.example.server.global.oauth.PrincipalOauth2UserService;
+import com.example.server.global.oauth.handler.OAuth2AuthenticationFailureHandler;
+import com.example.server.global.oauth.handler.OAuth2AuthenticationSuccessHandler;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,7 +24,6 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 public class SecurityConfig {
 
-	// private final AccessTokenUtil accessTokenUtil;
 	private final TokenProvider tokenProvider;
 	@Autowired
 	private PrincipalOauth2UserService principalOauth2UserService;

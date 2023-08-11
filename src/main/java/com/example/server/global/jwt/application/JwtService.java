@@ -1,22 +1,22 @@
-package com.example.server.domain.auth.application;
+package com.example.server.global.jwt.application;
 
 import static com.example.server.global.exception.ErrorCode.*;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import com.example.server.domain.auth.api.dto.AccessTokenRequest;
 import com.example.server.domain.member.model.constants.RoleType;
 import com.example.server.global.exception.BusinessException;
 import com.example.server.global.jwt.AuthToken;
 import com.example.server.global.jwt.TokenProvider;
+import com.example.server.global.jwt.api.dto.AccessTokenRequest;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class AuthService {
+public class JwtService {
 
 	private final TokenProvider tokenProvider;
 	private final RefreshTokenService refreshTokenService;
@@ -24,7 +24,6 @@ public class AuthService {
 	/**
 	 * access token 만료된 경우, access token 재발급
 	 */
-	// public ResponseEntity<AccessTokenResponse> getAccessToken(AccessTokenRequest accessTokenRequest) {
 	public String getAccessToken(AccessTokenRequest accessTokenRequest) {
 
 		String accessTokenValue = accessTokenRequest.getAccessToken();
@@ -39,10 +38,8 @@ public class AuthService {
 		try {
 			accessToken.validateToken();
 			return accessTokenValue;
-			// return new ResponseEntity<>(new AccessTokenResponse(accessTokenValue), null, HttpStatus.OK);
 		} catch (ExpiredJwtException expiredJwtException) {
 			return reIssueAccessTokenFromRefreshToken(providerId);
-			// return new ResponseEntity<>(new AccessTokenResponse(accessTkn), null, HttpStatus.OK);
 		}
 	}
 

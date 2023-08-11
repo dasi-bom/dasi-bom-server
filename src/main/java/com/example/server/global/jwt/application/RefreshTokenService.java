@@ -1,12 +1,12 @@
-package com.example.server.domain.auth.application;
+package com.example.server.global.jwt.application;
 
 import static com.example.server.global.exception.ErrorCode.*;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.server.domain.auth.dao.RefreshTokenDao;
 import com.example.server.global.exception.BusinessException;
+import com.example.server.global.jwt.dao.RefreshTokenDao;
 
 import lombok.RequiredArgsConstructor;
 

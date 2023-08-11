@@ -1,4 +1,4 @@
-package com.example.server.domain.auth.api.dto;
+package com.example.server.global.jwt.api.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

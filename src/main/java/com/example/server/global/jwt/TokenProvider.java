@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,8 +32,10 @@ public class TokenProvider {
 
 	private static final String AUTHORITIES_KEY = "role";
 	private final Key key;
-	private final Long ACCESS_TOKEN_PERIOD = 1000L * 60L * 120L; // 2시간
-	private final Long REFRESH_TOKEN_ERIOD = 1000L * 60L * 60L * 24L * 14L; // 14일
+	@Value("${jwt.token.access-token-expiry}")
+	private String accessTokenExpiry;
+	@Value("${jwt.token.refresh-token-expiry}")
+	private String refreshTokenExpiry;
 
 	public TokenProvider(String secretKey) {
 		this.key = Keys.hmacShaKeyFor(Base64.getEncoder().encode(secretKey.getBytes()));
@@ -47,7 +50,7 @@ public class TokenProvider {
 		Claims claims = Jwts.claims().setSubject(providerId);
 		claims.put(AUTHORITIES_KEY, role);
 
-		Long duration = isAccessToken ? ACCESS_TOKEN_PERIOD : REFRESH_TOKEN_ERIOD;
+		Long duration = isAccessToken ? Long.parseLong(accessTokenExpiry) : Long.parseLong(refreshTokenExpiry);
 
 		return AuthToken.builder()
 			.claims(claims)

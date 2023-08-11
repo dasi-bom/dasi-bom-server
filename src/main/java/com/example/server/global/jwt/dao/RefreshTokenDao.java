@@ -1,4 +1,4 @@
-package com.example.server.domain.auth.dao;
+package com.example.server.global.jwt.dao;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,8 @@ public class RefreshTokenDao {
 
 	private final RedisTemplate<String, String> redisTemplate;
 	private final String REFRESH_TOKEN_HASH_KEY = "refresh-token";
+	@Value("${jwt.token.refresh-token-expiry}")
+	private String refreshTokenExpiry;
 
 	// save refresh token redis
 	public void saveRefreshToken(String providerId, String refreshToken) {
@@ -31,7 +34,7 @@ public class RefreshTokenDao {
 		userMap.put(REFRESH_TOKEN_HASH_KEY, refreshToken);
 
 		hashOperations.putAll(providerId, userMap);
-		redisTemplate.expire(providerId, 14, TimeUnit.DAYS);
+		redisTemplate.expire(providerId, Long.parseLong(refreshTokenExpiry), TimeUnit.MILLISECONDS);
 	}
 
 	// get refresh token redis

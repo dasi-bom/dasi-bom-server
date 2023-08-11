@@ -1,4 +1,4 @@
-package com.example.server.domain.auth.api;
+package com.example.server.global.jwt.api;
 
 import javax.websocket.server.PathParam;
 
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.example.server.domain.auth.api.dto.AccessTokenRequest;
-import com.example.server.domain.auth.api.dto.AccessTokenResponse;
-import com.example.server.domain.auth.application.AuthService;
 import com.example.server.global.dto.ApiResponse;
+import com.example.server.global.jwt.api.dto.AccessTokenRequest;
+import com.example.server.global.jwt.api.dto.AccessTokenResponse;
+import com.example.server.global.jwt.application.JwtService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthController {
 
-	private final AuthService authService;
+	private final JwtService jwtService;
 
 	@GetMapping("/redirect-to-kakao")
 	public RedirectView redirectToKakao() {
@@ -39,13 +39,13 @@ public class AuthController {
 	// refresh token 을 활용해 access token 재발급
 	@PostMapping("/re-issue")
 	public ResponseEntity<AccessTokenResponse> reissueAccessToken(@RequestBody AccessTokenRequest accessTokenRequest) {
-		String accessToken = authService.getAccessToken(accessTokenRequest);
+		String accessToken = jwtService.getAccessToken(accessTokenRequest);
 		return ApiResponse.created(AccessTokenResponse.of(accessToken));
 	}
 
 	@PostMapping("/logout")
 	public ResponseEntity<Void> logout(@AuthenticationPrincipal UserDetails userDetails) {
-		authService.removeToken(userDetails);
+		jwtService.removeToken(userDetails);
 		return ApiResponse.success(null);
 	}
 }
