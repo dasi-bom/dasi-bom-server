@@ -23,8 +23,8 @@ public class RefreshTokenDao {
 
 	private final RedisTemplate<String, String> redisTemplate;
 	private final String REFRESH_TOKEN_HASH_KEY = "refresh-token";
-	@Value("${jwt.token.refresh-token-expiry}")
-	private String refreshTokenExpiry;
+	@Value("${refresh-token.expiration}")
+	private Long REFRESH_TOKEN_EXPIRATION;
 
 	// save refresh token redis
 	public void saveRefreshToken(String providerId, String refreshToken) {
@@ -34,7 +34,7 @@ public class RefreshTokenDao {
 		userMap.put(REFRESH_TOKEN_HASH_KEY, refreshToken);
 
 		hashOperations.putAll(providerId, userMap);
-		redisTemplate.expire(providerId, Long.parseLong(refreshTokenExpiry), TimeUnit.MILLISECONDS);
+		redisTemplate.expire(providerId, REFRESH_TOKEN_EXPIRATION, TimeUnit.MILLISECONDS);
 	}
 
 	// get refresh token redis

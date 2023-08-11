@@ -9,11 +9,13 @@ import com.example.server.global.jwt.TokenProvider;
 @Configuration
 public class JwtConfig {
 
-	@Value("${jwt.secret}")
-	private String secretKey;
+	@Value("${access-token.secret}")
+	private String accessTokenSecret;
+	@Value("${refresh-token.secret}")
+	private String refreshTokenSecret;
 
 	@Bean
 	public TokenProvider jwtProvider() {
-		return new TokenProvider(secretKey);
+		return new TokenProvider(accessTokenSecret, refreshTokenSecret);
 	}
 }

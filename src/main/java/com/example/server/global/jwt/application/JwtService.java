@@ -28,7 +28,7 @@ public class JwtService {
 
 		String accessTokenValue = accessTokenRequest.getAccessToken();
 
-		AuthToken accessToken = tokenProvider.convertAuthToken(accessTokenValue);
+		AuthToken accessToken = tokenProvider.convertAccessToken(accessTokenValue);
 		String providerId = accessToken.getProviderId();
 
 		/**
@@ -49,7 +49,7 @@ public class JwtService {
 	public String reIssueAccessTokenFromRefreshToken(String providerId) {
 
 		String refreshTokenValue = refreshTokenService.findById(providerId);
-		AuthToken refreshToken = tokenProvider.convertAuthToken(refreshTokenValue);
+		AuthToken refreshToken = tokenProvider.convertRefreshToken(refreshTokenValue);
 		checkRefreshTokenValidation(refreshToken, refreshTokenValue, providerId);
 
 		AuthToken accessToken = tokenProvider.generateToken(providerId, RoleType.ROLE_USER.name(), true);
@@ -70,7 +70,7 @@ public class JwtService {
 	 */
 	private void checkRefreshTokenValidation(AuthToken refreshToken, String refreshTokenValue, String providerId) {
 		try {
-			tokenProvider.convertAuthToken(refreshTokenValue).validateToken();
+			tokenProvider.convertRefreshToken(refreshTokenValue).validateToken();
 
 			if (!providerId.equals(refreshToken.getProviderId())) {
 				throw new BusinessException(ACCESS_TOKEN_INVALID);

@@ -31,18 +31,24 @@ import lombok.extern.slf4j.Slf4j;
 public class TokenProvider {
 
 	private static final String AUTHORITIES_KEY = "role";
-	private final Key key;
-	@Value("${jwt.token.access-token-expiry}")
-	private String accessTokenExpiry;
-	@Value("${jwt.token.refresh-token-expiry}")
-	private String refreshTokenExpiry;
+	private final Key accessKey;
+	private final Key refreshKey;
+	@Value("${access-token.expiration}")
+	private Long ACCESS_TOKEN_EXPIRATION;
+	@Value("${refresh-token.expiration}")
+	private Long REFRESH_TOKEN_EXPIRATION;
 
-	public TokenProvider(String secretKey) {
-		this.key = Keys.hmacShaKeyFor(Base64.getEncoder().encode(secretKey.getBytes()));
+	public TokenProvider(String accessTokenSecret, String refreshTokenSecret) {
+		this.accessKey = Keys.hmacShaKeyFor(Base64.getEncoder().encode(accessTokenSecret.getBytes()));
+		this.refreshKey = Keys.hmacShaKeyFor(Base64.getEncoder().encode(refreshTokenSecret.getBytes()));
 	}
 
-	public AuthToken convertAuthToken(String token) {
-		return new AuthToken(token, key);
+	public AuthToken convertAccessToken(String token) {
+		return new AuthToken(token, accessKey);
+	}
+
+	public AuthToken convertRefreshToken(String token) {
+		return new AuthToken(token, refreshKey);
 	}
 
 	public AuthToken generateToken(String providerId, String role, boolean isAccessToken) {
@@ -50,13 +56,21 @@ public class TokenProvider {
 		Claims claims = Jwts.claims().setSubject(providerId);
 		claims.put(AUTHORITIES_KEY, role);
 
-		Long duration = isAccessToken ? Long.parseLong(accessTokenExpiry) : Long.parseLong(refreshTokenExpiry);
-
-		return AuthToken.builder()
-			.claims(claims)
-			.key(key)
-			.duration(duration)
-			.build();
+		AuthToken authToken;
+		if (isAccessToken) {
+			authToken = AuthToken.builder()
+				.claims(claims)
+				.key(accessKey)
+				.duration(ACCESS_TOKEN_EXPIRATION)
+				.build();
+		} else { // refresh token 인 경우
+			authToken = AuthToken.builder()
+				.claims(claims)
+				.key(refreshKey)
+				.duration(REFRESH_TOKEN_EXPIRATION)
+				.build();
+		}
+		return authToken;
 	}
 
 	public Authentication getAuthentication(AuthToken authToken) {
