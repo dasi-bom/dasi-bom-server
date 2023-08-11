@@ -32,8 +32,8 @@ public class JwtService {
 		String providerId = accessToken.getProviderId();
 
 		/**
-		 * access token을 validate 한 후, 이상없으면 token을 내려준다.
-		 * access token이 존재하지만, 만료된 경우에는 reissue한다.
+		 * access token 을 validate 한 후, 이상없으면 token 을 내려준다.
+		 * access token 이 존재하지만, 만료된 경우에는 reissue 한다.
 		 */
 		try {
 			accessToken.validateToken();
@@ -44,9 +44,17 @@ public class JwtService {
 	}
 
 	/**
+	 * redis 의 refresh token 을 삭제하는 메소드
+	 */
+	public void removeToken(UserDetails userDetails) {
+		String providerId = userDetails.getUsername();
+		refreshTokenService.delete(providerId);
+	}
+
+	/**
 	 * refresh token 으로부터 access token 을 재발급 받는 메소드
 	 */
-	public String reIssueAccessTokenFromRefreshToken(String providerId) {
+	private String reIssueAccessTokenFromRefreshToken(String providerId) {
 
 		String refreshTokenValue = refreshTokenService.findById(providerId);
 		AuthToken refreshToken = tokenProvider.convertRefreshToken(refreshTokenValue);
@@ -55,14 +63,6 @@ public class JwtService {
 		AuthToken accessToken = tokenProvider.generateToken(providerId, RoleType.ROLE_USER.name(), true);
 
 		return accessToken.getToken();
-	}
-
-	/**
-	 * redis 의 refresh token 을 삭제하는 메소드
-	 */
-	public void removeToken(UserDetails userDetails) {
-		String providerId = userDetails.getUsername();
-		refreshTokenService.delete(providerId);
 	}
 
 	/**
