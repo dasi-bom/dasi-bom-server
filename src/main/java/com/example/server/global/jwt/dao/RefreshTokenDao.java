@@ -26,7 +26,6 @@ public class RefreshTokenDao {
 	@Value("${refresh-token.expiration}")
 	private Long REFRESH_TOKEN_EXPIRATION;
 
-	// save refresh token redis
 	public void saveRefreshToken(String providerId, String refreshToken) {
 		HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
 
@@ -37,13 +36,11 @@ public class RefreshTokenDao {
 		redisTemplate.expire(providerId, REFRESH_TOKEN_EXPIRATION, TimeUnit.MILLISECONDS);
 	}
 
-	// get refresh token redis
 	public Optional<Object> getRefreshToken(String providerId) {
 		HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
 		return Optional.ofNullable(hashOperations.get(providerId, REFRESH_TOKEN_HASH_KEY));
 	}
 
-	// remove refresh token
 	public void removeRefreshToken(String providerId) {
 		HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
 		hashOperations.delete(providerId, REFRESH_TOKEN_HASH_KEY);
