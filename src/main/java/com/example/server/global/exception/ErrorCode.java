@@ -67,6 +67,7 @@ public enum ErrorCode {
 	 * STAMP ERROR CODE (ME)
 	 */
 	STAMP_INVALID("ST-01-01", NOT_FOUND, "스탬프가 유효하지 않습니다"),
+	CONFLICT_STAMP("ST-02-01", CONFLICT, "이미 존재하는 스탬프입니다"),
 
 	/**
 	 * CATEGORY ERROR CODE (CA)

@@ -3,7 +3,15 @@ package com.example.server.domain.member.model;
 import static javax.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import com.example.server.domain.image.model.Image;
 import com.example.server.domain.member.model.constants.RoleType;
@@ -46,7 +54,8 @@ public class Member extends BaseEntity {
 	private String providerId;
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "image_id")
+	@JoinColumn(name = "image_id", insertable = false, updatable = false)
+	// @JoinColumn(name = "image_id")
 	private Image profileImage;
 
 	private String nickname;
