@@ -60,9 +60,11 @@ public class DiaryService {
 		// 일기 생성
 		Diary diary = Diary.of(
 			Category.toEnum(diarySaveRequest.getCategory()),
-			ChallengeTopic.toEnum(diarySaveRequest.getChallengeTopic()),
+			(diarySaveRequest.getChallengeTopic() != null)
+				? ChallengeTopic.toEnum(diarySaveRequest.getChallengeTopic()) : null,
 			member,
-			diarySaveRequest.getContent(),
+			(diarySaveRequest.getChallengeTopic() != null)
+				? diarySaveRequest.getContent() : null,
 			diaryStampList,
 			diarySaveRequest.getIsPublic()
 		);
