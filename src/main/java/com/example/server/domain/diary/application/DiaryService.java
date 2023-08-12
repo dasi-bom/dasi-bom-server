@@ -1,7 +1,5 @@
 package com.example.server.domain.diary.application;
 
-import static com.example.server.global.exception.ErrorCode.*;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +18,9 @@ import com.example.server.domain.diary.persistence.DiaryRepository;
 import com.example.server.domain.image.model.Image;
 import com.example.server.domain.member.application.MemberFindService;
 import com.example.server.domain.member.model.Member;
+import com.example.server.domain.stamp.application.StampFindService;
 import com.example.server.domain.stamp.model.Stamp;
 import com.example.server.domain.stamp.model.constants.StampType;
-import com.example.server.domain.stamp.persistence.StampRepository;
-import com.example.server.global.exception.BusinessException;
 import com.example.server.global.util.S3Uploader;
 
 import lombok.RequiredArgsConstructor;
@@ -34,7 +31,7 @@ public class DiaryService {
 
 	private final MemberFindService memberFindService;
 	private final DiaryRepository diaryRepository;
-	private final StampRepository stampRepository;
+	private final StampFindService stampFindService;
 	private final S3Uploader s3Uploader;
 
 	@Transactional
@@ -46,8 +43,7 @@ public class DiaryService {
 		Member member = memberFindService.findMemberByProviderId(username);
 		List<Stamp> stamps = diarySaveRequest.getStamps()
 			.stream()
-			.map(s -> stampRepository.findByStampType(StampType.toEnum(s))
-				.orElseThrow(() -> new BusinessException(STAMP_INVALID)))
+			.map(s -> stampFindService.findByStampType(StampType.toEnum(s)))
 			.collect(Collectors.toList());
 
 		// DiaryStamp 생성
