@@ -9,6 +9,7 @@ import com.example.server.domain.stamp.api.dto.StampSaveRequest;
 import com.example.server.domain.stamp.model.Stamp;
 import com.example.server.domain.stamp.model.constants.StampType;
 import com.example.server.domain.stamp.persistence.StampQueryRepository;
+import com.example.server.domain.stamp.persistence.StampRepository;
 import com.example.server.global.exception.BusinessException;
 
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class StampService {
 
 	private final StampQueryRepository stampQueryRepository;
+	private final StampRepository stampRepository;
 
 	@Transactional
 	public void createStamp(StampSaveRequest stampSaveRequest) {
@@ -25,6 +27,6 @@ public class StampService {
 		if (stampQueryRepository.existsByStampType(stampType)) {
 			throw new BusinessException(CONFLICT_STAMP);
 		}
-		stampQueryRepository.save(Stamp.of(stampType));
+		stampRepository.save(Stamp.of(stampType));
 	}
 }
