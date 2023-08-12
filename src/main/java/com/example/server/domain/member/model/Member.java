@@ -1,5 +1,7 @@
 package com.example.server.domain.member.model;
 
+import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
@@ -46,7 +48,7 @@ public class Member extends BaseEntity {
 
 	private String providerId;
 
-	@OneToOne
+	@OneToOne(fetch = LAZY, cascade = REMOVE)
 	@JoinColumn(name = "image_id")
 	private Image profileImage;
 

@@ -30,7 +30,6 @@ public class PetInfo {
     private PetType type;
 
     @Enumerated(STRING)
-    @Column(nullable = false)
     private PetSex sex;
 
     @Column(length = 300)

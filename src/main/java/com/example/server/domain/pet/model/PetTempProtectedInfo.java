@@ -29,7 +29,7 @@ public class PetTempProtectedInfo {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate startTempProtectedDate;
 
-    @Column(nullable = false)
+    @Column
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate endTempProtectedDate;
 
@@ -58,7 +58,6 @@ public class PetTempProtectedInfo {
         if (isNull(tempProtectedDate)) {
             throw new BusinessException(PET_TEMP_PROTECTED_SRT_DATE_INVALID);
         } else if (tempProtectedDate.isBefore(
-                //todo temp) 2020년 1월 1일 이전 임시보호일 등록에 대해 Exception
                 LocalDate.of(2020, 1, 1))) {
             throw new BusinessException(PET_TEMP_PROTECTED_SRT_DATE_TOO_EARLY);
         } else if (tempProtectedDate.isAfter(LocalDate.now())) {

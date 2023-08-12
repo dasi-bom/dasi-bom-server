@@ -35,7 +35,7 @@ public class Pet extends BaseEntity {
 
     @OneToOne(fetch = LAZY)
     @JoinColumn(name = "image_id")
-    private Image Profile;
+    private Image profile;
 
     @Embedded
     private PetInfo petInfo;
