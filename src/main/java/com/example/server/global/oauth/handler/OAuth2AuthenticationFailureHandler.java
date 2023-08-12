@@ -1,4 +1,4 @@
-package com.example.server.global.jwt.handler;
+package com.example.server.global.oauth.handler;
 
 import static com.example.server.global.exception.ErrorCode.*;
 

@@ -1,6 +1,5 @@
 package com.example.server.global.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -12,11 +11,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.example.server.global.jwt.AccessTokenUtil;
 import com.example.server.global.jwt.JwtAuthenticationFilter;
-import com.example.server.global.jwt.handler.OAuth2AuthenticationFailureHandler;
-import com.example.server.global.jwt.handler.OAuth2AuthenticationSuccessHandler;
+import com.example.server.global.jwt.TokenProvider;
 import com.example.server.global.oauth.PrincipalOauth2UserService;
+import com.example.server.global.oauth.handler.OAuth2AuthenticationFailureHandler;
+import com.example.server.global.oauth.handler.OAuth2AuthenticationSuccessHandler;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,14 +23,11 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 public class SecurityConfig {
 
-	private final AccessTokenUtil accessTokenUtil;
-	@Autowired
-	private PrincipalOauth2UserService principalOauth2UserService;
-	@Autowired
-	private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+	private final TokenProvider tokenProvider;
+	private final PrincipalOauth2UserService principalOauth2UserService;
+	private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
-	@Autowired
-	private OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
+	private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
 	@Bean
 	public BCryptPasswordEncoder encodePwd() {
@@ -71,7 +67,7 @@ public class SecurityConfig {
 				.successHandler(oAuth2AuthenticationSuccessHandler)
 				.failureHandler(oAuth2AuthenticationFailureHandler)
 			)
-			.addFilterBefore(new JwtAuthenticationFilter(accessTokenUtil), UsernamePasswordAuthenticationFilter.class);
+			.addFilterBefore(new JwtAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}
