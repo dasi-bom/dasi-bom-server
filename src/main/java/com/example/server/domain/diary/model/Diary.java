@@ -76,16 +76,11 @@ public class Diary extends BaseEntity {
 	) {
 		this.category = category;
 		this.challengeTopic = challengeTopic;
-		this.images = images;
+		this.images = (images != null) ? images : new ArrayList<>();
 		this.author = author;
 		this.content = content;
 		this.diaryStamps = (diaryStamps != null) ? diaryStamps : new ArrayList<>();
 		this.isPublic = isPublic;
-	}
-
-	private void addDiaryStamps(DiaryStamp diaryStamp) {
-		diaryStamps.add(diaryStamp);
-		diaryStamp.updateDiary(this);
 	}
 
 	public static Diary of(
@@ -106,5 +101,14 @@ public class Diary extends BaseEntity {
 		diaryStamps.forEach(diary::addDiaryStamps);
 
 		return diary;
+	}
+
+	public void addImages(List<Image> images) {
+		this.images.addAll(images);
+	}
+
+	private void addDiaryStamps(DiaryStamp diaryStamp) {
+		diaryStamps.add(diaryStamp);
+		diaryStamp.updateDiary(this);
 	}
 }

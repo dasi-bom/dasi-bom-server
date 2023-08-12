@@ -1,5 +1,6 @@
 package com.example.server.domain.diary.api;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -30,9 +31,9 @@ public class DiaryController {
 	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity<Void> createDiary(@AuthenticationPrincipal UserDetails userDetails,
 		@RequestPart @Valid DiarySaveRequest diarySaveRequest,
-		@RequestPart(required = false) List<MultipartFile> multipartFiles) {
-
-		diaryService.createDiary(userDetails.getUsername(), diarySaveRequest, multipartFiles);
+		@RequestPart(required = false) List<MultipartFile> multipartFiles
+	) throws IOException {
+		diaryService.createDiary(userDetails.getUsername(), diarySaveRequest, multipartFiles, "Diary");
 		return ApiResponse.success(null);
 	}
 }

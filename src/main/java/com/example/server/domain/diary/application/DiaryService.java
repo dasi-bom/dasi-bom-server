@@ -2,6 +2,7 @@ package com.example.server.domain.diary.application;
 
 import static com.example.server.global.exception.ErrorCode.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,6 +17,7 @@ import com.example.server.domain.diary.model.DiaryStamp;
 import com.example.server.domain.diary.model.constants.Category;
 import com.example.server.domain.diary.model.constants.ChallengeTopic;
 import com.example.server.domain.diary.persistence.DiaryRepository;
+import com.example.server.domain.image.model.Image;
 import com.example.server.domain.member.application.MemberFindService;
 import com.example.server.domain.member.model.Member;
 import com.example.server.domain.stamp.model.Stamp;
@@ -36,9 +38,11 @@ public class DiaryService {
 	private final S3Uploader s3Uploader;
 
 	@Transactional
-	public void createDiary(String username, DiarySaveRequest diarySaveRequest,
-		List<MultipartFile> multipartFiles) {
-
+	public void createDiary(String username,
+		DiarySaveRequest diarySaveRequest,
+		List<MultipartFile> multipartFiles,
+		String dirName
+	) throws IOException {
 		Member member = memberFindService.findMemberByProviderId(username);
 		List<Stamp> stamps = diarySaveRequest.getStamps()
 			.stream()
@@ -63,7 +67,10 @@ public class DiaryService {
 			diarySaveRequest.getIsPublic()
 		);
 
-		// todo: S3 업로드 로직
+		if (multipartFiles != null) {
+			List<Image> images = s3Uploader.uploadMultiImages(multipartFiles, dirName);
+			diary.addImages(images);
+		}
 
 		diaryRepository.save(diary);
 	}
