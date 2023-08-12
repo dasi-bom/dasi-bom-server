@@ -14,7 +14,6 @@ public enum ChallengeTopic {
 	TP_1("날도 좋은데, 기분 좋은 산책일기"),
 	TP_2("웃긴 표정을 찰칵! 유쾌일기"),
 	TP_3("무슨 꿈을 꾸나? 쿨쿨일기"),
-
 	ERROR("챌린지 에러");
 
 	private final String message;

@@ -17,7 +17,6 @@ import javax.persistence.Table;
 
 import com.example.server.domain.diary.model.DiaryStamp;
 import com.example.server.domain.stamp.model.constants.StampType;
-import com.example.server.global.auditing.BaseEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,7 +28,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "stamp_tb")
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
-public class Stamp extends BaseEntity {
+public class Stamp {
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)

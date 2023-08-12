@@ -13,7 +13,6 @@ public enum Category {
 
 	DAILY("일상"),
 	CHALLENGE("챌린지"),
-
 	ERROR("카테고리 에러");
 
 	private final String message;

@@ -13,11 +13,14 @@ import javax.persistence.Table;
 
 import com.example.server.domain.stamp.model.Stamp;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @Table(name = "diary_stamp_tb")
+@NoArgsConstructor
 public class DiaryStamp {
 
 	@Id
@@ -32,6 +35,23 @@ public class DiaryStamp {
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "stamp_id")
 	private Stamp stamp;
+
+	@Builder
+	private DiaryStamp(
+		final Diary diary,
+		final Stamp stamp
+	) {
+		this.diary = diary;
+		this.stamp = stamp;
+	}
+
+	public static DiaryStamp of(
+		final Stamp stamp
+	) {
+		return DiaryStamp.builder()
+			.stamp(stamp)
+			.build();
+	}
 
 	public void updateDiary(Diary diary) {
 		this.diary = diary;

@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -39,8 +41,10 @@ public class Diary extends BaseEntity {
 
 	// private Pet pet;
 
+	@Enumerated(EnumType.STRING)
 	private Category category;
 
+	@Enumerated(EnumType.STRING)
 	private ChallengeTopic challengeTopic;
 
 	@OneToMany(cascade = CascadeType.ALL)
@@ -75,11 +79,11 @@ public class Diary extends BaseEntity {
 		this.images = images;
 		this.author = author;
 		this.content = content;
-		this.diaryStamps = diaryStamps;
+		this.diaryStamps = (diaryStamps != null) ? diaryStamps : new ArrayList<>();
 		this.isPublic = isPublic;
 	}
 
-	public void addDiaryStamp(DiaryStamp diaryStamp) {
+	private void addDiaryStamps(DiaryStamp diaryStamp) {
 		diaryStamps.add(diaryStamp);
 		diaryStamp.updateDiary(this);
 	}
@@ -87,7 +91,6 @@ public class Diary extends BaseEntity {
 	public static Diary of(
 		final Category category,
 		final ChallengeTopic challengeTopic,
-		final List<Image> images,
 		final Member author,
 		final String content,
 		final List<DiaryStamp> diaryStamps,
@@ -96,13 +99,12 @@ public class Diary extends BaseEntity {
 		Diary diary = Diary.builder()
 			.category(category)
 			.challengeTopic(challengeTopic)
-			.images(images)
 			.author(author)
 			.content(content)
 			.isPublic(isPublic)
 			.build();
-		diaryStamps.forEach(diary::addDiaryStamp);
+		diaryStamps.forEach(diary::addDiaryStamps);
+
 		return diary;
 	}
-
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,10 +27,11 @@ public class DiaryController {
 
 	private final DiaryService diaryService;
 
-	@PostMapping()
+	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity<Void> createDiary(@AuthenticationPrincipal UserDetails userDetails,
 		@RequestPart @Valid DiarySaveRequest diarySaveRequest,
 		@RequestPart(required = false) List<MultipartFile> multipartFiles) {
+
 		diaryService.createDiary(userDetails.getUsername(), diarySaveRequest, multipartFiles);
 		return ApiResponse.success(null);
 	}
