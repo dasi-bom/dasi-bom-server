@@ -68,6 +68,13 @@ public enum ErrorCode {
 	 */
 	STAMP_INVALID("ST-01-01", NOT_FOUND, "스탬프가 유효하지 않습니다"),
 	CONFLICT_STAMP("ST-02-01", CONFLICT, "이미 존재하는 스탬프입니다"),
+	// STAMP_LIST_SIZE_ERROR("ST-03-01", BAD_REQUEST, "스탬프는 최대 ?개까지 선택할 수 있습니다"),
+
+	/**
+	 * DIARY ERROR CODE (DI)
+	 */
+	MAX_IMAGE_ATTACHMENTS_EXCEEDED("DI-01-01", NOT_FOUND, "최대 이미지 첨부 수는 5개입니다."),
+	DIARY_CONTENT_TOO_LONG("DI-02-01", BAD_REQUEST, "일기 본문은 공백 포함 1000자 이내입니다."),
 
 	/**
 	 * CATEGORY ERROR CODE (CA)

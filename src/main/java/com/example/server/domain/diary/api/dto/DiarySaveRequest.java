@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -18,6 +19,7 @@ public class DiarySaveRequest {
 
 	private String challengeTopic;
 
+	@Size(max = 1000, message = "본문은 최대 1000자까지 입력할 수 있습니다.")
 	private String content;
 
 	private List<String> stamps = new ArrayList<>();
