@@ -31,6 +31,11 @@ public class AuthController {
 		return new RedirectView("/oauth2/authorization/kakao");
 	}
 
+	@GetMapping("/redirect-to-naver")
+	public RedirectView redirectToNaver() {
+		return new RedirectView("/oauth2/authorization/naver");
+	}
+
 	@GetMapping("/success-login")
 	public String successLogin(@PathParam("token") String token) {
 		return token;
