@@ -41,7 +41,7 @@ public enum ErrorCode {
 	PET_OWNER_NULL("PE-01-01", BAD_REQUEST, "반려동물의 주인이 요청되지 않았습니다."),
 	PET_OWNER_INVALID("PE-01-02", FORBIDDEN, "해당 사용자는 요청한 반려동물 정보에 접근할 수 없습니다."),
 
-	// PE-02 -> Pet NAME Error
+	// PE-02 -> Pet Name Error
 	PET_NAME_NULL("PE-02-01", BAD_REQUEST, "반려동물의 이름이 요청되지 않았습니다."),
 	PET_NAME_TOO_LONG("PE-02-02", PAYLOAD_TOO_LARGE, "반려동물의 이름은 20자 이하여야 합니다."),
 	PET_NAME_INVALID_CHARACTERS("PE-02-03", BAD_REQUEST, "반려동물의 이름에는 한글과 영어만 사용 가능합니다."),
@@ -92,6 +92,11 @@ public enum ErrorCode {
 	 * CHALLENGE ERROR CODE (CH)
 	 */
 	CHALLENGE_TOPIC_INVALID("CH-01-01", NOT_FOUND, "챌린지가 유효하지 않습니다"),
+
+	/**
+	 * IMAGE ERROR CODE (IM)
+	 */
+	INVALID_IMAGE_EXTENSION("IM-01-01", NOT_FOUND, "확장자가 jpg, jpeg, png 인 파일만 업로드 가능합니다"),
 	;
 
 	private final String code;
