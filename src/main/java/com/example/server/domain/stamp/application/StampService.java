@@ -22,11 +22,13 @@ public class StampService {
 	private final StampRepository stampRepository;
 
 	@Transactional
-	public void createStamp(StampSaveRequest stampSaveRequest) {
+	public Stamp createStamp(StampSaveRequest stampSaveRequest) {
 		StampType stampType = StampType.toEnum(stampSaveRequest.getStampType());
 		if (stampQueryRepository.existsByStampType(stampType)) {
 			throw new BusinessException(CONFLICT_STAMP);
 		}
-		stampRepository.save(Stamp.of(stampType));
+		Stamp stamp = Stamp.of(stampType);
+		stampRepository.save(stamp);
+		return stamp;
 	}
 }
