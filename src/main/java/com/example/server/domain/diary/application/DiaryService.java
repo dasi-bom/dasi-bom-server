@@ -41,7 +41,7 @@ public class DiaryService {
 	static final int IMAGE_LIST_SIZE = 5;
 
 	@Transactional
-	public void createDiary(
+	public Diary createDiary(
 		String username,
 		DiarySaveRequest diarySaveRequest,
 		List<MultipartFile> multipartFiles,
@@ -87,6 +87,7 @@ public class DiaryService {
 		}
 
 		diaryRepository.save(diary);
+		return diary;
 	}
 
 	private List<DiaryStamp> generateDiaryStamps(List<Stamp> stamps) {
