@@ -14,6 +14,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class DiarySaveRequest {
 
+	@NotNull(message = "대상 동물은 필수 선택 값입니다.")
+	private Long petId;
+
 	@NotNull(message = "카테고리는 필수 선택 값입니다.")
 	private String category;
 

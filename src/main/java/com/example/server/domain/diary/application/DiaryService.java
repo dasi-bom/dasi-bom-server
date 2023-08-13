@@ -20,6 +20,8 @@ import com.example.server.domain.diary.persistence.DiaryRepository;
 import com.example.server.domain.image.model.Image;
 import com.example.server.domain.member.application.MemberFindService;
 import com.example.server.domain.member.model.Member;
+import com.example.server.domain.pet.application.PetFindService;
+import com.example.server.domain.pet.model.Pet;
 import com.example.server.domain.stamp.application.StampFindService;
 import com.example.server.domain.stamp.model.Stamp;
 import com.example.server.domain.stamp.model.constants.StampType;
@@ -33,6 +35,7 @@ import lombok.RequiredArgsConstructor;
 public class DiaryService {
 
 	private final MemberFindService memberFindService;
+	private final PetFindService petFindService;
 	private final DiaryRepository diaryRepository;
 	private final StampFindService stampFindService;
 	private final S3Uploader s3Uploader;
@@ -45,6 +48,11 @@ public class DiaryService {
 		String dirName
 	) throws IOException {
 		Member member = memberFindService.findMemberByProviderId(username);
+		if (!petFindService.findPetsByOwner(member).contains(diarySaveRequest.getPetId())) {
+			throw new BusinessException(PET_NOT_FOUND);
+		}
+		Pet pet = petFindService.findPetById(diarySaveRequest.getPetId());
+
 		List<Stamp> stamps = diarySaveRequest.getStamps()
 			.stream()
 			.map(s -> stampFindService.findByStampType(StampType.toEnum(s)))
@@ -63,6 +71,7 @@ public class DiaryService {
 
 		// 일기 생성
 		Diary diary = Diary.of(
+			pet,
 			Category.toEnum(diarySaveRequest.getCategory()),
 			(diarySaveRequest.getChallengeTopic() != null)
 				? ChallengeTopic.toEnum(diarySaveRequest.getChallengeTopic()) : null,

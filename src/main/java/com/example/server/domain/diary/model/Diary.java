@@ -1,5 +1,6 @@
 package com.example.server.domain.diary.model;
 
+import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
@@ -14,6 +15,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -22,6 +24,7 @@ import com.example.server.domain.diary.model.constants.Category;
 import com.example.server.domain.diary.model.constants.ChallengeTopic;
 import com.example.server.domain.image.model.Image;
 import com.example.server.domain.member.model.Member;
+import com.example.server.domain.pet.model.Pet;
 import com.example.server.global.auditing.BaseEntity;
 
 import lombok.AllArgsConstructor;
@@ -40,7 +43,9 @@ public class Diary extends BaseEntity {
 	@GeneratedValue(strategy = IDENTITY)
 	private Long id;
 
-	// private Pet pet;
+	@ManyToOne(fetch = LAZY)
+	@JoinColumn(name = "pet_id")
+	private Pet pet;
 
 	@Enumerated(EnumType.STRING)
 	private Category category;
@@ -51,7 +56,7 @@ public class Diary extends BaseEntity {
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Image> images = new ArrayList<>();
 
-	@ManyToOne
+	@ManyToOne(fetch = LAZY)
 	private Member author;
 
 	@Column(length = 1200)
@@ -68,6 +73,7 @@ public class Diary extends BaseEntity {
 
 	@Builder
 	private Diary(
+		final Pet pet,
 		final Category category,
 		final ChallengeTopic challengeTopic,
 		final List<Image> images,
@@ -76,6 +82,7 @@ public class Diary extends BaseEntity {
 		final List<DiaryStamp> diaryStamps,
 		final Boolean isPublic
 	) {
+		this.pet = pet;
 		this.category = category;
 		this.challengeTopic = challengeTopic;
 		this.images = (images != null) ? images : new ArrayList<>();
@@ -86,6 +93,7 @@ public class Diary extends BaseEntity {
 	}
 
 	public static Diary of(
+		final Pet pet,
 		final Category category,
 		final ChallengeTopic challengeTopic,
 		final Member author,
@@ -100,6 +108,7 @@ public class Diary extends BaseEntity {
 			.content(content)
 			.isPublic(isPublic)
 			.build();
+		diary.addPet(pet);
 		diaryStamps.forEach(diary::addDiaryStamps);
 
 		return diary;
@@ -112,5 +121,10 @@ public class Diary extends BaseEntity {
 	private void addDiaryStamps(DiaryStamp diaryStamp) {
 		diaryStamps.add(diaryStamp);
 		diaryStamp.updateDiary(this);
+	}
+
+	private void addPet(Pet pet) {
+		this.pet = pet;
+		pet.updateDiaries(this);
 	}
 }
