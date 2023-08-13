@@ -1,14 +1,27 @@
 package com.example.server.domain.member.model;
 
-import static javax.persistence.CascadeType.REMOVE;
-import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.CascadeType.*;
+import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
-import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import com.example.server.domain.image.model.Image;
 import com.example.server.domain.member.model.constants.RoleType;
+import com.example.server.domain.pet.model.Pet;
 import com.example.server.global.auditing.BaseEntity;
 import com.example.server.global.oauth.provider.constants.OAuth2Provider;
 
@@ -54,6 +67,9 @@ public class Member extends BaseEntity {
 
 	private String nickname;
 
+	@OneToMany
+	private List<Pet> pets = new ArrayList<>();
+
 	//== static factory method ==//
 
 	//== utility method ==//
@@ -67,5 +83,9 @@ public class Member extends BaseEntity {
 
 	public void updateEmail(String email) {
 		this.email = email;
+	}
+
+	public void addPet(Pet pet) {
+		this.pets.add(pet);
 	}
 }
