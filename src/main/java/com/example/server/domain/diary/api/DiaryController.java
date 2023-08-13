@@ -38,7 +38,7 @@ public class DiaryController {
 		@RequestPart @Valid DiarySaveRequest diarySaveRequest,
 		@RequestPart(required = false) List<MultipartFile> multipartFiles
 	) throws IOException {
-		Diary diary = diaryService.createDiary(userDetails.getUsername(), diarySaveRequest, multipartFiles, "Diary");
+		Diary diary = diaryService.createDiary(userDetails.getUsername(), diarySaveRequest, multipartFiles);
 		return ApiResponse.created(DiaryResponse.of(
 			diary.getPet().getPetInfo().getName(),
 			diary.getCategory(),

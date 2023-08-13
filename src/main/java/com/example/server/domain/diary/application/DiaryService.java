@@ -39,13 +39,13 @@ public class DiaryService {
 	private final StampFindService stampFindService;
 	private final S3Uploader s3Uploader;
 	static final int IMAGE_LIST_SIZE = 5;
+	static final String DIARY_DIR_NAME = "Diary";
 
 	@Transactional
 	public Diary createDiary(
 		String username,
 		DiarySaveRequest diarySaveRequest,
-		List<MultipartFile> multipartFiles,
-		String dirName
+		List<MultipartFile> multipartFiles
 	) throws IOException {
 		Member member = memberFindService.findMemberByProviderId(username);
 		if (!petFindService.findPetsByOwner(member).contains(diarySaveRequest.getPetId())) {
@@ -82,7 +82,7 @@ public class DiaryService {
 			if (multipartFiles.size() > IMAGE_LIST_SIZE) {
 				throw new BusinessException(MAX_IMAGE_ATTACHMENTS_EXCEEDED);
 			}
-			List<Image> images = s3Uploader.uploadMultiImages(multipartFiles, dirName);
+			List<Image> images = s3Uploader.uploadMultiImages(multipartFiles, DIARY_DIR_NAME);
 			diary.addImages(images);
 		}
 
