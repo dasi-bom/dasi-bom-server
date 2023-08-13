@@ -95,15 +95,21 @@ public class DiaryService {
 	) {
 		return Diary.of(
 			pet,
-			Category.toEnum(diarySaveRequest.getCategory()),
-			(diarySaveRequest.getChallengeTopic() != null)
-				? ChallengeTopic.toEnum(diarySaveRequest.getChallengeTopic()) : null,
+			resolveCategory(diarySaveRequest.getCategory()),
+			resolveChallengeTopic(diarySaveRequest.getChallengeTopic()),
 			member,
-			(diarySaveRequest.getChallengeTopic() != null)
-				? diarySaveRequest.getContent() : null,
+			diarySaveRequest.getContent(),
 			diaryStamps,
 			diarySaveRequest.getIsPublic()
 		);
+	}
+
+	private static Category resolveCategory(String category) {
+		return Category.toEnum(category);
+	}
+
+	private static ChallengeTopic resolveChallengeTopic(String challengeTopic) {
+		return (challengeTopic != null) ? ChallengeTopic.toEnum(challengeTopic) : null;
 	}
 
 	private void uploadImages(List<MultipartFile> multipartFiles, Diary diary) throws IOException {
