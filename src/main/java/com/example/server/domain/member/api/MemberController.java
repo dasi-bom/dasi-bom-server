@@ -74,9 +74,8 @@ public class MemberController {
 		Pet pet = petFindService.findPetById(petId);
 
 		return ApiResponse.success(FirstProfileCreateResponse.of(
-			member.getName(),
-			(member.getProfileImage() != null) ? member.getProfileImage().getImgUrl() : null,
 			member.getNickname(),
+			(member.getProfileImage() != null) ? member.getProfileImage().getImgUrl() : null,
 			pet.getPetInfo().getName(),
 			(pet.getProfile() != null) ? pet.getProfile().getImgUrl() : null
 		));

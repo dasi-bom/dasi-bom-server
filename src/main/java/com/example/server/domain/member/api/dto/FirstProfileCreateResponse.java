@@ -17,24 +17,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FirstProfileCreateResponse {
 
-	private String name; // Username
-	private String memberProfileImage;
 	private String nickname;
+	private String memberProfileImage;
 	private String petName;
 	private String petProfileImage;
 
 	//== static factory method ==//
 	public static FirstProfileCreateResponse of(
-		String name,
-		String memberProfileImage,
 		String nickname,
+		String memberProfileImage,
 		String petName,
 		String petProfileImage
 	) {
 		return FirstProfileCreateResponse.builder()
-			.name(name)
-			.memberProfileImage(memberProfileImage)
 			.nickname(nickname)
+			.memberProfileImage(memberProfileImage)
 			.petName(petName)
 			.petProfileImage(petProfileImage)
 			.build();
