@@ -42,7 +42,8 @@ public class DiaryService {
 	static final int IMAGE_LIST_SIZE = 5;
 
 	@Transactional
-	public void createDiary(String username,
+	public void createDiary(
+		String username,
 		DiarySaveRequest diarySaveRequest,
 		List<MultipartFile> multipartFiles,
 		String dirName

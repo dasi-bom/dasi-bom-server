@@ -29,7 +29,8 @@ public class DiaryController {
 	private final DiaryService diaryService;
 
 	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-	public ResponseEntity<Void> createDiary(@AuthenticationPrincipal UserDetails userDetails,
+	public ResponseEntity<Void> createDiary(
+		@AuthenticationPrincipal UserDetails userDetails,
 		@RequestPart @Valid DiarySaveRequest diarySaveRequest,
 		@RequestPart(required = false) List<MultipartFile> multipartFiles
 	) throws IOException {
