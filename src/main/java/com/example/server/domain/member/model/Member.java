@@ -1,7 +1,7 @@
 package com.example.server.domain.member.model;
 
-import static javax.persistence.CascadeType.*;
-import static javax.persistence.FetchType.*;
+import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
@@ -27,6 +27,7 @@ public class Member extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
+	@Column(name = "member_id")
 	private Long id;
 
 	private String name; // Username

@@ -41,8 +41,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 	private final RefreshTokenService refreshTokenService;
 	private final MemberQueryRepository userRepository;
 
-	@Value("${callback-url-scheme.web}")
-	// @Value("${callback-url-scheme.app}")
+	@Value("${callback-url-scheme}")
 	private String callbackUrlScheme;
 
 	@Override
