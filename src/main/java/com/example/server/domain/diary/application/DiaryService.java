@@ -52,14 +52,7 @@ public class DiaryService {
 			throw new BusinessException(PET_NOT_FOUND);
 		}
 		Pet pet = petFindService.findPetById(diarySaveRequest.getPetId());
-		List<Stamp> stamps = diarySaveRequest.getStamps()
-			.stream()
-			.map(s -> stampFindService.findByStampType(StampType.toEnum(s)))
-			.collect(Collectors.toList());
-		// todo: 스탬프 개수 제한 확인
-		// if (stamps.size() > STAMP_LIST_SIZE) {
-		// 	throw new BusinessException(STAMP_LIST_SIZE_ERROR);
-		// }
+		List<Stamp> stamps = getStamps(diarySaveRequest);
 
 		List<DiaryStamp> diaryStamps = generateDiaryStamps(stamps);
 		Diary diary = generateDiary(diarySaveRequest, member, pet, diaryStamps);
@@ -74,6 +67,18 @@ public class DiaryService {
 
 	private boolean isPetOwner(Member member, Long petId) {
 		return petFindService.findPetsByOwner(member).contains(petId);
+	}
+
+	private List<Stamp> getStamps(DiarySaveRequest diarySaveRequest) {
+		List<Stamp> stamps = diarySaveRequest.getStamps()
+			.stream()
+			.map(s -> stampFindService.findByStampType(StampType.toEnum(s)))
+			.collect(Collectors.toList());
+		// todo: 스탬프 개수 제한 확인
+		// if (stamps.size() > STAMP_LIST_SIZE) {
+		// 	throw new BusinessException(STAMP_LIST_SIZE_ERROR);
+		// }
+		return stamps;
 	}
 
 	private List<DiaryStamp> generateDiaryStamps(List<Stamp> stamps) {
