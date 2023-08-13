@@ -22,7 +22,6 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 public class PetInfo {
 
-    @Column(columnDefinition = "varchar(30)")
     private String name;
 
     private Integer age;
@@ -31,10 +30,9 @@ public class PetInfo {
     private PetType type;
 
     @Enumerated(STRING)
-    @Column(nullable = false)
     private PetSex sex;
 
-    @Column(columnDefinition = "varchar(300)")
+    @Column(length = 300)
     private String bio;
 
     //== validation constructor ==//

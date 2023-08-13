@@ -11,6 +11,7 @@ spring:
       - s3
   jpa:
     hibernate:
+      generate-ddl: true
       ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl # myEmail -> my_email

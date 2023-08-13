@@ -21,7 +21,6 @@ public class PetProfileResponse {
 
     Long petId;
     String providerId;
-    Image profileImage;
     PetInfo petInfo;
     PetTempProtectedInfo petTempProtectedInfo;
     Boolean isSuccess;
@@ -31,14 +30,12 @@ public class PetProfileResponse {
     public static PetProfileResponse of(
             Long petId,
             String providerId,
-            Image profileImage,
             PetInfo petInfo,
             PetTempProtectedInfo petTempProtectedInfo
     ) {
         return PetProfileResponse.builder()
                 .petId(petId)
                 .providerId(providerId)
-                .profileImage(profileImage)
                 .petInfo(petInfo)
                 .petTempProtectedInfo(petTempProtectedInfo)
                 .isSuccess(true)

@@ -1,4 +1,4 @@
-package com.example.server.global.jwt.handler;
+package com.example.server.global.oauth.handler;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -17,7 +17,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.example.server.domain.member.model.Member;
 import com.example.server.domain.member.model.constants.RoleType;
 import com.example.server.domain.member.persistence.MemberQueryRepository;
-import com.example.server.global.jwt.service.JwtService;
+import com.example.server.global.jwt.AuthToken;
+import com.example.server.global.jwt.TokenProvider;
+import com.example.server.global.jwt.application.RefreshTokenService;
 import com.example.server.global.oauth.CustomOAuth2User;
 import com.example.server.global.oauth.provider.KakaoUserInfo;
 import com.example.server.global.oauth.provider.NaverUserInfo;
@@ -35,7 +37,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-	private final JwtService jwtService;
+	private final TokenProvider tokenProvider;
+	private final RefreshTokenService refreshTokenService;
 	private final MemberQueryRepository userRepository;
 
 	@Value("${callback-url-scheme.web}")
@@ -65,16 +68,18 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 		}
 
 		// JWT 생성
-		String accessToken = jwtService.createAccessToken(oAuth2UserInfo.getProviderId(),
-			RoleType.ROLE_USER.toString());
-		String refreshToken = jwtService.createRefreshToken(oAuth2UserInfo.getProviderId(),
-			RoleType.ROLE_USER.toString());
+		AuthToken accessToken = tokenProvider.generateToken(oAuth2UserInfo.getProviderId(), RoleType.ROLE_USER.name(),
+			true);
+		AuthToken refreshToken = tokenProvider.generateToken(oAuth2UserInfo.getProviderId(), RoleType.ROLE_USER.name(),
+			false);
+
+		refreshTokenService.save(oAuth2UserInfo.getProviderId(), refreshToken.getToken());
 
 		String targetUrl;
 		if (oUser.isEmpty()) {
-			targetUrl = createTargetUrl(accessToken, Boolean.TRUE);
+			targetUrl = createTargetUrl(accessToken.getToken(), Boolean.TRUE);
 		} else {
-			targetUrl = createTargetUrl(accessToken, Boolean.FALSE);
+			targetUrl = createTargetUrl(accessToken.getToken(), Boolean.FALSE);
 		}
 
 		getRedirectStrategy().sendRedirect(request, response, targetUrl);

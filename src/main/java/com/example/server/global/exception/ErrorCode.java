@@ -20,6 +20,13 @@ public enum ErrorCode {
 	GLOBAL_INTERNAL_SERVER_ERROR("GL-01-04", INTERNAL_SERVER_ERROR, "Server Error!"),
 
 	/**
+	 * AUTH ERROR CODE (AU)
+	 */
+	REFRESH_TOKEN_NOT_FOUND("AU-01-01", UNAUTHORIZED, "존재하지 않는 리프레시 토큰입니다"),
+	REFRESH_TOKEN_EXPIRED("AU-01-02", UNAUTHORIZED, "만료된 리프레시 토큰입니다"),
+	ACCESS_TOKEN_INVALID("AU-02-01", UNAUTHORIZED, "유효하지 않은 엑세스 토큰입니다"),
+
+	/**
 	 * MEMBER ERROR CODE (ME)
 	 */
 	MEMBER_NOT_FOUND("ME-01-01", NOT_FOUND, "해당 유저 정보를 찾을 수 없습니다"),
