@@ -52,7 +52,6 @@ public class DiaryService {
 			throw new BusinessException(PET_NOT_FOUND);
 		}
 		Pet pet = petFindService.findPetById(diarySaveRequest.getPetId());
-
 		List<Stamp> stamps = diarySaveRequest.getStamps()
 			.stream()
 			.map(s -> stampFindService.findByStampType(StampType.toEnum(s)))
@@ -62,28 +61,11 @@ public class DiaryService {
 		// 	throw new BusinessException(STAMP_LIST_SIZE_ERROR);
 		// }
 
-		// DiaryStamp 생성
 		List<DiaryStamp> diaryStamps = generateDiaryStamps(stamps);
-
-		// 일기 생성
-		Diary diary = Diary.of(
-			pet,
-			Category.toEnum(diarySaveRequest.getCategory()),
-			(diarySaveRequest.getChallengeTopic() != null)
-				? ChallengeTopic.toEnum(diarySaveRequest.getChallengeTopic()) : null,
-			member,
-			(diarySaveRequest.getChallengeTopic() != null)
-				? diarySaveRequest.getContent() : null,
-			diaryStamps,
-			diarySaveRequest.getIsPublic()
-		);
+		Diary diary = generateDiary(diarySaveRequest, member, pet, diaryStamps);
 
 		if (multipartFiles != null) {
-			if (multipartFiles.size() > IMAGE_LIST_SIZE) {
-				throw new BusinessException(MAX_IMAGE_ATTACHMENTS_EXCEEDED);
-			}
-			List<Image> images = s3Uploader.uploadMultiImages(multipartFiles, DIARY_DIR_NAME);
-			diary.addImages(images);
+			uploadImages(multipartFiles, diary);
 		}
 
 		diaryRepository.save(diary);
@@ -100,4 +82,30 @@ public class DiaryService {
 			.collect(Collectors.toList());
 	}
 
+	private static Diary generateDiary(
+		DiarySaveRequest diarySaveRequest,
+		Member member,
+		Pet pet,
+		List<DiaryStamp> diaryStamps
+	) {
+		return Diary.of(
+			pet,
+			Category.toEnum(diarySaveRequest.getCategory()),
+			(diarySaveRequest.getChallengeTopic() != null)
+				? ChallengeTopic.toEnum(diarySaveRequest.getChallengeTopic()) : null,
+			member,
+			(diarySaveRequest.getChallengeTopic() != null)
+				? diarySaveRequest.getContent() : null,
+			diaryStamps,
+			diarySaveRequest.getIsPublic()
+		);
+	}
+
+	private void uploadImages(List<MultipartFile> multipartFiles, Diary diary) throws IOException {
+		if (multipartFiles.size() > IMAGE_LIST_SIZE) {
+			throw new BusinessException(MAX_IMAGE_ATTACHMENTS_EXCEEDED);
+		}
+		List<Image> images = s3Uploader.uploadMultiImages(multipartFiles, DIARY_DIR_NAME);
+		diary.addImages(images);
+	}
 }
