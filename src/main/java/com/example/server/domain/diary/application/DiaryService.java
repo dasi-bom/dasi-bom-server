@@ -3,7 +3,6 @@ package com.example.server.domain.diary.application;
 import static com.example.server.global.exception.ErrorCode.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,11 +63,7 @@ public class DiaryService {
 		// }
 
 		// DiaryStamp 생성
-		List<DiaryStamp> diaryStampList = new ArrayList<>();
-		for (Stamp stamp : stamps) {
-			DiaryStamp diaryStamp = DiaryStamp.of(stamp);
-			diaryStampList.add(diaryStamp);
-		}
+		List<DiaryStamp> diaryStamps = generateDiaryStamps(stamps);
 
 		// 일기 생성
 		Diary diary = Diary.of(
@@ -79,7 +74,7 @@ public class DiaryService {
 			member,
 			(diarySaveRequest.getChallengeTopic() != null)
 				? diarySaveRequest.getContent() : null,
-			diaryStampList,
+			diaryStamps,
 			diarySaveRequest.getIsPublic()
 		);
 
@@ -92,6 +87,12 @@ public class DiaryService {
 		}
 
 		diaryRepository.save(diary);
+	}
+
+	private List<DiaryStamp> generateDiaryStamps(List<Stamp> stamps) {
+		return stamps.stream()
+			.map(DiaryStamp::of)
+			.collect(Collectors.toList());
 	}
 
 }
