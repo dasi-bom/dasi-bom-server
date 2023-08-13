@@ -85,11 +85,19 @@ public class Diary extends BaseEntity {
 		this.pet = pet;
 		this.category = category;
 		this.challengeTopic = challengeTopic;
-		this.images = (images != null) ? images : new ArrayList<>();
+		this.images = validateAndInitializeImages(images);
 		this.author = author;
 		this.content = content;
-		this.diaryStamps = (diaryStamps != null) ? diaryStamps : new ArrayList<>();
+		this.diaryStamps = validateAndInitializeDiaryStamps(diaryStamps);
 		this.isPublic = isPublic;
+	}
+
+	private List<Image> validateAndInitializeImages(List<Image> images) {
+		return (images != null) ? images : new ArrayList<>();
+	}
+
+	private List<DiaryStamp> validateAndInitializeDiaryStamps(List<DiaryStamp> diaryStamps) {
+		return (diaryStamps != null) ? diaryStamps : new ArrayList<>();
 	}
 
 	public static Diary of(
