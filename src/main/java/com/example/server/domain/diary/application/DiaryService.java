@@ -48,7 +48,7 @@ public class DiaryService {
 		List<MultipartFile> multipartFiles
 	) throws IOException {
 		Member member = memberFindService.findMemberByProviderId(username);
-		if (!petFindService.findPetsByOwner(member).contains(diarySaveRequest.getPetId())) {
+		if (!isPetOwner(member, diarySaveRequest.getPetId())) {
 			throw new BusinessException(PET_NOT_FOUND);
 		}
 		Pet pet = petFindService.findPetById(diarySaveRequest.getPetId());
@@ -88,6 +88,10 @@ public class DiaryService {
 
 		diaryRepository.save(diary);
 		return diary;
+	}
+
+	private boolean isPetOwner(Member member, Long petId) {
+		return petFindService.findPetsByOwner(member).contains(petId);
 	}
 
 	private List<DiaryStamp> generateDiaryStamps(List<Stamp> stamps) {
