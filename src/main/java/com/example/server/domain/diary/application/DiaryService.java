@@ -39,6 +39,8 @@ public class DiaryService {
 	private final StampFindService stampFindService;
 	private final S3Uploader s3Uploader;
 	static final int IMAGE_LIST_SIZE = 5;
+	static final int MINIMUM_STAMP_LIST_SIZE = 2;
+	static final int MAXIMUM_STAMP_LIST_SIZE = 5;
 	static final String DIARY_DIR_NAME = "Diary";
 
 	@Transactional
@@ -74,8 +76,10 @@ public class DiaryService {
 			.stream()
 			.map(s -> stampFindService.findByStampType(StampType.toEnum(s)))
 			.collect(Collectors.toList());
-		// todo: 스탬프 개수 제한 확인
-		// if (stamps.size() > STAMP_LIST_SIZE) {
+		if (stamps.size() > MINIMUM_STAMP_LIST_SIZE) {
+			throw new BusinessException(STAMP_LIST_SIZE_TOO_SHORT);
+		}
+		// else if (stamps.size() > STAMP_LIST_SIZE) {
 		// 	throw new BusinessException(STAMP_LIST_SIZE_ERROR);
 		// }
 		return stamps;

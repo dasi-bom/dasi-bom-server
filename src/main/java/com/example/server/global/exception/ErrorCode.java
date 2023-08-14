@@ -75,7 +75,8 @@ public enum ErrorCode {
 	 */
 	STAMP_INVALID("ST-01-01", NOT_FOUND, "스탬프가 유효하지 않습니다"),
 	CONFLICT_STAMP("ST-02-01", CONFLICT, "이미 존재하는 스탬프입니다"),
-	// STAMP_LIST_SIZE_ERROR("ST-03-01", BAD_REQUEST, "스탬프는 최대 ?개까지 선택할 수 있습니다"),
+	STAMP_LIST_SIZE_TOO_SHORT("ST-03-01", BAD_REQUEST, "스탬프는 최소 2개 이상 선택해야 합니다"),
+	STAMP_LIST_SIZE_TOO_LONG("ST-03-02", BAD_REQUEST, "스탬프는 최대 ?개까지 선택할 수 있습니다"),
 
 	/**
 	 * DIARY ERROR CODE (DI)
