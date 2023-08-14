@@ -110,13 +110,13 @@ public class Diary extends BaseEntity {
 		final Boolean isPublic
 	) {
 		Diary diary = Diary.builder()
+			.pet(pet)
 			.category(category)
 			.challengeTopic(challengeTopic)
 			.author(author)
 			.content(content)
 			.isPublic(isPublic)
 			.build();
-		diary.addPet(pet);
 		diaryStamps.forEach(diary::addDiaryStamps);
 
 		return diary;
@@ -131,8 +131,4 @@ public class Diary extends BaseEntity {
 		diaryStamp.updateDiary(this);
 	}
 
-	private void addPet(Pet pet) {
-		this.pet = pet;
-		pet.updateDiaries(this);
-	}
 }
