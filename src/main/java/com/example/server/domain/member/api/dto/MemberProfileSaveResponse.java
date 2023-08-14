@@ -1,0 +1,63 @@
+package com.example.server.domain.member.api.dto;
+
+import static lombok.AccessLevel.*;
+
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+
+import com.example.server.global.oauth.provider.constants.OAuth2Provider;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+/**
+ * 사용자 신규 가입 후 응답에 사용되는 dto
+ */
+@Builder
+@Getter
+@NoArgsConstructor(access = PROTECTED)
+@AllArgsConstructor
+public class MemberProfileSaveResponse {
+
+	private String name; // Username
+
+	private String username; // Spring Security ID
+
+	private String email;
+
+	private String mobile;
+
+	@Enumerated(EnumType.STRING)
+	private OAuth2Provider provider;
+
+	private String providerId;
+
+	private String profileImage;
+
+	private String nickname;
+
+	//== static factory method ==//
+	public static MemberProfileSaveResponse of(
+		String name,
+		String username,
+		String email,
+		String mobile,
+		OAuth2Provider provider,
+		String providerId,
+		String profileImage,
+		String nickname
+	) {
+		return MemberProfileSaveResponse.builder()
+			.name(name)
+			.username(username)
+			.email(email)
+			.mobile(mobile)
+			.provider(provider)
+			.providerId(providerId)
+			.profileImage(profileImage)
+			.nickname(nickname)
+			.build();
+	}
+}

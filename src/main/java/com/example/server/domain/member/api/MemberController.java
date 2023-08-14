@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.server.domain.member.api.dto.FirstProfileCreateResponse;
 import com.example.server.domain.member.api.dto.MemberProfileResponse;
 import com.example.server.domain.member.api.dto.MemberProfileSaveRequest;
+import com.example.server.domain.member.api.dto.MemberProfileSaveResponse;
 import com.example.server.domain.member.application.MemberFindService;
 import com.example.server.domain.member.application.MemberService;
 import com.example.server.domain.member.model.Member;
@@ -44,10 +45,19 @@ public class MemberController {
 	private final PetFindService petFindService;
 
 	@PatchMapping("/profile")
-	public ResponseEntity<Void> updateProfile(@RequestBody MemberProfileSaveRequest reqDto,
+	public ResponseEntity<MemberProfileSaveResponse> updateProfile(@RequestBody MemberProfileSaveRequest reqDto,
 		@AuthenticationPrincipal UserDetails userDetails) {
-		memberService.updateProfile(reqDto, userDetails.getUsername());
-		return ApiResponse.success(null);
+		Member member = memberService.updateProfile(reqDto, userDetails.getUsername());
+		return ApiResponse.created(MemberProfileSaveResponse.of(
+			member.getName(),
+			member.getUsername(),
+			member.getEmail(),
+			member.getMobile(),
+			member.getProvider(),
+			member.getProviderId(),
+			(member.getProfileImage() != null) ? member.getProfileImage().getImgUrl() : null,
+			member.getNickname()
+		));
 	}
 
 	@PostMapping(value = "/profile/images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

@@ -27,13 +27,14 @@ public class MemberService {
 	private final MemberQueryRepository memberQueryRepository;
 
 	@Transactional
-	public void updateProfile(MemberProfileSaveRequest reqDto, String username) {
+	public Member updateProfile(MemberProfileSaveRequest reqDto, String username) {
 		Member member = memberQueryRepository.findByProviderId(username)
 			.orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
 		if (StringUtils.isNotBlank(reqDto.getNickname())) {
 			validateDuplicatedNickname(reqDto.getNickname());
 			member.updateProfileInfo(reqDto.getNickname());
 		}
+		return member;
 	}
 
 	@Transactional
