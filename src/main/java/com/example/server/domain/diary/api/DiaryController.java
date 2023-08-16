@@ -20,6 +20,7 @@ import com.example.server.domain.diary.api.dto.DiaryResponse;
 import com.example.server.domain.diary.api.dto.DiarySaveRequest;
 import com.example.server.domain.diary.application.DiaryService;
 import com.example.server.domain.diary.model.Diary;
+import com.example.server.domain.diary.model.DiaryStamp;
 import com.example.server.domain.image.model.Image;
 import com.example.server.global.dto.ApiResponse;
 
@@ -42,13 +43,22 @@ public class DiaryController {
 		return ApiResponse.created(DiaryResponse.of(
 			diary.getPet().getPetInfo().getName(),
 			diary.getCategory(),
-			(diary.getImages() != null)
-				? diary.getImages().stream().map(Image::getImgUrl).collect(Collectors.toList()) : null,
+			getImages(diary.getImages()),
 			diary.getAuthor().getNickname(),
 			diary.getContent(),
-			diary.getDiaryStamps()
-				.stream().map(diaryStamp -> diaryStamp.getStamp().getStampType().name()).collect(Collectors.toList()),
+			getStamps(diary.getDiaryStamps()),
 			diary.getIsPublic()
 		));
+	}
+
+	private static List<String> getImages(List<Image> images) {
+		return (images != null)
+			? images.stream().map(Image::getImgUrl).collect(Collectors.toList()) : null;
+	}
+
+	private static List<String> getStamps(List<DiaryStamp> diaryStamps) {
+		return diaryStamps.stream()
+			.map(diaryStamp -> diaryStamp.getStamp().getStampType().name())
+			.collect(Collectors.toList());
 	}
 }
