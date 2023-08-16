@@ -66,7 +66,7 @@ public class MemberController {
 		if (multipartFile == null) {
 			throw new BusinessException(FILE_NOT_EXIST_ERROR);
 		}
-		memberService.uploadProfileImage(userDetails.getUsername(), multipartFile, "Profile/Member");
+		memberService.uploadProfileImage(userDetails.getUsername(), multipartFile);
 
 		return ApiResponse.success(null);
 	}

@@ -4,9 +4,8 @@ import static com.example.server.global.exception.ErrorCode.*;
 
 import java.io.IOException;
 
-import javax.transaction.Transactional;
-
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.server.domain.image.model.Image;
@@ -25,6 +24,7 @@ public class MemberService {
 
 	private final S3Uploader s3Uploader;
 	private final MemberQueryRepository memberQueryRepository;
+	private static final String MEMBER_DIR_NAME = "Profile/Member";
 
 	@Transactional
 	public Member updateProfile(MemberProfileSaveRequest reqDto, String username) {
@@ -38,10 +38,10 @@ public class MemberService {
 	}
 
 	@Transactional
-	public void uploadProfileImage(String username, MultipartFile multipartFile, String dirName) throws IOException {
+	public void uploadProfileImage(String username, MultipartFile multipartFile) throws IOException {
 		Member member = memberQueryRepository.findByProviderId(username)
 			.orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
-		Image img = s3Uploader.uploadSingleImage(multipartFile, dirName);
+		Image img = s3Uploader.uploadSingleImage(multipartFile, MEMBER_DIR_NAME);
 		member.updateProfileImage(img);
 	}
 
