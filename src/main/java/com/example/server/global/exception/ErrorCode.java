@@ -90,11 +90,6 @@ public enum ErrorCode {
 	CATEGORY_INVALID("CA-01-01", NOT_FOUND, "카테고리가 유효하지 않습니다"),
 
 	/**
-	 * CHALLENGE ERROR CODE (CH)
-	 */
-	CHALLENGE_TOPIC_INVALID("CH-01-01", NOT_FOUND, "챌린지가 유효하지 않습니다"),
-
-	/**
 	 * IMAGE ERROR CODE (IM)
 	 */
 	INVALID_IMAGE_EXTENSION("IM-01-01", NOT_FOUND, "확장자가 jpg, jpeg, png 인 파일만 업로드 가능합니다"),

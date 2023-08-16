@@ -21,7 +21,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.example.server.domain.diary.model.constants.Category;
-import com.example.server.domain.diary.model.constants.ChallengeTopic;
 import com.example.server.domain.image.model.Image;
 import com.example.server.domain.member.model.Member;
 import com.example.server.domain.pet.model.Pet;
@@ -50,9 +49,6 @@ public class Diary extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private Category category;
 
-	@Enumerated(EnumType.STRING)
-	private ChallengeTopic challengeTopic;
-
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Image> images = new ArrayList<>();
 
@@ -75,7 +71,6 @@ public class Diary extends BaseEntity {
 	private Diary(
 		final Pet pet,
 		final Category category,
-		final ChallengeTopic challengeTopic,
 		final List<Image> images,
 		final Member author,
 		final String content,
@@ -84,7 +79,6 @@ public class Diary extends BaseEntity {
 	) {
 		this.pet = pet;
 		this.category = category;
-		this.challengeTopic = challengeTopic;
 		this.images = validateAndInitializeImages(images);
 		this.author = author;
 		this.content = content;
@@ -103,7 +97,6 @@ public class Diary extends BaseEntity {
 	public static Diary of(
 		final Pet pet,
 		final Category category,
-		final ChallengeTopic challengeTopic,
 		final Member author,
 		final String content,
 		final List<DiaryStamp> diaryStamps,
@@ -112,7 +105,6 @@ public class Diary extends BaseEntity {
 		Diary diary = Diary.builder()
 			.pet(pet)
 			.category(category)
-			.challengeTopic(challengeTopic)
 			.author(author)
 			.content(content)
 			.isPublic(isPublic)

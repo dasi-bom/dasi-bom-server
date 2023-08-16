@@ -42,7 +42,6 @@ public class DiaryController {
 		return ApiResponse.created(DiaryResponse.of(
 			diary.getPet().getPetInfo().getName(),
 			diary.getCategory(),
-			diary.getChallengeTopic(),
 			(diary.getImages() != null)
 				? diary.getImages().stream().map(Image::getImgUrl).collect(Collectors.toList()) : null,
 			diary.getAuthor().getNickname(),

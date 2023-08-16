@@ -12,7 +12,9 @@ import lombok.RequiredArgsConstructor;
 public enum Category {
 
 	DAILY("일상"),
-	CHALLENGE("챌린지"),
+	CHALLENGE_1("날도 좋은데, 기분 좋은 산책일기"),
+	CHALLENGE_2("웃긴 표정을 찰칵! 유쾌일기"),
+	CHALLENGE_3("무슨 꿈을 꾸나? 쿨쿨일기"),
 	ERROR("카테고리 에러");
 
 	private final String message;

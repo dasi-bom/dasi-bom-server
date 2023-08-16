@@ -56,8 +56,8 @@ public class SecurityConfig {
 				.antMatchers("/").permitAll()
 				.antMatchers("/auth/**").permitAll()
 				.antMatchers("/social/login").permitAll()
-				.antMatchers("/member/**").hasAnyRole("USER", "ADMIN")
-				.antMatchers("/admin/**").hasRole("ADMIN")
+				// .antMatchers("/member/**").hasAnyRole("USER", "ADMIN")
+				// .antMatchers("/admin/**").hasRole("ADMIN")
 				.anyRequest().authenticated()
 			)
 			.oauth2Login(oauth2Login -> oauth2Login

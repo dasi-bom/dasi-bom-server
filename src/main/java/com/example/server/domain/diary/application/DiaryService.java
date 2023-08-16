@@ -14,7 +14,6 @@ import com.example.server.domain.diary.api.dto.DiarySaveRequest;
 import com.example.server.domain.diary.model.Diary;
 import com.example.server.domain.diary.model.DiaryStamp;
 import com.example.server.domain.diary.model.constants.Category;
-import com.example.server.domain.diary.model.constants.ChallengeTopic;
 import com.example.server.domain.diary.persistence.DiaryRepository;
 import com.example.server.domain.image.model.Image;
 import com.example.server.domain.member.application.MemberFindService;
@@ -100,7 +99,6 @@ public class DiaryService {
 		return Diary.of(
 			pet,
 			resolveCategory(diarySaveRequest.getCategory()),
-			resolveChallengeTopic(diarySaveRequest.getChallengeTopic()),
 			member,
 			diarySaveRequest.getContent(),
 			diaryStamps,
@@ -110,10 +108,6 @@ public class DiaryService {
 
 	private static Category resolveCategory(String category) {
 		return Category.toEnum(category);
-	}
-
-	private static ChallengeTopic resolveChallengeTopic(String challengeTopic) {
-		return (challengeTopic != null) ? ChallengeTopic.toEnum(challengeTopic) : null;
 	}
 
 	private void uploadImages(List<MultipartFile> multipartFiles, Diary diary) throws IOException {

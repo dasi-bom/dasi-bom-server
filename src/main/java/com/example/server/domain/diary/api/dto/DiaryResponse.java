@@ -8,7 +8,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
 import com.example.server.domain.diary.model.constants.Category;
-import com.example.server.domain.diary.model.constants.ChallengeTopic;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,8 +26,6 @@ public class DiaryResponse {
 	private String pet;
 	@Enumerated(EnumType.STRING)
 	private Category category;
-	@Enumerated(EnumType.STRING)
-	private ChallengeTopic challengeTopic;
 	private List<String> images;
 	private String author;
 	private String content;
@@ -39,7 +36,6 @@ public class DiaryResponse {
 	public static DiaryResponse of(
 		String pet,
 		Category category,
-		ChallengeTopic challengeTopic,
 		List<String> images,
 		String author,
 		String content,
@@ -49,7 +45,6 @@ public class DiaryResponse {
 		return DiaryResponse.builder()
 			.pet(pet)
 			.category(category)
-			.challengeTopic(challengeTopic)
 			.images(images)
 			.author(author)
 			.content(content)
