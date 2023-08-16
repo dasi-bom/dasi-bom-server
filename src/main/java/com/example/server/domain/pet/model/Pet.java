@@ -76,4 +76,9 @@ public class Pet extends BaseEntity {
             throw new BusinessException(PET_OWNER_NULL);
         }
     }
+
+    //== utility method==//
+    public void updateProfileImage(Image image) {
+        this.profile = image;
+    }
 }
