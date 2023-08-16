@@ -38,11 +38,12 @@ public class MemberService {
 	}
 
 	@Transactional
-	public void uploadProfileImage(String username, MultipartFile multipartFile) throws IOException {
+	public Member uploadProfileImage(String username, MultipartFile multipartFile) throws IOException {
 		Member member = memberQueryRepository.findByProviderId(username)
 			.orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
 		Image img = s3Uploader.uploadSingleImage(multipartFile, MEMBER_DIR_NAME);
 		member.updateProfileImage(img);
+		return member;
 	}
 
 	private void validateDuplicatedNickname(String nickname) {

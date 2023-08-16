@@ -48,7 +48,7 @@ public class MemberController {
 	public ResponseEntity<MemberProfileSaveResponse> updateProfile(@RequestBody MemberProfileSaveRequest reqDto,
 		@AuthenticationPrincipal UserDetails userDetails) {
 		Member member = memberService.updateProfile(reqDto, userDetails.getUsername());
-		return ApiResponse.created(MemberProfileSaveResponse.of(
+		return ApiResponse.success(MemberProfileSaveResponse.of(
 			member.getName(),
 			member.getUsername(),
 			member.getEmail(),
@@ -61,14 +61,22 @@ public class MemberController {
 	}
 
 	@PostMapping(value = "/profile/images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<Void> uploadProfileImage(@RequestParam MultipartFile multipartFile,
+	public ResponseEntity<MemberProfileSaveResponse> uploadProfileImage(@RequestParam MultipartFile multipartFile,
 		@AuthenticationPrincipal UserDetails userDetails) throws IOException {
 		if (multipartFile == null) {
 			throw new BusinessException(FILE_NOT_EXIST_ERROR);
 		}
-		memberService.uploadProfileImage(userDetails.getUsername(), multipartFile);
-
-		return ApiResponse.success(null);
+		Member member = memberService.uploadProfileImage(userDetails.getUsername(), multipartFile);
+		return ApiResponse.success(MemberProfileSaveResponse.of(
+			member.getName(),
+			member.getUsername(),
+			member.getEmail(),
+			member.getMobile(),
+			member.getProvider(),
+			member.getProviderId(),
+			(member.getProfileImage() != null) ? member.getProfileImage().getImgUrl() : null,
+			member.getNickname()
+		));
 	}
 
 	// 최초 프로필 등록 완료 (동물 프로필까지 등록했을 때에만 사용)
