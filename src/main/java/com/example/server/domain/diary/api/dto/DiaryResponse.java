@@ -31,25 +31,4 @@ public class DiaryResponse {
 	private String content;
 	private List<String> diaryStamps;
 	private Boolean isPublic;
-
-	//== static factory method ==//
-	public static DiaryResponse of(
-		String pet,
-		Category category,
-		List<String> images,
-		String author,
-		String content,
-		List<String> diaryStamps,
-		Boolean isPublic
-	) {
-		return DiaryResponse.builder()
-			.pet(pet)
-			.category(category)
-			.images(images)
-			.author(author)
-			.content(content)
-			.diaryStamps(diaryStamps)
-			.isPublic(isPublic)
-			.build();
-	}
 }
