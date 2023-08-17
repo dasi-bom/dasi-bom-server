@@ -24,7 +24,7 @@ public class MemberService {
 
 	private final S3Uploader s3Uploader;
 	private final MemberQueryRepository memberQueryRepository;
-	private static final String MEMBER_DIR_NAME = "Profile/Member";
+	static final String MEMBER_PROFILE_DIR_NAME = "Profile/Member";
 
 	@Transactional
 	public Member updateProfile(MemberProfileSaveRequest reqDto, String username) {
@@ -38,10 +38,10 @@ public class MemberService {
 	}
 
 	@Transactional
-	public Member uploadProfileImage(String username, MultipartFile multipartFile) throws IOException {
+	public void uploadProfileImage(String username, MultipartFile multipartFile) throws IOException {
 		Member member = memberQueryRepository.findByProviderId(username)
 			.orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
-		Image img = s3Uploader.uploadSingleImage(multipartFile, MEMBER_DIR_NAME);
+		Image img = s3Uploader.uploadSingleImage(multipartFile, MEMBER_PROFILE_DIR_NAME);
 		member.updateProfileImage(img);
 		return member;
 	}

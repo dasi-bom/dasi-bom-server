@@ -39,62 +39,62 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Pet extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = IDENTITY)
+	private Long id;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "owner_id")
-    private Member owner;
+	@ManyToOne(fetch = LAZY)
+	@JoinColumn(name = "owner_id")
+	private Member owner;
 
-    @OneToOne(fetch = LAZY)
-    @JoinColumn(name = "image_id")
-    private Image profile;
+	@OneToOne(fetch = LAZY)
+	@JoinColumn(name = "image_id")
+	private Image profile;
 
-    @Embedded
-    private PetInfo petInfo;
+	@Embedded
+	private PetInfo petInfo;
 
-    @Embedded
-    private PetTempProtectedInfo petTempProtectedInfo;
+	@Embedded
+	private PetTempProtectedInfo petTempProtectedInfo;
 
-    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL)
-    private List<Diary> diaries = new ArrayList<>();
+	@OneToMany(mappedBy = "pet", cascade = CascadeType.ALL)
+	private List<Diary> diaries = new ArrayList<>();
 
-    //== validation constructor ==//
-    @Builder
-    private Pet(
-        final Member owner,
-        final PetInfo petInfo,
-        final PetTempProtectedInfo petTempProtectedInfo
-    ) {
-        validateOwner(owner);
-        this.owner = owner;
-        this.petInfo = petInfo;
-        this.petTempProtectedInfo = petTempProtectedInfo;
-    }
+	//== validation constructor ==//
+	@Builder
+	private Pet(
+		final Member owner,
+		final PetInfo petInfo,
+		final PetTempProtectedInfo petTempProtectedInfo
+	) {
+		validateOwner(owner);
+		this.owner = owner;
+		this.petInfo = petInfo;
+		this.petTempProtectedInfo = petTempProtectedInfo;
+	}
 
-    //== static factory method ==//
-    public static Pet of(
-        final Member owner,
-        final PetInfo petInfo,
-        final PetTempProtectedInfo petTempProtectedInfo
-    ) {
-        return Pet.builder()
-            .owner(owner)
-            .petInfo(petInfo)
-            .petTempProtectedInfo(petTempProtectedInfo)
-            .build();
-    }
+	//== static factory method ==//
+	public static Pet of(
+		final Member owner,
+		final PetInfo petInfo,
+		final PetTempProtectedInfo petTempProtectedInfo
+	) {
+		return Pet.builder()
+			.owner(owner)
+			.petInfo(petInfo)
+			.petTempProtectedInfo(petTempProtectedInfo)
+			.build();
+	}
 
-    //== validation method ==//
-    private void validateOwner(final Member owner) {
-        if (isNull(owner)) {
-            throw new BusinessException(PET_OWNER_NULL);
-        }
-    }
+	//== validation method ==//
+	private void validateOwner(final Member owner) {
+		if (isNull(owner)) {
+			throw new BusinessException(PET_OWNER_NULL);
+		}
+	}
 
-    //== utility method ==//
-    public void updateDiaries(Diary diary) {
-        this.diaries.add(diary);
-    }
+	//== utility method ==//
+	public void updateDiaries(Diary diary) {
+		this.diaries.add(diary);
+	}
 }
