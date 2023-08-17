@@ -37,27 +37,4 @@ public class MemberProfileSaveResponse {
 	private String profileImage;
 
 	private String nickname;
-
-	//== static factory method ==//
-	public static MemberProfileSaveResponse of(
-		String name,
-		String username,
-		String email,
-		String mobile,
-		OAuth2Provider provider,
-		String providerId,
-		String profileImage,
-		String nickname
-	) {
-		return MemberProfileSaveResponse.builder()
-			.name(name)
-			.username(username)
-			.email(email)
-			.mobile(mobile)
-			.provider(provider)
-			.providerId(providerId)
-			.profileImage(profileImage)
-			.nickname(nickname)
-			.build();
-	}
 }

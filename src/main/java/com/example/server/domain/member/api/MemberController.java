@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.server.domain.member.api.assembler.MemberProfileSaveResponseAssembler;
 import com.example.server.domain.member.api.dto.FirstProfileCreateResponse;
 import com.example.server.domain.member.api.dto.MemberProfileResponse;
 import com.example.server.domain.member.api.dto.MemberProfileSaveRequest;
@@ -43,21 +44,13 @@ public class MemberController {
 	private final MemberService memberService;
 	private final MemberFindService memberFindService;
 	private final PetFindService petFindService;
+	private final MemberProfileSaveResponseAssembler memberProfileSaveResponseAssembler;
 
 	@PatchMapping("/profile")
 	public ResponseEntity<MemberProfileSaveResponse> updateProfile(@RequestBody MemberProfileSaveRequest reqDto,
 		@AuthenticationPrincipal UserDetails userDetails) {
 		Member member = memberService.updateProfile(reqDto, userDetails.getUsername());
-		return ApiResponse.success(MemberProfileSaveResponse.of(
-			member.getName(),
-			member.getUsername(),
-			member.getEmail(),
-			member.getMobile(),
-			member.getProvider(),
-			member.getProviderId(),
-			(member.getProfileImage() != null) ? member.getProfileImage().getImgUrl() : null,
-			member.getNickname()
-		));
+		return ApiResponse.success(memberProfileSaveResponseAssembler.toResponse(member));
 	}
 
 	@PostMapping(value = "/profile/images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -67,16 +60,7 @@ public class MemberController {
 			throw new BusinessException(FILE_NOT_EXIST_ERROR);
 		}
 		Member member = memberService.uploadProfileImage(userDetails.getUsername(), multipartFile);
-		return ApiResponse.success(MemberProfileSaveResponse.of(
-			member.getName(),
-			member.getUsername(),
-			member.getEmail(),
-			member.getMobile(),
-			member.getProvider(),
-			member.getProviderId(),
-			(member.getProfileImage() != null) ? member.getProfileImage().getImgUrl() : null,
-			member.getNickname()
-		));
+		return ApiResponse.success(memberProfileSaveResponseAssembler.toResponse(member));
 	}
 
 	// 최초 프로필 등록 완료 (동물 프로필까지 등록했을 때에만 사용)
