@@ -1,6 +1,10 @@
 package com.example.server.domain.image.model;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -19,13 +23,21 @@ public class Image {
 	private String fileName;
 
 	@Builder
-	public Image(String imgUrl, String fileName) {
+	private Image(
+		final String imgUrl,
+		final String fileName
+	) {
 		this.imgUrl = imgUrl;
 		this.fileName = fileName;
 	}
 
-	public void updateImage(String imgUrl, String fileName) {
-		this.imgUrl = imgUrl;
-		this.fileName = fileName;
+	public static Image of(
+		final String imgUrl,
+		final String fileName
+	) {
+		return Image.builder()
+			.imgUrl(imgUrl)
+			.fileName(fileName)
+			.build();
 	}
 }
