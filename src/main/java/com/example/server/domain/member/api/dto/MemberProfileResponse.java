@@ -45,27 +45,27 @@ public class MemberProfileResponse {
 	private List<PetProfileResponse> petProfileResponses = new ArrayList<>();
 
 	//== static factory method ==//
-	public static MemberProfileResponse of(
-		String name,
-		String username,
-		String email,
-		String mobile,
-		OAuth2Provider provider,
-		String providerId,
-		String profileImage,
-		String nickname,
-		List<PetProfileResponse> petProfileResponses
-	) {
-		return MemberProfileResponse.builder()
-			.name(name)
-			.username(username)
-			.email(email)
-			.mobile(mobile)
-			.provider(provider)
-			.providerId(providerId)
-			.profileImage(profileImage)
-			.nickname(nickname)
-			.petProfileResponses(petProfileResponses)
-			.build();
-	}
+	// public static MemberProfileResponse of(
+	// 	String name,
+	// 	String username,
+	// 	String email,
+	// 	String mobile,
+	// 	OAuth2Provider provider,
+	// 	String providerId,
+	// 	String profileImage,
+	// 	String nickname,
+	// 	List<PetProfileResponse> petProfileResponses
+	// ) {
+	// 	return MemberProfileResponse.builder()
+	// 		.name(name)
+	// 		.username(username)
+	// 		.email(email)
+	// 		.mobile(mobile)
+	// 		.provider(provider)
+	// 		.providerId(providerId)
+	// 		.profileImage(profileImage)
+	// 		.nickname(nickname)
+	// 		.petProfileResponses(petProfileResponses)
+	// 		.build();
+	// }
 }

@@ -8,6 +8,7 @@ import static lombok.AccessLevel.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -67,7 +68,7 @@ public class Member extends BaseEntity {
 
 	private String nickname;
 
-	@OneToMany
+	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
 	private List<Pet> pets = new ArrayList<>();
 
 	//== static factory method ==//
@@ -83,9 +84,5 @@ public class Member extends BaseEntity {
 
 	public void updateEmail(String email) {
 		this.email = email;
-	}
-
-	public void addPet(Pet pet) {
-		this.pets.add(pet);
 	}
 }
