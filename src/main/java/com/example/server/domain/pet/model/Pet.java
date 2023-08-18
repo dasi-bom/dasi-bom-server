@@ -39,6 +39,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Pet extends BaseEntity {
 
+
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	private Long id;
