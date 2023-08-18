@@ -41,7 +41,7 @@ public enum ErrorCode {
 	PET_OWNER_NULL("PE-01-01", BAD_REQUEST, "반려동물의 주인이 요청되지 않았습니다."),
 	PET_OWNER_INVALID("PE-01-02", FORBIDDEN, "해당 사용자는 요청한 반려동물 정보에 접근할 수 없습니다."),
 
-	// PE-02 -> Pet NAME Error
+	// PE-02 -> Pet Name Error
 	PET_NAME_NULL("PE-02-01", BAD_REQUEST, "반려동물의 이름이 요청되지 않았습니다."),
 	PET_NAME_TOO_LONG("PE-02-02", PAYLOAD_TOO_LARGE, "반려동물의 이름은 20자 이하여야 합니다."),
 	PET_NAME_INVALID_CHARACTERS("PE-02-03", BAD_REQUEST, "반려동물의 이름에는 한글과 영어만 사용 가능합니다."),
@@ -68,7 +68,32 @@ public enum ErrorCode {
 	PET_NOT_FOUND("PE-08-01", NOT_FOUND, "반려 동물 정보를 찾을 수 없습니다."),
 
 	// PE-09 -> Pet Sex Error
-	PET_SEX_INVALID("PE-08-01", NOT_FOUND, "반려 동물 성별이 유효하지 않습니다.");
+	PET_SEX_INVALID("PE-08-01", NOT_FOUND, "반려 동물 성별이 유효하지 않습니다."),
+
+	/**
+	 * STAMP ERROR CODE (ME)
+	 */
+	STAMP_INVALID("ST-01-01", NOT_FOUND, "스탬프가 유효하지 않습니다"),
+	CONFLICT_STAMP("ST-02-01", CONFLICT, "이미 존재하는 스탬프입니다"),
+	STAMP_LIST_SIZE_TOO_SHORT("ST-03-01", BAD_REQUEST, "스탬프는 최소 2개 이상 선택해야 합니다"),
+	STAMP_LIST_SIZE_TOO_LONG("ST-03-02", BAD_REQUEST, "스탬프는 최대 ?개까지 선택할 수 있습니다"),
+
+	/**
+	 * DIARY ERROR CODE (DI)
+	 */
+	MAX_IMAGE_ATTACHMENTS_EXCEEDED("DI-01-01", NOT_FOUND, "최대 이미지 첨부 수는 5개입니다."),
+	DIARY_CONTENT_TOO_LONG("DI-02-01", BAD_REQUEST, "일기 본문은 공백 포함 1000자 이내입니다."),
+
+	/**
+	 * CATEGORY ERROR CODE (CA)
+	 */
+	CATEGORY_INVALID("CA-01-01", NOT_FOUND, "카테고리가 유효하지 않습니다"),
+
+	/**
+	 * IMAGE ERROR CODE (IM)
+	 */
+	INVALID_IMAGE_EXTENSION("IM-01-01", NOT_FOUND, "확장자가 jpg, jpeg, png 인 파일만 업로드 가능합니다"),
+	;
 
 	private final String code;
 	private final HttpStatus httpStatus;
