@@ -18,7 +18,7 @@ public class MemberFindService {
 
 	private final MemberQueryRepository memberQueryRepository;
 
-	public Member findMemberByProviderId(String username) {
+	public Member findMemberByUsername(String username) {
 		return memberQueryRepository.findByProviderId(username)
 			.orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
 	}
