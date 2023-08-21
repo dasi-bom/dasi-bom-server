@@ -39,7 +39,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Pet extends BaseEntity {
 
-
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	private Long id;
@@ -97,5 +96,9 @@ public class Pet extends BaseEntity {
 	//== utility method ==//
 	public void updateDiaries(Diary diary) {
 		this.diaries.add(diary);
+	}
+
+	public void updateProfileImage(Image image) {
+		this.profile = image;
 	}
 }
