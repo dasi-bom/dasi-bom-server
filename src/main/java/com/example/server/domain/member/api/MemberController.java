@@ -59,7 +59,7 @@ public class MemberController {
 
 	@GetMapping("/profile")
 	public ResponseEntity<MemberProfileResponse> getProfile(@AuthenticationPrincipal UserDetails userDetails) {
-		Member member = memberFindService.findMemberByProviderId(userDetails.getUsername());
+		Member member = memberFindService.findMemberByUsername(userDetails.getUsername());
 		return ApiResponse.success(memberProfileResponseAssembler.toResponse(member));
 	}
 }

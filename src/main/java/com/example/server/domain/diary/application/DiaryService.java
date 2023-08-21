@@ -48,7 +48,7 @@ public class DiaryService {
 		DiarySaveRequest diarySaveRequest,
 		List<MultipartFile> multipartFiles
 	) throws IOException {
-		Member member = memberFindService.findMemberByProviderId(username);
+		Member member = memberFindService.findMemberByUsername(username);
 		if (!isPetOwner(member, diarySaveRequest.getPetId())) {
 			throw new BusinessException(PET_NOT_FOUND);
 		}
