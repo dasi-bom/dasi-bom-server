@@ -56,6 +56,8 @@ public class SecurityConfig {
 				.antMatchers("/").permitAll()
 				.antMatchers("/auth/**").permitAll()
 				.antMatchers("/social/login").permitAll()
+				.antMatchers("/redirect-to-docs").permitAll()
+				.antMatchers("/docs/index.html").permitAll()
 				// .antMatchers("/member/**").hasAnyRole("USER", "ADMIN")
 				// .antMatchers("/admin/**").hasRole("ADMIN")
 				.anyRequest().authenticated()
