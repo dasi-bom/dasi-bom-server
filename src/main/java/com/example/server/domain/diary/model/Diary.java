@@ -20,11 +20,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.example.server.domain.diary.api.dto.DiaryUpdateRequest;
 import com.example.server.domain.diary.model.constants.Category;
 import com.example.server.domain.image.model.Image;
 import com.example.server.domain.member.model.Member;
 import com.example.server.domain.pet.model.Pet;
 import com.example.server.global.auditing.BaseEntity;
+import com.nimbusds.oauth2.sdk.util.StringUtils;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -82,6 +84,7 @@ public class Diary extends BaseEntity {
 		this.images = validateAndInitializeImages(images);
 		this.author = author;
 		this.content = content;
+		this.isDeleted = false; // todo: 변경했다 !!!!
 		this.diaryStamps = validateAndInitializeDiaryStamps(diaryStamps);
 		this.isPublic = isPublic;
 	}
@@ -121,6 +124,30 @@ public class Diary extends BaseEntity {
 	private void addDiaryStamps(DiaryStamp diaryStamp) {
 		diaryStamps.add(diaryStamp);
 		diaryStamp.updateDiary(this);
+	}
+
+	// todo: 책임이 너무 많다.
+	public void updateDiary(DiaryUpdateRequest diaryUpdateRequest, List<DiaryStamp> diaryStamps) {
+		// todo: petId도 업데이트
+		// if (diaryUpdateRequest.getPetId()) {
+		// 	this.pet = diaryUpdateRequest.getPetId();
+		// }
+		if (StringUtils.isNotBlank(diaryUpdateRequest.getCategory())) {
+			this.category = Category.toEnum(diaryUpdateRequest.getCategory());
+		}
+		if (StringUtils.isNotBlank(diaryUpdateRequest.getContent())) {
+			this.content = diaryUpdateRequest.getContent();
+		}
+		// todo: diarystamp 업데이트 할 때 기존 diarystamp 지워야 한다
+		if (diaryStamps != null) {
+			this.diaryStamps.clear();
+			for (DiaryStamp ds : diaryStamps) {
+				addDiaryStamps(ds);
+			}
+		}
+		if (diaryUpdateRequest.getIsPublic() != null) {
+			this.isPublic = diaryUpdateRequest.getIsPublic();
+		}
 	}
 
 }
