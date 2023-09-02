@@ -32,7 +32,8 @@ public class DiaryController {
 	private final DiaryService diaryService;
 	private final DiaryResponseAssembler diaryResponseAssembler;
 
-	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+	// @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<DiaryResponse> createDiary(
 		@AuthenticationPrincipal UserDetails userDetails,
 		@RequestPart @Valid DiarySaveRequest diarySaveRequest,
