@@ -6,12 +6,14 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Setter // todo: 제거
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor() // todo: 제거
+// @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class DiarySaveRequest {
 
 	@NotNull(message = "대상 동물은 필수 선택 값입니다.")
