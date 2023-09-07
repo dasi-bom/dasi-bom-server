@@ -1,11 +1,10 @@
 package com.example.server.global.base;
 
-import com.example.server.domain.member.application.MemberFindService;
-import com.example.server.domain.member.application.MemberService;
-import com.example.server.domain.pet.application.PetService;
-import com.example.server.global.base.config.RestDocsConfig;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
+import static org.springframework.test.web.servlet.setup.SharedHttpSessionConfigurer.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +22,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.setup.SharedHttpSessionConfigurer.sharedHttpSession;
+import com.example.server.domain.member.application.MemberService;
+import com.example.server.domain.pet.application.PetService;
+import com.example.server.global.base.config.RestDocsConfig;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ExtendWith(RestDocumentationExtension.class)
 @Import(RestDocsConfig.class)
@@ -35,44 +34,41 @@ import static org.springframework.test.web.servlet.setup.SharedHttpSessionConfig
 @MockBean(JpaMetamodelMappingContext.class)
 public abstract class ControllerTestSupport {
 
-    @Autowired
-    protected RestDocumentationResultHandler restDocs;
+	@Autowired
+	protected RestDocumentationResultHandler restDocs;
 
-    @Autowired
-    protected MockMvc mockMvc;
+	@Autowired
+	protected MockMvc mockMvc;
 
-    @Autowired
-    protected ObjectMapper objectMapper;
+	@Autowired
+	protected ObjectMapper objectMapper;
 
-    @MockBean
-    protected PetService petService;
+	@MockBean
+	protected PetService petService;
 
-    @MockBean
-    protected MemberService memberService;
+	@MockBean
+	protected MemberService memberService;
 
-    @MockBean
-    protected MemberFindService memberFindService;
+	protected String toJson(Object object) throws JsonProcessingException {
+		return objectMapper.writeValueAsString(object);
+	}
 
-    protected String toJson(Object object) throws JsonProcessingException {
-        return objectMapper.writeValueAsString(object);
-    }
+	protected RequestHeadersSnippet accessTokenHeaderDocument() {
+		return requestHeaders(
+			headerWithName("Authorization").description("Access Token")
+		);
+	}
 
-    protected RequestHeadersSnippet accessTokenHeaderDocument() {
-        return requestHeaders(
-                headerWithName("Authorization").description("Access Token")
-        );
-    }
-
-    @BeforeEach
-    void setUp(final WebApplicationContext context,
-               final RestDocumentationContextProvider provider) {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
-                .apply(springSecurity())
-                .apply(sharedHttpSession())
-                .apply(MockMvcRestDocumentation.documentationConfiguration(provider))
-                .addFilters(new CharacterEncodingFilter("UTF-8", true))
-                .alwaysDo(print())
-                .alwaysDo(restDocs)
-                .build();
-    }
+	@BeforeEach
+	void setUp(final WebApplicationContext context,
+		final RestDocumentationContextProvider provider) {
+		this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
+			.apply(springSecurity())
+			.apply(sharedHttpSession())
+			.apply(MockMvcRestDocumentation.documentationConfiguration(provider))
+			.addFilters(new CharacterEncodingFilter("UTF-8", true))
+			.alwaysDo(print())
+			.alwaysDo(restDocs)
+			.build();
+	}
 }
