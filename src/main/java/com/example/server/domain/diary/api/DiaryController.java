@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,12 +37,23 @@ public class DiaryController {
 	private final DiaryResponseAssembler diaryResponseAssembler;
 
 	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-	public ResponseEntity<DiaryResponse> createDiary(
+	public ResponseEntity<DiaryResponse> createDiaryExceptForImage(
 		@AuthenticationPrincipal UserDetails userDetails,
-		@RequestPart @Valid DiarySaveRequest diarySaveRequest,
-		@RequestPart(required = false) List<MultipartFile> multipartFiles
+		@RequestBody @Valid DiarySaveRequest diarySaveRequest
+	) {
+		Diary diary = diaryService.createDiaryExceptForImage(userDetails.getUsername(), diarySaveRequest);
+		DiaryResponse response = diaryResponseAssembler.toResponse(diary);
+		return ApiResponse.created(response);
+	}
+
+	@PostMapping(value = "/img/{diary-id}", consumes = {MediaType.APPLICATION_JSON_VALUE,
+		MediaType.MULTIPART_FORM_DATA_VALUE})
+	public ResponseEntity<DiaryResponse> uploadImage(
+		@PathVariable("diary-id") Long diaryId,
+		@AuthenticationPrincipal UserDetails userDetails,
+		@RequestPart List<MultipartFile> multipartFiles
 	) throws IOException {
-		Diary diary = diaryService.createDiary(userDetails.getUsername(), diarySaveRequest, multipartFiles);
+		Diary diary = diaryService.uploadImage(diaryId, userDetails.getUsername(), multipartFiles);
 		DiaryResponse response = diaryResponseAssembler.toResponse(diary);
 		return ApiResponse.created(response);
 	}

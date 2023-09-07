@@ -15,6 +15,7 @@ import com.example.server.domain.image.model.Image;
 public class DiaryResponseAssembler {
 	public DiaryResponse toResponse(Diary diary) {
 		return DiaryResponse.builder()
+			.id(diary.getId())
 			.pet(diary.getPet().getPetInfo().getName())
 			.category(diary.getCategory())
 			.images(getImages(diary.getImages()))
