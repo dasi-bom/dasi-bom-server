@@ -15,7 +15,6 @@ import com.example.server.domain.diary.api.dto.DiaryUpdateRequest;
 import com.example.server.domain.diary.model.Diary;
 import com.example.server.domain.diary.model.DiaryStamp;
 import com.example.server.domain.diary.model.constants.Category;
-import com.example.server.domain.diary.persistence.DiaryQueryRepository;
 import com.example.server.domain.diary.persistence.DiaryRepository;
 import com.example.server.domain.image.model.Image;
 import com.example.server.domain.member.model.Member;
@@ -37,7 +36,6 @@ public class DiaryService {
 	private final MemberQueryRepository memberQueryRepository;
 	private final PetQueryRepository petQueryRepository;
 	private final DiaryRepository diaryRepository;
-	private final DiaryQueryRepository diaryQueryRepository;
 	private final StampQueryRepository stampQueryRepository;
 	private final S3Uploader s3Uploader;
 	static final int IMAGE_LIST_SIZE = 5;
@@ -72,7 +70,7 @@ public class DiaryService {
 	) throws IOException {
 		Member member = memberQueryRepository.findByProviderId(username)
 			.orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
-		Diary diary = diaryQueryRepository.findByIdAndAuthor(diaryId, member)
+		Diary diary = diaryRepository.findByIdAndAuthor(diaryId, member)
 			.orElseThrow(() -> new BusinessException(DIARY_NOT_FOUND));
 
 		uploadImages(multipartFiles, diary);
@@ -88,7 +86,7 @@ public class DiaryService {
 	) {
 		Member member = memberQueryRepository.findByProviderId(username)
 			.orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
-		Diary diary = diaryQueryRepository.findByIdAndAuthor(diaryId, member)
+		Diary diary = diaryRepository.findByIdAndAuthor(diaryId, member)
 			.orElseThrow(() -> new BusinessException(DIARY_NOT_FOUND));
 		if (diary.getIsDeleted()) {
 			throw new BusinessException(DIARY_NOT_FOUND);
