@@ -20,7 +20,6 @@ import com.example.server.domain.diary.persistence.DiaryRepository;
 import com.example.server.domain.image.model.Image;
 import com.example.server.domain.member.application.MemberFindService;
 import com.example.server.domain.member.model.Member;
-import com.example.server.domain.pet.application.PetFindService;
 import com.example.server.domain.pet.model.Pet;
 import com.example.server.domain.pet.persistence.PetQueryRepository;
 import com.example.server.domain.stamp.application.StampFindService;
@@ -36,7 +35,6 @@ import lombok.RequiredArgsConstructor;
 public class DiaryService {
 
 	private final MemberFindService memberFindService;
-	private final PetFindService petFindService;
 	private final PetQueryRepository petQueryRepository;
 	private final DiaryRepository diaryRepository;
 	private final DiaryQueryRepository diaryQueryRepository;
