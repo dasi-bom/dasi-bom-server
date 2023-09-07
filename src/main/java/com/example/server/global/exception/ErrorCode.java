@@ -83,6 +83,7 @@ public enum ErrorCode {
 	 */
 	MAX_IMAGE_ATTACHMENTS_EXCEEDED("DI-01-01", NOT_FOUND, "최대 이미지 첨부 수는 5개입니다."),
 	DIARY_CONTENT_TOO_LONG("DI-02-01", BAD_REQUEST, "일기 본문은 공백 포함 1000자 이내입니다."),
+	DIARY_NOT_FOUND("DI-03-01", NOT_FOUND, "해당 일기 정보를 찾을 수 없습니다"),
 
 	/**
 	 * CATEGORY ERROR CODE (CA)
