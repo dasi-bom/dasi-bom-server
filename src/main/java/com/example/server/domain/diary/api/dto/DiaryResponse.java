@@ -23,6 +23,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DiaryResponse {
 
+	private Long id;
 	private String pet;
 	@Enumerated(EnumType.STRING)
 	private Category category;

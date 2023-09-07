@@ -46,11 +46,10 @@ public class DiaryService {
 	static final String DIARY_DIR_NAME = "Diary";
 
 	@Transactional
-	public Diary createDiary(
+	public Diary createDiaryExceptForImage(
 		String username,
-		DiarySaveRequest diarySaveRequest,
-		List<MultipartFile> multipartFiles
-	) throws IOException {
+		DiarySaveRequest diarySaveRequest
+	) {
 		Member member = memberFindService.findMemberByUsername(username);
 		if (!isPetOwner(member, diarySaveRequest.getPetId())) {
 			throw new BusinessException(PET_NOT_FOUND);
@@ -61,11 +60,23 @@ public class DiaryService {
 		List<DiaryStamp> diaryStamps = generateDiaryStamps(stamps);
 		Diary diary = generateDiary(diarySaveRequest, member, pet, diaryStamps);
 
-		if (multipartFiles != null) {
-			uploadImages(multipartFiles, diary);
-		}
-
 		diaryRepository.save(diary);
+
+		return diary;
+	}
+
+	@Transactional
+	public Diary uploadImage(
+		Long diaryId,
+		String username,
+		List<MultipartFile> multipartFiles
+	) throws IOException {
+		Member member = memberFindService.findMemberByUsername(username);
+		Diary diary = diaryQueryRepository.findByIdAndAuthor(diaryId, member)
+			.orElseThrow(() -> new BusinessException(DIARY_NOT_FOUND));
+
+		uploadImages(multipartFiles, diary);
+
 		return diary;
 	}
 
@@ -158,13 +169,11 @@ public class DiaryService {
 	}
 
 	private void uploadImages(List<MultipartFile> multipartFiles, Diary diary) throws IOException {
-		if (multipartFiles != null) {
-			if (multipartFiles.size() > IMAGE_LIST_SIZE) {
-				throw new BusinessException(MAX_IMAGE_ATTACHMENTS_EXCEEDED);
-			}
-			List<Image> images = s3Uploader.uploadMultiImages(multipartFiles, DIARY_DIR_NAME);
-			diary.addImages(images);
+		if (multipartFiles.size() > IMAGE_LIST_SIZE) {
+			throw new BusinessException(MAX_IMAGE_ATTACHMENTS_EXCEEDED);
 		}
+		List<Image> images = s3Uploader.uploadMultiImages(multipartFiles, DIARY_DIR_NAME);
+		diary.addImages(images);
 	}
 
 	private void deleteImages(Diary diary) {
