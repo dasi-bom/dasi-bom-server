@@ -20,7 +20,7 @@ import com.example.server.domain.image.model.Image;
 import com.example.server.domain.member.model.Member;
 import com.example.server.domain.member.persistence.MemberRepository;
 import com.example.server.domain.pet.model.Pet;
-import com.example.server.domain.pet.persistence.PetQueryRepository;
+import com.example.server.domain.pet.persistence.PetRepository;
 import com.example.server.domain.stamp.model.Stamp;
 import com.example.server.domain.stamp.model.constants.StampType;
 import com.example.server.domain.stamp.persistence.StampQueryRepository;
@@ -34,7 +34,7 @@ import lombok.RequiredArgsConstructor;
 public class DiaryService {
 
 	private final MemberRepository memberRepository;
-	private final PetQueryRepository petQueryRepository;
+	private final PetRepository petRepository;
 	private final DiaryRepository diaryRepository;
 	private final StampQueryRepository stampQueryRepository;
 	private final S3Uploader s3Uploader;
@@ -50,7 +50,7 @@ public class DiaryService {
 	) {
 		Member member = memberRepository.findByProviderId(username)
 			.orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
-		Pet pet = petQueryRepository.findPetByIdAndOwner(diarySaveRequest.getPetId(), member)
+		Pet pet = petRepository.findPetByIdAndOwner(diarySaveRequest.getPetId(), member)
 			.orElseThrow(() -> new BusinessException(PET_NOT_FOUND));
 		List<Stamp> stamps = getStamps(diarySaveRequest.getStamps());
 
@@ -92,7 +92,7 @@ public class DiaryService {
 			throw new BusinessException(DIARY_NOT_FOUND);
 		}
 		if (diaryUpdateRequest.getPetId() != null) {
-			Pet pet = petQueryRepository.findPetByIdAndOwner(diaryUpdateRequest.getPetId(), member)
+			Pet pet = petRepository.findPetByIdAndOwner(diaryUpdateRequest.getPetId(), member)
 				.orElseThrow(() -> new BusinessException(PET_NOT_FOUND));
 			diary.updatePet(pet);
 		}

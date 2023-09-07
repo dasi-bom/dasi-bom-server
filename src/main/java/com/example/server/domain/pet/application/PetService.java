@@ -2,7 +2,6 @@ package com.example.server.domain.pet.application;
 
 import static com.example.server.domain.pet.model.constants.PetTempProtectedStatus.*;
 import static com.example.server.global.exception.ErrorCode.*;
-import static java.util.Objects.*;
 
 import java.io.IOException;
 
@@ -18,7 +17,6 @@ import com.example.server.domain.pet.model.PetInfo;
 import com.example.server.domain.pet.model.PetTempProtectedInfo;
 import com.example.server.domain.pet.model.constants.PetSex;
 import com.example.server.domain.pet.model.constants.PetType;
-import com.example.server.domain.pet.persistence.PetQueryRepository;
 import com.example.server.domain.pet.persistence.PetRepository;
 import com.example.server.global.exception.BusinessException;
 import com.example.server.global.util.S3Uploader;
@@ -31,7 +29,6 @@ import lombok.RequiredArgsConstructor;
 public class PetService {
 
 	private static final String DIR_NAME = "Profile/Pet";
-	private final PetQueryRepository petQueryRepository;
 	private final MemberRepository memberRepository;
 	private final PetRepository petRepository;
 	private final S3Uploader s3Uploader;
@@ -64,10 +61,10 @@ public class PetService {
 		Long petId,
 		MultipartFile multipartFile
 	) throws IOException {
-		if (isNull(multipartFile)) {
+		if (multipartFile == null) {
 			throw new BusinessException(FILE_NOT_EXIST_ERROR);
 		}
-		Pet pet = petQueryRepository.findPetById(petId)
+		Pet pet = petRepository.findPetById(petId)
 			.orElseThrow(() -> new BusinessException(PET_NOT_FOUND));
 		String foundUsername = pet.getOwner().getUsername();
 		if (!foundUsername.equals(username)) {
