@@ -22,9 +22,9 @@ import com.example.server.domain.member.model.Member;
 import com.example.server.domain.member.persistence.MemberQueryRepository;
 import com.example.server.domain.pet.model.Pet;
 import com.example.server.domain.pet.persistence.PetQueryRepository;
-import com.example.server.domain.stamp.application.StampFindService;
 import com.example.server.domain.stamp.model.Stamp;
 import com.example.server.domain.stamp.model.constants.StampType;
+import com.example.server.domain.stamp.persistence.StampQueryRepository;
 import com.example.server.global.exception.BusinessException;
 import com.example.server.global.util.S3Uploader;
 
@@ -38,7 +38,7 @@ public class DiaryService {
 	private final PetQueryRepository petQueryRepository;
 	private final DiaryRepository diaryRepository;
 	private final DiaryQueryRepository diaryQueryRepository;
-	private final StampFindService stampFindService;
+	private final StampQueryRepository stampQueryRepository;
 	private final S3Uploader s3Uploader;
 	static final int IMAGE_LIST_SIZE = 5;
 	static final int MINIMUM_STAMP_LIST_SIZE = 1;
@@ -126,7 +126,9 @@ public class DiaryService {
 	private List<Stamp> getStamps(List<String> stampList) {
 		List<Stamp> stamps = stampList
 			.stream()
-			.map(s -> stampFindService.findByStampType(StampType.toEnum(s)))
+			.map(s -> stampQueryRepository.findByStampType(StampType.toEnum(s))
+				.orElseThrow(() -> new BusinessException(STAMP_INVALID))
+			)
 			.collect(Collectors.toList());
 		if (stamps.size() < MINIMUM_STAMP_LIST_SIZE) {
 			throw new BusinessException(STAMP_LIST_SIZE_TOO_SHORT);
