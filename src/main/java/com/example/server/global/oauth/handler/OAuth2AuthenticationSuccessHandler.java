@@ -16,7 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.example.server.domain.member.model.Member;
 import com.example.server.domain.member.model.constants.RoleType;
-import com.example.server.domain.member.persistence.MemberQueryRepository;
+import com.example.server.domain.member.persistence.MemberRepository;
 import com.example.server.global.jwt.AuthToken;
 import com.example.server.global.jwt.TokenProvider;
 import com.example.server.global.jwt.application.RefreshTokenService;
@@ -39,7 +39,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
 	private final TokenProvider tokenProvider;
 	private final RefreshTokenService refreshTokenService;
-	private final MemberQueryRepository userRepository;
+	private final MemberRepository userRepository;
 
 	@Value("${callback-url-scheme}")
 	private String callbackUrlScheme;

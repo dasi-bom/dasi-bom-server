@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.server.domain.member.model.Member;
 import com.example.server.domain.member.model.constants.RoleType;
-import com.example.server.domain.member.persistence.MemberQueryRepository;
 import com.example.server.domain.member.persistence.MemberRepository;
 import com.example.server.global.oauth.provider.KakaoUserInfo;
 import com.example.server.global.oauth.provider.NaverUserInfo;
@@ -24,7 +23,6 @@ import lombok.AllArgsConstructor;
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
 	private final MemberRepository memberRepository;
-	private final MemberQueryRepository memberQueryRepository;
 
 	// userRequest 는 code를 받아서 accessToken을 응답 받은 객체
 	@Override
@@ -47,7 +45,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 		}
 
 		Optional<Member> userOptional =
-			memberQueryRepository.findByProviderAndProviderId(oAuth2UserInfo.getProvider(),
+			memberRepository.findByProviderAndProviderId(oAuth2UserInfo.getProvider(),
 				oAuth2UserInfo.getProviderId());
 
 		boolean isFirst; // 최초 로그인 여부

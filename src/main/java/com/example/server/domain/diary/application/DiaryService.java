@@ -15,17 +15,15 @@ import com.example.server.domain.diary.api.dto.DiaryUpdateRequest;
 import com.example.server.domain.diary.model.Diary;
 import com.example.server.domain.diary.model.DiaryStamp;
 import com.example.server.domain.diary.model.constants.Category;
-import com.example.server.domain.diary.persistence.DiaryQueryRepository;
 import com.example.server.domain.diary.persistence.DiaryRepository;
 import com.example.server.domain.image.model.Image;
-import com.example.server.domain.member.application.MemberFindService;
 import com.example.server.domain.member.model.Member;
-import com.example.server.domain.pet.application.PetFindService;
+import com.example.server.domain.member.persistence.MemberRepository;
 import com.example.server.domain.pet.model.Pet;
-import com.example.server.domain.pet.persistence.PetQueryRepository;
-import com.example.server.domain.stamp.application.StampFindService;
+import com.example.server.domain.pet.persistence.PetRepository;
 import com.example.server.domain.stamp.model.Stamp;
 import com.example.server.domain.stamp.model.constants.StampType;
+import com.example.server.domain.stamp.persistence.StampRepository;
 import com.example.server.global.exception.BusinessException;
 import com.example.server.global.util.S3Uploader;
 
@@ -35,12 +33,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DiaryService {
 
-	private final MemberFindService memberFindService;
-	private final PetFindService petFindService;
-	private final PetQueryRepository petQueryRepository;
+	private final MemberRepository memberRepository;
+	private final PetRepository petRepository;
 	private final DiaryRepository diaryRepository;
-	private final DiaryQueryRepository diaryQueryRepository;
-	private final StampFindService stampFindService;
+	private final StampRepository stampRepository;
 	private final S3Uploader s3Uploader;
 	static final int IMAGE_LIST_SIZE = 5;
 	static final int MINIMUM_STAMP_LIST_SIZE = 1;
@@ -52,8 +48,9 @@ public class DiaryService {
 		String username,
 		DiarySaveRequest diarySaveRequest
 	) {
-		Member member = memberFindService.findMemberByUsername(username);
-		Pet pet = petQueryRepository.findPetByIdAndOwner(diarySaveRequest.getPetId(), member)
+		Member member = memberRepository.findByProviderId(username)
+			.orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
+		Pet pet = petRepository.findPetByIdAndOwner(diarySaveRequest.getPetId(), member)
 			.orElseThrow(() -> new BusinessException(PET_NOT_FOUND));
 		List<Stamp> stamps = getStamps(diarySaveRequest.getStamps());
 
@@ -71,8 +68,9 @@ public class DiaryService {
 		String username,
 		List<MultipartFile> multipartFiles
 	) throws IOException {
-		Member member = memberFindService.findMemberByUsername(username);
-		Diary diary = diaryQueryRepository.findByIdAndAuthor(diaryId, member)
+		Member member = memberRepository.findByProviderId(username)
+			.orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
+		Diary diary = diaryRepository.findByIdAndAuthor(diaryId, member)
 			.orElseThrow(() -> new BusinessException(DIARY_NOT_FOUND));
 
 		uploadImages(multipartFiles, diary);
@@ -86,14 +84,15 @@ public class DiaryService {
 		String username,
 		DiaryUpdateRequest diaryUpdateRequest
 	) {
-		Member member = memberFindService.findMemberByUsername(username);
-		Diary diary = diaryQueryRepository.findByIdAndAuthor(diaryId, member)
+		Member member = memberRepository.findByProviderId(username)
+			.orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
+		Diary diary = diaryRepository.findByIdAndAuthor(diaryId, member)
 			.orElseThrow(() -> new BusinessException(DIARY_NOT_FOUND));
 		if (diary.getIsDeleted()) {
 			throw new BusinessException(DIARY_NOT_FOUND);
 		}
 		if (diaryUpdateRequest.getPetId() != null) {
-			Pet pet = petQueryRepository.findPetByIdAndOwner(diaryUpdateRequest.getPetId(), member)
+			Pet pet = petRepository.findPetByIdAndOwner(diaryUpdateRequest.getPetId(), member)
 				.orElseThrow(() -> new BusinessException(PET_NOT_FOUND));
 			diary.updatePet(pet);
 		}
@@ -125,7 +124,9 @@ public class DiaryService {
 	private List<Stamp> getStamps(List<String> stampList) {
 		List<Stamp> stamps = stampList
 			.stream()
-			.map(s -> stampFindService.findByStampType(StampType.toEnum(s)))
+			.map(s -> stampRepository.findByStampType(StampType.toEnum(s))
+				.orElseThrow(() -> new BusinessException(STAMP_INVALID))
+			)
 			.collect(Collectors.toList());
 		if (stamps.size() < MINIMUM_STAMP_LIST_SIZE) {
 			throw new BusinessException(STAMP_LIST_SIZE_TOO_SHORT);
