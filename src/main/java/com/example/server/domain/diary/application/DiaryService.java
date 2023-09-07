@@ -23,7 +23,7 @@ import com.example.server.domain.pet.model.Pet;
 import com.example.server.domain.pet.persistence.PetRepository;
 import com.example.server.domain.stamp.model.Stamp;
 import com.example.server.domain.stamp.model.constants.StampType;
-import com.example.server.domain.stamp.persistence.StampQueryRepository;
+import com.example.server.domain.stamp.persistence.StampRepository;
 import com.example.server.global.exception.BusinessException;
 import com.example.server.global.util.S3Uploader;
 
@@ -36,7 +36,7 @@ public class DiaryService {
 	private final MemberRepository memberRepository;
 	private final PetRepository petRepository;
 	private final DiaryRepository diaryRepository;
-	private final StampQueryRepository stampQueryRepository;
+	private final StampRepository stampRepository;
 	private final S3Uploader s3Uploader;
 	static final int IMAGE_LIST_SIZE = 5;
 	static final int MINIMUM_STAMP_LIST_SIZE = 1;
@@ -124,7 +124,7 @@ public class DiaryService {
 	private List<Stamp> getStamps(List<String> stampList) {
 		List<Stamp> stamps = stampList
 			.stream()
-			.map(s -> stampQueryRepository.findByStampType(StampType.toEnum(s))
+			.map(s -> stampRepository.findByStampType(StampType.toEnum(s))
 				.orElseThrow(() -> new BusinessException(STAMP_INVALID))
 			)
 			.collect(Collectors.toList());
