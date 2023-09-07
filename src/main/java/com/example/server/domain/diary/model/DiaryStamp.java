@@ -56,4 +56,10 @@ public class DiaryStamp {
 	public void updateDiary(Diary diary) {
 		this.diary = diary;
 	}
+
+	// diaryId 와 stampId 의 매핑 제거
+	public void removeDiaryStamp() {
+		this.diary = null;
+		this.stamp = null;
+	}
 }

@@ -40,4 +40,10 @@ public class Image {
 			.fileName(fileName)
 			.build();
 	}
+
+	public void deleteImage() {
+		this.imgUrl = null;
+		this.fileName = null;
+	}
+
 }

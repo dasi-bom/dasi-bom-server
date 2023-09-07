@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.example.server.domain.image.model.Image;
 import com.example.server.domain.image.persistence.ImageRepository;
@@ -71,6 +72,10 @@ public class S3Uploader {
 		});
 
 		return images;
+	}
+
+	public void deleteMultiImages(Image image) {
+		amazonS3.deleteObject(new DeleteObjectRequest(bucket, image.getFileName()));
 	}
 
 	private String createFileName(String originalName, String dirName) {
