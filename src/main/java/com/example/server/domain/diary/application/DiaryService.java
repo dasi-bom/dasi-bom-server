@@ -18,7 +18,7 @@ import com.example.server.domain.diary.model.constants.Category;
 import com.example.server.domain.diary.persistence.DiaryRepository;
 import com.example.server.domain.image.model.Image;
 import com.example.server.domain.member.model.Member;
-import com.example.server.domain.member.persistence.MemberQueryRepository;
+import com.example.server.domain.member.persistence.MemberRepository;
 import com.example.server.domain.pet.model.Pet;
 import com.example.server.domain.pet.persistence.PetQueryRepository;
 import com.example.server.domain.stamp.model.Stamp;
@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DiaryService {
 
-	private final MemberQueryRepository memberQueryRepository;
+	private final MemberRepository memberRepository;
 	private final PetQueryRepository petQueryRepository;
 	private final DiaryRepository diaryRepository;
 	private final StampQueryRepository stampQueryRepository;
@@ -48,7 +48,7 @@ public class DiaryService {
 		String username,
 		DiarySaveRequest diarySaveRequest
 	) {
-		Member member = memberQueryRepository.findByProviderId(username)
+		Member member = memberRepository.findByProviderId(username)
 			.orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
 		Pet pet = petQueryRepository.findPetByIdAndOwner(diarySaveRequest.getPetId(), member)
 			.orElseThrow(() -> new BusinessException(PET_NOT_FOUND));
@@ -68,7 +68,7 @@ public class DiaryService {
 		String username,
 		List<MultipartFile> multipartFiles
 	) throws IOException {
-		Member member = memberQueryRepository.findByProviderId(username)
+		Member member = memberRepository.findByProviderId(username)
 			.orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
 		Diary diary = diaryRepository.findByIdAndAuthor(diaryId, member)
 			.orElseThrow(() -> new BusinessException(DIARY_NOT_FOUND));
@@ -84,7 +84,7 @@ public class DiaryService {
 		String username,
 		DiaryUpdateRequest diaryUpdateRequest
 	) {
-		Member member = memberQueryRepository.findByProviderId(username)
+		Member member = memberRepository.findByProviderId(username)
 			.orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
 		Diary diary = diaryRepository.findByIdAndAuthor(diaryId, member)
 			.orElseThrow(() -> new BusinessException(DIARY_NOT_FOUND));

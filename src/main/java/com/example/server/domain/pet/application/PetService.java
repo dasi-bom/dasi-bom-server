@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.server.domain.member.model.Member;
-import com.example.server.domain.member.persistence.MemberQueryRepository;
+import com.example.server.domain.member.persistence.MemberRepository;
 import com.example.server.domain.pet.api.dto.PetProfileCreateRequest;
 import com.example.server.domain.pet.model.Pet;
 import com.example.server.domain.pet.model.PetInfo;
@@ -32,7 +32,7 @@ public class PetService {
 
 	private static final String DIR_NAME = "Profile/Pet";
 	private final PetQueryRepository petQueryRepository;
-	private final MemberQueryRepository memberQueryRepository;
+	private final MemberRepository memberRepository;
 	private final PetRepository petRepository;
 	private final S3Uploader s3Uploader;
 
@@ -47,7 +47,7 @@ public class PetService {
 		PetProfileCreateRequest req,
 		String username
 	) {
-		Member owner = memberQueryRepository.findByProviderId(username)
+		Member owner = memberRepository.findByProviderId(username)
 			.orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
 
 		PetType type = PetType.toEnum(req.getType());

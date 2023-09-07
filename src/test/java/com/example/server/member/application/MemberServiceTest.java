@@ -19,7 +19,7 @@ import com.example.server.domain.image.model.Image;
 import com.example.server.domain.member.api.dto.MemberProfileSaveRequest;
 import com.example.server.domain.member.application.MemberService;
 import com.example.server.domain.member.model.Member;
-import com.example.server.domain.member.persistence.MemberQueryRepository;
+import com.example.server.domain.member.persistence.MemberRepository;
 import com.example.server.global.exception.BusinessException;
 import com.example.server.global.util.S3Uploader;
 
@@ -27,7 +27,7 @@ import com.example.server.global.util.S3Uploader;
 public class MemberServiceTest {
 
 	@Mock
-	MemberQueryRepository memberQueryRepository;
+	MemberRepository memberQueryRepository;
 
 	@InjectMocks
 	MemberService memberService;

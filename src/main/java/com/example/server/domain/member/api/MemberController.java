@@ -24,7 +24,7 @@ import com.example.server.domain.member.api.dto.MemberProfileSaveRequest;
 import com.example.server.domain.member.api.dto.MemberProfileSaveResponse;
 import com.example.server.domain.member.application.MemberService;
 import com.example.server.domain.member.model.Member;
-import com.example.server.domain.member.persistence.MemberQueryRepository;
+import com.example.server.domain.member.persistence.MemberRepository;
 import com.example.server.global.dto.ApiResponse;
 import com.example.server.global.exception.BusinessException;
 
@@ -36,7 +36,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberController {
 
 	private final MemberService memberService;
-	private final MemberQueryRepository memberQueryRepository;
+	private final MemberRepository memberRepository;
 	private final MemberProfileSaveResponseAssembler memberProfileSaveResponseAssembler;
 	private final MemberProfileResponseAssembler memberProfileResponseAssembler;
 
@@ -59,7 +59,7 @@ public class MemberController {
 
 	@GetMapping("/profile")
 	public ResponseEntity<MemberProfileResponse> getProfile(@AuthenticationPrincipal UserDetails userDetails) {
-		Member member = memberQueryRepository.findByProviderId(userDetails.getUsername())
+		Member member = memberRepository.findByProviderId(userDetails.getUsername())
 			.orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
 		return ApiResponse.success(memberProfileResponseAssembler.toResponse(member));
 	}
