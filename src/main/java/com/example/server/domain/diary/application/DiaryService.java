@@ -22,6 +22,7 @@ import com.example.server.domain.member.application.MemberFindService;
 import com.example.server.domain.member.model.Member;
 import com.example.server.domain.pet.application.PetFindService;
 import com.example.server.domain.pet.model.Pet;
+import com.example.server.domain.pet.persistence.PetQueryRepository;
 import com.example.server.domain.stamp.application.StampFindService;
 import com.example.server.domain.stamp.model.Stamp;
 import com.example.server.domain.stamp.model.constants.StampType;
@@ -36,6 +37,7 @@ public class DiaryService {
 
 	private final MemberFindService memberFindService;
 	private final PetFindService petFindService;
+	private final PetQueryRepository petQueryRepository;
 	private final DiaryRepository diaryRepository;
 	private final DiaryQueryRepository diaryQueryRepository;
 	private final StampFindService stampFindService;
@@ -51,10 +53,8 @@ public class DiaryService {
 		DiarySaveRequest diarySaveRequest
 	) {
 		Member member = memberFindService.findMemberByUsername(username);
-		if (!isPetOwner(member, diarySaveRequest.getPetId())) {
-			throw new BusinessException(PET_NOT_FOUND);
-		}
-		Pet pet = petFindService.findPetById(diarySaveRequest.getPetId());
+		Pet pet = petQueryRepository.findPetByIdAndOwner(diarySaveRequest.getPetId(), member)
+			.orElseThrow(() -> new BusinessException(PET_NOT_FOUND));
 		List<Stamp> stamps = getStamps(diarySaveRequest.getStamps());
 
 		List<DiaryStamp> diaryStamps = generateDiaryStamps(stamps);
@@ -92,7 +92,11 @@ public class DiaryService {
 		if (diary.getIsDeleted()) {
 			throw new BusinessException(DIARY_NOT_FOUND);
 		}
-
+		if (diaryUpdateRequest.getPetId() != null) {
+			Pet pet = petQueryRepository.findPetByIdAndOwner(diaryUpdateRequest.getPetId(), member)
+				.orElseThrow(() -> new BusinessException(PET_NOT_FOUND));
+			diary.updatePet(pet);
+		}
 		if (!diaryUpdateRequest.getStamps().isEmpty()) { // 새로 요청하지 않으면(null 이면) 그대로 유지
 			List<DiaryStamp> newDiaryStamps = updateStamp(diaryUpdateRequest, diary);
 			diary.updateDiary(diaryUpdateRequest, newDiaryStamps);
@@ -116,10 +120,6 @@ public class DiaryService {
 		List<DiaryStamp> diaryStamps = generateDiaryStamps(stamps);
 
 		return diaryStamps;
-	}
-
-	private boolean isPetOwner(Member member, Long petId) {
-		return petFindService.findPetsByOwner(member).contains(petId);
 	}
 
 	private List<Stamp> getStamps(List<String> stampList) {

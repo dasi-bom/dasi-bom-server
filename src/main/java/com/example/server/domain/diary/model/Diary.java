@@ -126,19 +126,17 @@ public class Diary extends BaseEntity {
 		diaryStamp.updateDiary(this);
 	}
 
-	// todo: 책임이 너무 많다.
+	public void updatePet(Pet pet) {
+		this.pet = pet;
+	}
+
 	public void updateDiary(DiaryUpdateRequest diaryUpdateRequest, List<DiaryStamp> diaryStamps) {
-		// todo: petId도 업데이트
-		// if (diaryUpdateRequest.getPetId()) {
-		// 	this.pet = diaryUpdateRequest.getPetId();
-		// }
 		if (StringUtils.isNotBlank(diaryUpdateRequest.getCategory())) {
 			this.category = Category.toEnum(diaryUpdateRequest.getCategory());
 		}
 		if (StringUtils.isNotBlank(diaryUpdateRequest.getContent())) {
 			this.content = diaryUpdateRequest.getContent();
 		}
-		// todo: diarystamp 업데이트 할 때 기존 diarystamp 지워야 한다
 		if (diaryStamps != null) {
 			this.diaryStamps.clear();
 			for (DiaryStamp ds : diaryStamps) {
