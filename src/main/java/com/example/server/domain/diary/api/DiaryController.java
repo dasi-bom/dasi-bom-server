@@ -62,10 +62,10 @@ public class DiaryController {
 	public ResponseEntity<DiaryResponse> updateDiary(
 		@PathVariable("diary-id") Long diaryId,
 		@AuthenticationPrincipal UserDetails userDetails,
-		@RequestPart @Valid DiaryUpdateRequest diaryUpdateRequest,
-		@RequestPart(required = false) List<MultipartFile> multipartFiles
-	) throws IOException {
-		diaryService.updateDiary(diaryId, userDetails.getUsername(), diaryUpdateRequest, multipartFiles);
-		return ApiResponse.success(null); // todo: response 생성
+		@RequestBody @Valid DiaryUpdateRequest diaryUpdateRequest
+	) {
+		Diary diary = diaryService.updateDiary(diaryId, userDetails.getUsername(), diaryUpdateRequest);
+		DiaryResponse response = diaryResponseAssembler.toResponse(diary);
+		return ApiResponse.success(response);
 	}
 }

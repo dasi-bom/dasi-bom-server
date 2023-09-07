@@ -84,9 +84,8 @@ public class DiaryService {
 	public Diary updateDiary(
 		Long diaryId,
 		String username,
-		DiaryUpdateRequest diaryUpdateRequest,
-		List<MultipartFile> multipartFiles
-	) throws IOException {
+		DiaryUpdateRequest diaryUpdateRequest
+	) {
 		Member member = memberFindService.findMemberByUsername(username);
 		Diary diary = diaryQueryRepository.findByIdAndAuthor(diaryId, member)
 			.orElseThrow(() -> new BusinessException(DIARY_NOT_FOUND));
@@ -97,11 +96,6 @@ public class DiaryService {
 		if (!diaryUpdateRequest.getStamps().isEmpty()) { // 새로 요청하지 않으면(null 이면) 그대로 유지
 			List<DiaryStamp> newDiaryStamps = updateStamp(diaryUpdateRequest, diary);
 			diary.updateDiary(diaryUpdateRequest, newDiaryStamps);
-		}
-
-		if (multipartFiles != null) { // 새로 요청하지 않으면(null 이면) 그대로 유지
-			deleteImages(diary); // 기존 이미지 제거하고
-			uploadImages(multipartFiles, diary); // 새로운 이미지 업로드
 		}
 
 		return diary;
