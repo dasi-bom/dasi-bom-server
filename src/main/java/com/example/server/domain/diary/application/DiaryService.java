@@ -104,6 +104,21 @@ public class DiaryService {
 		return diary;
 	}
 
+	@Transactional
+	public void deleteDiary(
+		Long diaryId,
+		String username
+	) {
+		Member member = memberRepository.findByProviderId(username)
+			.orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
+		Diary diary = diaryRepository.findByIdAndAuthor(diaryId, member)
+			.orElseThrow(() -> new BusinessException(DIARY_NOT_FOUND));
+		if (diary.getIsDeleted()) {
+			throw new BusinessException(DIARY_NOT_FOUND);
+		}
+		diary.deleteDiary();
+	}
+
 	private List<DiaryStamp> updateStamp(DiaryUpdateRequest diaryUpdateRequest, Diary diary) {
 		List<DiaryStamp> oldDiaryStamps = diary.getDiaryStamps();
 
