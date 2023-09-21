@@ -148,4 +148,9 @@ public class Diary extends BaseEntity {
 		}
 	}
 
+	public void deleteDiary() {
+		this.isDeleted = Boolean.TRUE;
+		this.deletedDate = LocalDateTime.now();
+	}
+
 }

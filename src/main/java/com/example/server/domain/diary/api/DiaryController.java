@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -67,5 +68,14 @@ public class DiaryController {
 		Diary diary = diaryService.updateDiary(diaryId, userDetails.getUsername(), diaryUpdateRequest);
 		DiaryResponse response = diaryResponseAssembler.toResponse(diary);
 		return ApiResponse.success(response);
+	}
+
+	@DeleteMapping("/{diary-id}")
+	public ResponseEntity deleteDiary(
+		@PathVariable("diary-id") Long diaryId,
+		@AuthenticationPrincipal UserDetails userDetails
+	) {
+		diaryService.deleteDiary(diaryId, userDetails.getUsername());
+		return ApiResponse.success("성공적으로 삭제되었습니다.");
 	}
 }
