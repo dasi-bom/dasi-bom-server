@@ -11,6 +11,6 @@ import com.example.server.domain.member.model.Member;
 
 @Repository
 @Transactional
-public interface DiaryRepository extends JpaRepository<Diary, Long> {
+public interface DiaryRepository extends JpaRepository<Diary, Long>, CustomDiaryRepository {
 	Optional<Diary> findByIdAndAuthor(Long id, Member author);
 }
