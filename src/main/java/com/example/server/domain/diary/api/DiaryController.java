@@ -5,11 +5,15 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,11 +24,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.server.domain.diary.api.assembler.DiaryResponseAssembler;
+import com.example.server.domain.diary.api.dto.DiaryBriefResponse;
 import com.example.server.domain.diary.api.dto.DiaryResponse;
 import com.example.server.domain.diary.api.dto.DiarySaveRequest;
 import com.example.server.domain.diary.api.dto.DiaryUpdateRequest;
 import com.example.server.domain.diary.application.DiaryService;
 import com.example.server.domain.diary.model.Diary;
+import com.example.server.domain.diary.model.condition.ReadCondition;
 import com.example.server.global.dto.ApiResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -37,6 +43,7 @@ public class DiaryController {
 	private final DiaryService diaryService;
 	private final DiaryResponseAssembler diaryResponseAssembler;
 
+	// 일기 작성
 	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity<DiaryResponse> createDiaryExceptForImage(
 		@AuthenticationPrincipal UserDetails userDetails,
@@ -47,6 +54,7 @@ public class DiaryController {
 		return ApiResponse.created(response);
 	}
 
+	// 이미지 업로드
 	@PostMapping(value = "/img/{diary-id}", consumes = {MediaType.APPLICATION_JSON_VALUE,
 		MediaType.MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity<DiaryResponse> uploadImage(
@@ -59,6 +67,7 @@ public class DiaryController {
 		return ApiResponse.created(response);
 	}
 
+	// 일기 수정
 	@PatchMapping("/{diary-id}")
 	public ResponseEntity<DiaryResponse> updateDiary(
 		@PathVariable("diary-id") Long diaryId,
@@ -70,6 +79,7 @@ public class DiaryController {
 		return ApiResponse.success(response);
 	}
 
+	// 일기 삭제
 	@DeleteMapping("/{diary-id}")
 	public ResponseEntity deleteDiary(
 		@PathVariable("diary-id") Long diaryId,
@@ -77,5 +87,14 @@ public class DiaryController {
 	) {
 		diaryService.deleteDiary(diaryId, userDetails.getUsername());
 		return ApiResponse.success("성공적으로 삭제되었습니다.");
+	}
+
+	// 일기 목록을 조회할 수 있는 엔드포인트
+	@GetMapping("/list")
+	public Slice<DiaryBriefResponse> getAll(
+		Long cursor,
+		@PageableDefault(size = 5, sort = "createdDate") Pageable pageRequest
+	) {
+		return diaryService.getAll(cursor, new ReadCondition(), pageRequest);
 	}
 }

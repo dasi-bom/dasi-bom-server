@@ -6,14 +6,18 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.server.domain.diary.api.dto.DiaryBriefResponse;
 import com.example.server.domain.diary.api.dto.DiarySaveRequest;
 import com.example.server.domain.diary.api.dto.DiaryUpdateRequest;
 import com.example.server.domain.diary.model.Diary;
 import com.example.server.domain.diary.model.DiaryStamp;
+import com.example.server.domain.diary.model.condition.ReadCondition;
 import com.example.server.domain.diary.model.constants.Category;
 import com.example.server.domain.diary.persistence.DiaryRepository;
 import com.example.server.domain.image.model.Image;
@@ -117,6 +121,14 @@ public class DiaryService {
 			throw new BusinessException(DIARY_NOT_FOUND);
 		}
 		diary.deleteDiary();
+	}
+
+	public Slice<DiaryBriefResponse> getAll(
+		Long cursor,
+		ReadCondition condition,
+		Pageable pageRequest
+	) {
+		return diaryRepository.getDiaryBriefScroll(cursor, condition, pageRequest);
 	}
 
 	private List<DiaryStamp> updateStamp(DiaryUpdateRequest diaryUpdateRequest, Diary diary) {
