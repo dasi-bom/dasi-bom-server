@@ -56,22 +56,6 @@ public class PetInfo {
 		this.bio = bio;
 	}
 
-	// public static PetInfo of(
-	//         final String name,
-	//         final Integer age,
-	//         final PetType type,
-	//         final PetSex sex,
-	//         final String bio
-	// ) {
-	//     return PetInfo.builder()
-	//             .name(name)
-	//             .age(age)
-	//             .type(type)
-	//             .sex(sex)
-	//             .bio(bio)
-	//             .build();
-	// }
-
 	//== validation Logic ==//
 	private void validateType(final PetType type) {
 		if (isNull(type)) {

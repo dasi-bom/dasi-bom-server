@@ -58,8 +58,10 @@ public class PetService {
 			.bio(req.getBio())
 			.build();
 
-		PetTempProtectedInfo petProtectedInfo =
-			PetTempProtectedInfo.of(IN_PROGRESS, req.getStartTempProtectedDate());
+		PetTempProtectedInfo petProtectedInfo = PetTempProtectedInfo.builder()
+			.status(IN_PROGRESS)
+			.startTempProtectedDate(req.getStartTempProtectedDate())
+			.build();
 
 		Pet pet = Pet.builder()
 			.owner(owner)

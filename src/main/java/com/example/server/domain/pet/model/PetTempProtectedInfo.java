@@ -44,17 +44,6 @@ public class PetTempProtectedInfo {
 		this.startTempProtectedDate = startTempProtectedDate;
 	}
 
-	public static PetTempProtectedInfo of(
-		final PetTempProtectedStatus status,
-		final LocalDate startTempProtectedDate
-	) {
-		return PetTempProtectedInfo
-			.builder()
-			.status(status)
-			.startTempProtectedDate(startTempProtectedDate)
-			.build();
-	}
-
 	private void validateStartTempProtectedDate(final LocalDate tempProtectedDate) {
 		if (isNull(tempProtectedDate)) {
 			throw new BusinessException(PET_TEMP_PROTECTED_SRT_DATE_INVALID);
