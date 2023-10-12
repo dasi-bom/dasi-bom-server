@@ -45,14 +45,6 @@ public class DiaryStamp {
 		this.stamp = stamp;
 	}
 
-	public static DiaryStamp of(
-		final Stamp stamp
-	) {
-		return DiaryStamp.builder()
-			.stamp(stamp)
-			.build();
-	}
-
 	public void updateDiary(Diary diary) {
 		this.diary = diary;
 	}
