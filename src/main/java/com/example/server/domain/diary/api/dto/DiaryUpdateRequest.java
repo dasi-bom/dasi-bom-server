@@ -17,8 +17,6 @@ public class DiaryUpdateRequest {
 
 	private Long challengeId;
 
-	// private String category;
-
 	@Size(max = 1000, message = "본문은 최대 1000자까지 입력할 수 있습니다.")
 	private String content;
 

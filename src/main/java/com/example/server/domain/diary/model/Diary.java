@@ -119,9 +119,6 @@ public class Diary extends BaseEntity {
 	}
 
 	public void updateDiary(DiaryUpdateRequest diaryUpdateRequest, List<DiaryStamp> diaryStamps) {
-		// if (diaryUpdateRequest.getChallengeId() != null) {
-		// 	this.challenge = Challenge
-		// }
 		if (StringUtils.isNotBlank(diaryUpdateRequest.getContent())) {
 			this.content = diaryUpdateRequest.getContent();
 		}
@@ -134,6 +131,11 @@ public class Diary extends BaseEntity {
 		if (diaryUpdateRequest.getIsPublic() != null) {
 			this.isPublic = diaryUpdateRequest.getIsPublic();
 		}
+	}
+
+	public void updateChallenge(Challenge challenge) {
+		this.isChallenge = true;
+		this.challenge = challenge;
 	}
 
 	public void deleteDiary() {

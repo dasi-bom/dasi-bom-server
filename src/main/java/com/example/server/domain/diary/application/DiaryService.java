@@ -102,6 +102,11 @@ public class DiaryService {
 				.orElseThrow(() -> new BusinessException(PET_NOT_FOUND));
 			diary.updatePet(pet);
 		}
+		if (diaryUpdateRequest.getChallengeId() != null) {
+			Challenge challenge = challengeRepository.findById(diaryUpdateRequest.getChallengeId())
+				.orElseThrow(() -> new BusinessException(CHALLENGE_INVALID));
+			diary.updateChallenge(challenge);
+		}
 		if (!diaryUpdateRequest.getStamps().isEmpty()) { // 새로 요청하지 않으면(null 이면) 그대로 유지
 			List<DiaryStamp> newDiaryStamps = updateStamp(diaryUpdateRequest, diary);
 			diary.updateDiary(diaryUpdateRequest, newDiaryStamps);
