@@ -43,7 +43,10 @@ public class S3Uploader {
 		amazonS3.putObject(bucket, s3FileName, multipartFile.getInputStream(), objMeta);
 		String url = URLDecoder.decode(amazonS3.getUrl(bucket, s3FileName).toString(), "utf-8");
 
-		Image img = Image.of(url, s3FileName);
+		Image img = Image.builder()
+			.imgUrl(url)
+			.fileName(s3FileName)
+			.build();
 		imageRepository.save(img);
 
 		return img;
@@ -66,7 +69,10 @@ public class S3Uploader {
 				throw new RuntimeException(e);
 			}
 
-			Image img = Image.of(url, s3FileName);
+			Image img = Image.builder()
+				.imgUrl(url)
+				.fileName(s3FileName)
+				.build();
 			imageRepository.save(img);
 			images.add(img);
 		});
