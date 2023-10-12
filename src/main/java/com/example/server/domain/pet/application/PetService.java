@@ -60,7 +60,14 @@ public class PetService {
 
 		PetTempProtectedInfo petProtectedInfo =
 			PetTempProtectedInfo.of(IN_PROGRESS, req.getStartTempProtectedDate());
-		return petRepository.save(Pet.of(owner, petInfo, petProtectedInfo));
+
+		Pet pet = Pet.builder()
+			.owner(owner)
+			.petInfo(petInfo)
+			.petTempProtectedInfo(petProtectedInfo)
+			.build();
+
+		return petRepository.save(pet);
 	}
 
 	public Pet uploadProfileImage(
