@@ -21,7 +21,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.example.server.domain.image.model.Image;
-import com.example.server.domain.member.model.constants.RoleType;
 import com.example.server.domain.pet.model.Pet;
 import com.example.server.global.auditing.BaseEntity;
 import com.example.server.global.oauth.provider.constants.OAuth2Provider;

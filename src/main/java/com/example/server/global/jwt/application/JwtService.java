@@ -5,7 +5,7 @@ import static com.example.server.global.exception.ErrorCode.*;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import com.example.server.domain.member.model.constants.RoleType;
+import com.example.server.domain.member.model.RoleType;
 import com.example.server.global.exception.BusinessException;
 import com.example.server.global.jwt.AuthToken;
 import com.example.server.global.jwt.TokenProvider;
