@@ -16,6 +16,10 @@ public class ApiResponse<T> {
 		return ResponseEntity.status(HttpStatus.CREATED).body(body);
 	}
 
+	public static <T> ResponseEntity<T> noContent(T body) {
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(body);
+	}
+
 	public static <T> ResponseEntity<T> fail(T body) {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
 	}

@@ -81,12 +81,12 @@ public class DiaryController {
 
 	// 일기 삭제
 	@DeleteMapping("/{diary-id}")
-	public ResponseEntity deleteDiary(
+	public ResponseEntity<String> deleteDiary(
 		@PathVariable("diary-id") Long diaryId,
 		@AuthenticationPrincipal UserDetails userDetails
 	) {
 		diaryService.deleteDiary(diaryId, userDetails.getUsername());
-		return ApiResponse.success("성공적으로 삭제되었습니다.");
+		return ApiResponse.noContent("성공적으로 삭제되었습니다.");
 	}
 
 	// 일기 목록을 조회할 수 있는 엔드포인트
