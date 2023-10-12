@@ -12,13 +12,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.server.domain.challenge.model.Challenge;
+import com.example.server.domain.challenge.persistence.ChallengeRepository;
 import com.example.server.domain.diary.api.dto.DiaryBriefResponse;
 import com.example.server.domain.diary.api.dto.DiarySaveRequest;
 import com.example.server.domain.diary.api.dto.DiaryUpdateRequest;
 import com.example.server.domain.diary.model.Diary;
 import com.example.server.domain.diary.model.DiaryStamp;
 import com.example.server.domain.diary.model.condition.ReadCondition;
-import com.example.server.domain.diary.model.constants.Category;
 import com.example.server.domain.diary.persistence.DiaryRepository;
 import com.example.server.domain.image.model.Image;
 import com.example.server.domain.member.model.Member;
@@ -41,6 +42,7 @@ public class DiaryService {
 	private final PetRepository petRepository;
 	private final DiaryRepository diaryRepository;
 	private final StampRepository stampRepository;
+	private final ChallengeRepository challengeRepository;
 	private final S3Uploader s3Uploader;
 	static final int IMAGE_LIST_SIZE = 5;
 	static final int MINIMUM_STAMP_LIST_SIZE = 1;
@@ -170,24 +172,25 @@ public class DiaryService {
 			.collect(Collectors.toList());
 	}
 
-	private static Diary generateDiary(
+	private Diary generateDiary(
 		DiarySaveRequest diarySaveRequest,
 		Member member,
 		Pet pet,
 		List<DiaryStamp> diaryStamps
 	) {
-		return Diary.of(
-			pet,
-			resolveCategory(diarySaveRequest.getCategory()),
-			member,
-			diarySaveRequest.getContent(),
-			diaryStamps,
-			diarySaveRequest.getIsPublic()
-		);
-	}
-
-	private static Category resolveCategory(String category) {
-		return Category.toEnum(category);
+		Challenge challenge = null;
+		if (diarySaveRequest.getChallengeId() != null) {
+			challenge = challengeRepository.findById(diarySaveRequest.getChallengeId())
+				.orElseThrow(() -> new BusinessException(CHALLENGE_INVALID));
+		}
+		return Diary.builder()
+			.pet(pet)
+			.challenge(challenge)
+			.author(member)
+			.content(diarySaveRequest.getContent())
+			.diaryStamps(diaryStamps)
+			.isPublic(diarySaveRequest.getIsPublic())
+			.build();
 	}
 
 	private void uploadImages(List<MultipartFile> multipartFiles, Diary diary) throws IOException {

@@ -4,11 +4,6 @@ import static lombok.AccessLevel.*;
 
 import java.util.List;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-
-import com.example.server.domain.diary.model.constants.Category;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,8 +20,8 @@ public class DiaryResponse {
 
 	private Long id;
 	private String pet;
-	@Enumerated(EnumType.STRING)
-	private Category category;
+	private Boolean isChallenge; // false 이면 일상 일기 (챌린지 X)
+	private String challenge; // 일상 일기라면 null
 	private List<String> images;
 	private String author;
 	private String content;

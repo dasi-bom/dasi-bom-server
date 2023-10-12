@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
+import com.example.server.domain.challenge.model.Challenge;
 import com.example.server.domain.diary.api.dto.DiaryResponse;
 import com.example.server.domain.diary.model.Diary;
 import com.example.server.domain.diary.model.DiaryStamp;
@@ -17,13 +18,18 @@ public class DiaryResponseAssembler {
 		return DiaryResponse.builder()
 			.id(diary.getId())
 			.pet(diary.getPet().getPetInfo().getName())
-			.category(diary.getCategory())
+			.isChallenge(diary.getIsChallenge())
+			.challenge(getChallengeName(diary.getChallenge()))
 			.images(getImages(diary.getImages()))
 			.author(diary.getAuthor().getNickname())
 			.content(diary.getContent())
 			.diaryStamps(getStamps(diary.getDiaryStamps()))
 			.isPublic(diary.getIsPublic())
 			.build();
+	}
+
+	private String getChallengeName(Challenge challenge) {
+		return (challenge == null) ? null : challenge.getName();
 	}
 
 	private static List<String> getImages(List<Image> images) {

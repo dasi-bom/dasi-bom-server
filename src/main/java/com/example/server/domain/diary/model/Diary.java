@@ -11,17 +11,16 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.example.server.domain.challenge.model.Challenge;
 import com.example.server.domain.diary.api.dto.DiaryUpdateRequest;
-import com.example.server.domain.diary.model.constants.Category;
 import com.example.server.domain.image.model.Image;
 import com.example.server.domain.member.model.Member;
 import com.example.server.domain.pet.model.Pet;
@@ -38,6 +37,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "diary_tb")
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
+// @Builder
 public class Diary extends BaseEntity {
 
 	@Id
@@ -48,8 +48,11 @@ public class Diary extends BaseEntity {
 	@JoinColumn(name = "pet_id")
 	private Pet pet;
 
-	@Enumerated(EnumType.STRING)
-	private Category category;
+	private Boolean isChallenge; // false 이면 일상 일기 (챌린지 X)
+
+	@OneToOne(fetch = LAZY)
+	@JoinColumn(name = "challenge_id")
+	private Challenge challenge; // 일상 일기라면 null
 
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Image> images = new ArrayList<>();
@@ -72,7 +75,7 @@ public class Diary extends BaseEntity {
 	@Builder
 	private Diary(
 		final Pet pet,
-		final Category category,
+		final Challenge challenge,
 		final List<Image> images,
 		final Member author,
 		final String content,
@@ -80,41 +83,26 @@ public class Diary extends BaseEntity {
 		final Boolean isPublic
 	) {
 		this.pet = pet;
-		this.category = category;
+		this.isChallenge = validateIsChallenge(challenge);
+		this.challenge = challenge;
 		this.images = validateAndInitializeImages(images);
 		this.author = author;
 		this.content = content;
-		this.isDeleted = false; // todo: 변경했다 !!!!
+		this.isDeleted = false;
 		this.diaryStamps = validateAndInitializeDiaryStamps(diaryStamps);
 		this.isPublic = isPublic;
 	}
 
-	private List<Image> validateAndInitializeImages(List<Image> images) {
+	private static List<Image> validateAndInitializeImages(List<Image> images) {
 		return (images != null) ? images : new ArrayList<>();
 	}
 
-	private List<DiaryStamp> validateAndInitializeDiaryStamps(List<DiaryStamp> diaryStamps) {
+	private static List<DiaryStamp> validateAndInitializeDiaryStamps(List<DiaryStamp> diaryStamps) {
 		return (diaryStamps != null) ? diaryStamps : new ArrayList<>();
 	}
 
-	public static Diary of(
-		final Pet pet,
-		final Category category,
-		final Member author,
-		final String content,
-		final List<DiaryStamp> diaryStamps,
-		final Boolean isPublic
-	) {
-		Diary diary = Diary.builder()
-			.pet(pet)
-			.category(category)
-			.author(author)
-			.content(content)
-			.isPublic(isPublic)
-			.build();
-		diaryStamps.forEach(diary::addDiaryStamps);
-
-		return diary;
+	private static Boolean validateIsChallenge(Challenge challenge) {
+		return (challenge == null) ? false : true;
 	}
 
 	public void addImages(List<Image> images) {
@@ -131,9 +119,9 @@ public class Diary extends BaseEntity {
 	}
 
 	public void updateDiary(DiaryUpdateRequest diaryUpdateRequest, List<DiaryStamp> diaryStamps) {
-		if (StringUtils.isNotBlank(diaryUpdateRequest.getCategory())) {
-			this.category = Category.toEnum(diaryUpdateRequest.getCategory());
-		}
+		// if (diaryUpdateRequest.getChallengeId() != null) {
+		// 	this.challenge = Challenge
+		// }
 		if (StringUtils.isNotBlank(diaryUpdateRequest.getContent())) {
 			this.content = diaryUpdateRequest.getContent();
 		}
