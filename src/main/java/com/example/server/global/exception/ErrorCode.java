@@ -88,7 +88,13 @@ public enum ErrorCode {
 	/**
 	 * CATEGORY ERROR CODE (CA)
 	 */
-	CATEGORY_INVALID("CA-01-01", NOT_FOUND, "카테고리가 유효하지 않습니다"),
+	// CATEGORY_INVALID("CA-01-01", NOT_FOUND, "카테고리가 유효하지 않습니다"),
+
+	/**
+	 * CHALLENGE ERROR CODE (CH)
+	 */
+	CHALLENGE_INVALID("CH-01-01", NOT_FOUND, "챌린지가 유효하지 않습니다"),
+	CONFLICT_CHALLENGE("CH-02-01", CONFLICT, "이미 존재하는 챌린지입니다"),
 
 	/**
 	 * IMAGE ERROR CODE (IM)
