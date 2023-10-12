@@ -8,6 +8,10 @@ import com.example.server.domain.member.model.Member;
 
 @Component
 public class MemberProfileSaveResponseAssembler {
+	private static String getImage(Image image) {
+		return (image != null) ? image.getImgUrl() : null;
+	}
+
 	public MemberProfileSaveResponse toResponse(Member member) {
 		return MemberProfileSaveResponse.builder()
 			.name(member.getName())
@@ -19,9 +23,5 @@ public class MemberProfileSaveResponseAssembler {
 			.profileImage(getImage(member.getProfileImage()))
 			.nickname(member.getNickname())
 			.build();
-	}
-
-	private static String getImage(Image image) {
-		return (image != null) ? image.getImgUrl() : null;
 	}
 }

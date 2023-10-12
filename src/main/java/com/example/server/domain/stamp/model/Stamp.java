@@ -45,9 +45,4 @@ public class Stamp {
 		this.stampType = stampType;
 	}
 
-	public static Stamp of(final StampType stampType) {
-		return Stamp.builder()
-			.stampType(stampType)
-			.build();
-	}
 }

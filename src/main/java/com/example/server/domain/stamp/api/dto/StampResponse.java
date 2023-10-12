@@ -24,12 +24,4 @@ public class StampResponse {
 	@Enumerated(EnumType.STRING)
 	private StampType stampType;
 
-	//== static factory method ==//
-	public static StampResponse of(
-		StampType stampType
-	) {
-		return StampResponse.builder()
-			.stampType(stampType)
-			.build();
-	}
 }

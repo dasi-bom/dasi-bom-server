@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-
 import com.example.server.domain.challenge.model.Challenge;
 import com.example.server.domain.challenge.persistence.ChallengeRepository;
 import com.example.server.domain.diary.api.dto.DiaryBriefResponse;
@@ -39,16 +38,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DiaryService {
 
+	static final int IMAGE_LIST_SIZE = 5;
+	static final int MINIMUM_STAMP_LIST_SIZE = 1;
+	static final int MAXIMUM_STAMP_LIST_SIZE = 5;
+	static final String DIARY_DIR_NAME = "Diary";
 	private final MemberRepository memberRepository;
 	private final PetRepository petRepository;
 	private final DiaryRepository diaryRepository;
 	private final StampRepository stampRepository;
 	private final ChallengeRepository challengeRepository;
 	private final S3Uploader s3Uploader;
-	static final int IMAGE_LIST_SIZE = 5;
-	static final int MINIMUM_STAMP_LIST_SIZE = 1;
-	static final int MAXIMUM_STAMP_LIST_SIZE = 5;
-	static final String DIARY_DIR_NAME = "Diary";
 
 	@Transactional
 	public Diary createDiaryExceptForImage(
@@ -174,7 +173,9 @@ public class DiaryService {
 
 	private List<DiaryStamp> generateDiaryStamps(List<Stamp> stamps) {
 		return stamps.stream()
-			.map(DiaryStamp::of)
+			.map(stamp -> DiaryStamp.builder()
+				.stamp(stamp)
+				.build())
 			.collect(Collectors.toList());
 	}
 

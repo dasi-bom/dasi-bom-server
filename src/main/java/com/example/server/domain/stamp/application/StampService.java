@@ -25,7 +25,9 @@ public class StampService {
 		if (stampRepository.existsByStampType(stampType)) {
 			throw new BusinessException(CONFLICT_STAMP);
 		}
-		Stamp stamp = Stamp.of(stampType);
+		Stamp stamp = Stamp.builder()
+			.stampType(stampType)
+			.build();
 		stampRepository.save(stamp);
 		return stamp;
 	}
