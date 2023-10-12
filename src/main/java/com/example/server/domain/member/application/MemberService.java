@@ -22,9 +22,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberService {
 
+	static final String MEMBER_PROFILE_DIR_NAME = "Profile/Member";
 	private final S3Uploader s3Uploader;
 	private final MemberRepository memberRepository;
-	static final String MEMBER_PROFILE_DIR_NAME = "Profile/Member";
 
 	@Transactional
 	public Member updateProfile(MemberProfileSaveRequest reqDto, String username) {

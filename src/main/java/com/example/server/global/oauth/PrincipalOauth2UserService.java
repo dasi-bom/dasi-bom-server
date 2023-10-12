@@ -9,7 +9,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import com.example.server.domain.member.model.Member;
-import com.example.server.domain.member.model.constants.RoleType;
+import com.example.server.domain.member.model.RoleType;
 import com.example.server.domain.member.persistence.MemberRepository;
 import com.example.server.global.oauth.provider.KakaoUserInfo;
 import com.example.server.global.oauth.provider.NaverUserInfo;

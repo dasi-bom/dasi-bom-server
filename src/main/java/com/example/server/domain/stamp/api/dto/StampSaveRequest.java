@@ -1,5 +1,7 @@
 package com.example.server.domain.stamp.api.dto;
 
+import javax.validation.constraints.NotNull;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,5 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StampSaveRequest {
 
-	private String stampType;
+	@NotNull(message = "스탬프 이름은 필수 값입니다.")
+	private String name;
 }

@@ -73,19 +73,6 @@ public class Pet extends BaseEntity {
 		this.petTempProtectedInfo = petTempProtectedInfo;
 	}
 
-	//== static factory method ==//
-	public static Pet of(
-		final Member owner,
-		final PetInfo petInfo,
-		final PetTempProtectedInfo petTempProtectedInfo
-	) {
-		return Pet.builder()
-			.owner(owner)
-			.petInfo(petInfo)
-			.petTempProtectedInfo(petTempProtectedInfo)
-			.build();
-	}
-
 	//== validation method ==//
 	private void validateOwner(final Member owner) {
 		if (isNull(owner)) {

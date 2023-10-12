@@ -1,4 +1,4 @@
-package com.example.server.domain.member.model.constants;
+package com.example.server.domain.member.model;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

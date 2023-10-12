@@ -24,13 +24,4 @@ public class ChallengeResponse {
 	private String name;
 	@Enumerated(EnumType.STRING)
 	private ChallengeType challengeType;
-
-	//== static factory method ==//
-	// public static ChallengeResponse of(
-	// 	StampType stampType
-	// ) {
-	// 	return ChallengeResponse.builder()
-	// 		.stampType(stampType)
-	// 		.build();
-	// }
 }

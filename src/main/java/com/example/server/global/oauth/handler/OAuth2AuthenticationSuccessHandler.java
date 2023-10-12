@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.example.server.domain.member.model.Member;
-import com.example.server.domain.member.model.constants.RoleType;
+import com.example.server.domain.member.model.RoleType;
 import com.example.server.domain.member.persistence.MemberRepository;
 import com.example.server.global.jwt.AuthToken;
 import com.example.server.global.jwt.TokenProvider;

@@ -14,6 +14,24 @@ import com.example.server.domain.image.model.Image;
 
 @Component
 public class DiaryResponseAssembler {
+	private static List<String> getImages(List<Image> images) {
+		return Optional.ofNullable(images)
+			.map(imgs -> imgs.stream()
+				.map(Image::getImgUrl)
+				.collect(Collectors.toList())
+			)
+			.orElse(null);
+	}
+
+	private static List<String> getStamps(List<DiaryStamp> diaryStamps) {
+		return Optional.ofNullable(diaryStamps)
+			.map(stamps -> stamps.stream()
+				.map(diaryStamp -> diaryStamp.getStamp().getName())
+				.collect(Collectors.toList())
+			)
+			.orElse(null);
+	}
+
 	public DiaryResponse toResponse(Diary diary) {
 		return DiaryResponse.builder()
 			.id(diary.getId())
@@ -30,23 +48,5 @@ public class DiaryResponseAssembler {
 
 	private String getChallengeName(Challenge challenge) {
 		return (challenge == null) ? null : challenge.getName();
-	}
-
-	private static List<String> getImages(List<Image> images) {
-		return Optional.ofNullable(images)
-			.map(imgs -> imgs.stream()
-				.map(Image::getImgUrl)
-				.collect(Collectors.toList())
-			)
-			.orElse(null);
-	}
-
-	private static List<String> getStamps(List<DiaryStamp> diaryStamps) {
-		return Optional.ofNullable(diaryStamps)
-			.map(stamps -> stamps.stream()
-				.map(diaryStamp -> diaryStamp.getStamp().getStampType().name())
-				.collect(Collectors.toList())
-			)
-			.orElse(null);
 	}
 }
