@@ -1,5 +1,6 @@
 package com.example.server.domain.stamp.model;
 
+import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
@@ -12,10 +13,13 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.example.server.domain.diary.model.DiaryStamp;
+import com.example.server.domain.member.model.Member;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,11 +40,20 @@ public class Stamp {
 	@Enumerated(EnumType.STRING)
 	private StampType stampType;
 
+	@OneToOne(fetch = LAZY)
+	@JoinColumn(name = "admin_id")
+	private Member admin; // 등록한 사람
+	// private Admin admin;
+
 	@OneToMany(mappedBy = "stamp", cascade = CascadeType.ALL)
 	private List<DiaryStamp> diaries = new ArrayList<>();
 
 	@Builder
-	private Stamp(final StampType stampType) {
+	private Stamp(
+		final StampType stampType,
+		final Member admin
+	) {
+		this.admin = admin;
 		this.stampType = stampType;
 	}
 
