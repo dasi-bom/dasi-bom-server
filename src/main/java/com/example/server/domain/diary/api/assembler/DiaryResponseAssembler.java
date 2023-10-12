@@ -14,24 +14,6 @@ import com.example.server.domain.image.model.Image;
 
 @Component
 public class DiaryResponseAssembler {
-	public DiaryResponse toResponse(Diary diary) {
-		return DiaryResponse.builder()
-			.id(diary.getId())
-			.pet(diary.getPet().getPetInfo().getName())
-			.isChallenge(diary.getIsChallenge())
-			.challenge(getChallengeName(diary.getChallenge()))
-			.images(getImages(diary.getImages()))
-			.author(diary.getAuthor().getNickname())
-			.content(diary.getContent())
-			.diaryStamps(getStamps(diary.getDiaryStamps()))
-			.isPublic(diary.getIsPublic())
-			.build();
-	}
-
-	private String getChallengeName(Challenge challenge) {
-		return (challenge == null) ? null : challenge.getName();
-	}
-
 	private static List<String> getImages(List<Image> images) {
 		return Optional.ofNullable(images)
 			.map(imgs -> imgs.stream()
@@ -48,5 +30,23 @@ public class DiaryResponseAssembler {
 				.collect(Collectors.toList())
 			)
 			.orElse(null);
+	}
+
+	public DiaryResponse toResponse(Diary diary) {
+		return DiaryResponse.builder()
+			.id(diary.getId())
+			.pet(diary.getPet().getPetInfo().getName())
+			.isChallenge(diary.getIsChallenge())
+			.challenge(getChallengeName(diary.getChallenge()))
+			.images(getImages(diary.getImages()))
+			.author(diary.getAuthor().getNickname())
+			.content(diary.getContent())
+			.diaryStamps(getStamps(diary.getDiaryStamps()))
+			.isPublic(diary.getIsPublic())
+			.build();
+	}
+
+	private String getChallengeName(Challenge challenge) {
+		return (challenge == null) ? null : challenge.getName();
 	}
 }

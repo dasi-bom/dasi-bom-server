@@ -12,6 +12,17 @@ import com.example.server.domain.pet.api.dto.PetProfileResponse;
 
 @Component
 public class MemberProfileResponseAssembler {
+	private static List<PetProfileResponse> getPetProfileResponses(Member member) {
+		return member.getPets().stream()
+			.map(pet -> PetProfileResponse.of(pet.getId(), member.getProviderId(), pet.getPetInfo(),
+				pet.getPetTempProtectedInfo()))
+			.collect(Collectors.toList());
+	}
+
+	private static String getImage(Image image) {
+		return (image != null) ? image.getImgUrl() : null;
+	}
+
 	public MemberProfileResponse toResponse(Member member) {
 		return MemberProfileResponse.builder()
 			.name(member.getName())
@@ -24,16 +35,5 @@ public class MemberProfileResponseAssembler {
 			.nickname(member.getNickname())
 			.petProfileResponses(getPetProfileResponses(member))
 			.build();
-	}
-
-	private static List<PetProfileResponse> getPetProfileResponses(Member member) {
-		return member.getPets().stream()
-			.map(pet -> PetProfileResponse.of(pet.getId(), member.getProviderId(), pet.getPetInfo(),
-				pet.getPetTempProtectedInfo()))
-			.collect(Collectors.toList());
-	}
-
-	private static String getImage(Image image) {
-		return (image != null) ? image.getImgUrl() : null;
 	}
 }

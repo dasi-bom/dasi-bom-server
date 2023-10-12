@@ -38,16 +38,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DiaryService {
 
+	static final int IMAGE_LIST_SIZE = 5;
+	static final int MINIMUM_STAMP_LIST_SIZE = 1;
+	static final int MAXIMUM_STAMP_LIST_SIZE = 5;
+	static final String DIARY_DIR_NAME = "Diary";
 	private final MemberRepository memberRepository;
 	private final PetRepository petRepository;
 	private final DiaryRepository diaryRepository;
 	private final StampRepository stampRepository;
 	private final ChallengeRepository challengeRepository;
 	private final S3Uploader s3Uploader;
-	static final int IMAGE_LIST_SIZE = 5;
-	static final int MINIMUM_STAMP_LIST_SIZE = 1;
-	static final int MAXIMUM_STAMP_LIST_SIZE = 5;
-	static final String DIARY_DIR_NAME = "Diary";
 
 	@Transactional
 	public Diary createDiaryExceptForImage(

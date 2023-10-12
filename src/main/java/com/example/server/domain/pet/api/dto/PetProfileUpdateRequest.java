@@ -1,13 +1,14 @@
 package com.example.server.domain.pet.api.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
+import static lombok.AccessLevel.*;
 
 import java.time.LocalDate;
 
-import static lombok.AccessLevel.PROTECTED;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = PROTECTED)
