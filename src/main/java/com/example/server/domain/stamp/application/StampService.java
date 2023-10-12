@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.server.domain.stamp.api.dto.StampSaveRequest;
 import com.example.server.domain.stamp.model.Stamp;
-import com.example.server.domain.stamp.model.constants.StampType;
+import com.example.server.domain.stamp.model.StampType;
 import com.example.server.domain.stamp.persistence.StampRepository;
 import com.example.server.global.exception.BusinessException;
 

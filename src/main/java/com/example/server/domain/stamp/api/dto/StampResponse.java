@@ -5,7 +5,7 @@ import static lombok.AccessLevel.*;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
-import com.example.server.domain.stamp.model.constants.StampType;
+import com.example.server.domain.stamp.model.StampType;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

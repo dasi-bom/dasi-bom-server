@@ -1,4 +1,4 @@
-package com.example.server.domain.stamp.model.constants;
+package com.example.server.domain.stamp.model;
 
 import static com.example.server.global.exception.ErrorCode.*;
 

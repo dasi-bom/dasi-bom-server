@@ -27,7 +27,7 @@ import com.example.server.domain.member.persistence.MemberRepository;
 import com.example.server.domain.pet.model.Pet;
 import com.example.server.domain.pet.persistence.PetRepository;
 import com.example.server.domain.stamp.model.Stamp;
-import com.example.server.domain.stamp.model.constants.StampType;
+import com.example.server.domain.stamp.model.StampType;
 import com.example.server.domain.stamp.persistence.StampRepository;
 import com.example.server.global.exception.BusinessException;
 import com.example.server.global.util.S3Uploader;

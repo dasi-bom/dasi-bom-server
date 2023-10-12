@@ -16,7 +16,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.example.server.domain.diary.model.DiaryStamp;
-import com.example.server.domain.stamp.model.constants.StampType;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
