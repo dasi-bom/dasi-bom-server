@@ -39,9 +39,6 @@ public class Stamp {
 	@Column(unique = true)
 	private String name;
 
-	// @Enumerated(EnumType.STRING)
-	// private StampType stampType;
-
 	@OneToOne(fetch = LAZY)
 	@JoinColumn(name = "admin_id")
 	private Member admin; // 등록한 사람

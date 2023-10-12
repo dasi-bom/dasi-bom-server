@@ -18,7 +18,4 @@ public class StampResponse {
 
 	private String name;
 
-	// @Enumerated(EnumType.STRING)
-	// private StampType stampType;
-
 }

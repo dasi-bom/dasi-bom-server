@@ -169,22 +169,6 @@ public class DiaryService {
 		return stamps;
 	}
 
-	// private List<Stamp> getStamps(List<String> stampList) {
-	// 	List<Stamp> stamps = stampList
-	// 		.stream()
-	// 		.map(s -> stampRepository.findByStampType(StampType.toEnum(s))
-	// 			.orElseThrow(() -> new BusinessException(STAMP_INVALID))
-	// 		)
-	// 		.collect(Collectors.toList());
-	// 	if (stamps.size() < MINIMUM_STAMP_LIST_SIZE) {
-	// 		throw new BusinessException(STAMP_LIST_SIZE_TOO_SHORT);
-	// 	}
-	// 	// else if (stamps.size() > STAMP_LIST_SIZE) {
-	// 	// 	throw new BusinessException(STAMP_LIST_SIZE_ERROR);
-	// 	// }
-	// 	return stamps;
-	// }
-
 	private List<DiaryStamp> generateDiaryStamps(List<Stamp> stamps) {
 		return stamps.stream()
 			.map(stamp -> DiaryStamp.builder()
