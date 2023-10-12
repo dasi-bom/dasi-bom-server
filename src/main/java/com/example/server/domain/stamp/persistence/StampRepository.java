@@ -7,12 +7,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.server.domain.stamp.model.Stamp;
-import com.example.server.domain.stamp.model.StampType;
 
 @Repository
 @Transactional
 public interface StampRepository extends JpaRepository<Stamp, Long> {
-	boolean existsByStampType(StampType stampType);
-
-	Optional<Stamp> findByStampType(StampType stampType);
+	// boolean existsByStampType(StampType stampType);
+	// Optional<Stamp> findByStampType(StampType stampType);
+	Optional<Stamp> findByName(String name);
 }

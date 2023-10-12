@@ -33,7 +33,7 @@ public class StampController {
 	) {
 		Stamp stamp = stampService.createStamp(userDetails.getUsername(), stampSaveRequest);
 		return ApiResponse.created(StampResponse.builder()
-			.stampType(stamp.getStampType())
+			.name(stamp.getName())
 			.build());
 	}
 }

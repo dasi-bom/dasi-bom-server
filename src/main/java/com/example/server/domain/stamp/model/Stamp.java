@@ -8,9 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -37,8 +36,11 @@ public class Stamp {
 	@GeneratedValue(strategy = IDENTITY)
 	private Long id;
 
-	@Enumerated(EnumType.STRING)
-	private StampType stampType;
+	@Column(unique = true)
+	private String name;
+
+	// @Enumerated(EnumType.STRING)
+	// private StampType stampType;
 
 	@OneToOne(fetch = LAZY)
 	@JoinColumn(name = "admin_id")
@@ -50,11 +52,11 @@ public class Stamp {
 
 	@Builder
 	private Stamp(
-		final StampType stampType,
+		final String name,
 		final Member admin
 	) {
 		this.admin = admin;
-		this.stampType = stampType;
+		this.name = name;
 	}
 
 }

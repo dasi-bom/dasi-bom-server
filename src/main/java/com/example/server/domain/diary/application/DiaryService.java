@@ -27,7 +27,6 @@ import com.example.server.domain.member.persistence.MemberRepository;
 import com.example.server.domain.pet.model.Pet;
 import com.example.server.domain.pet.persistence.PetRepository;
 import com.example.server.domain.stamp.model.Stamp;
-import com.example.server.domain.stamp.model.StampType;
 import com.example.server.domain.stamp.persistence.StampRepository;
 import com.example.server.global.exception.BusinessException;
 import com.example.server.global.util.S3Uploader;
@@ -155,10 +154,9 @@ public class DiaryService {
 		return diaryStamps;
 	}
 
-	private List<Stamp> getStamps(List<String> stampList) {
-		List<Stamp> stamps = stampList
-			.stream()
-			.map(s -> stampRepository.findByStampType(StampType.toEnum(s))
+	private List<Stamp> getStamps(List<Long> stampList) {
+		List<Stamp> stamps = stampList.stream()
+			.map(stampId -> stampRepository.findById(stampId)
 				.orElseThrow(() -> new BusinessException(STAMP_INVALID))
 			)
 			.collect(Collectors.toList());
@@ -170,6 +168,22 @@ public class DiaryService {
 		// }
 		return stamps;
 	}
+
+	// private List<Stamp> getStamps(List<String> stampList) {
+	// 	List<Stamp> stamps = stampList
+	// 		.stream()
+	// 		.map(s -> stampRepository.findByStampType(StampType.toEnum(s))
+	// 			.orElseThrow(() -> new BusinessException(STAMP_INVALID))
+	// 		)
+	// 		.collect(Collectors.toList());
+	// 	if (stamps.size() < MINIMUM_STAMP_LIST_SIZE) {
+	// 		throw new BusinessException(STAMP_LIST_SIZE_TOO_SHORT);
+	// 	}
+	// 	// else if (stamps.size() > STAMP_LIST_SIZE) {
+	// 	// 	throw new BusinessException(STAMP_LIST_SIZE_ERROR);
+	// 	// }
+	// 	return stamps;
+	// }
 
 	private List<DiaryStamp> generateDiaryStamps(List<Stamp> stamps) {
 		return stamps.stream()

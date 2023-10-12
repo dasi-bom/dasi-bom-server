@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StampSaveRequest {
 
-	private String stampType;
+	private String name;
 }
