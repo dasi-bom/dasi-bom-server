@@ -50,7 +50,14 @@ public class PetService {
         PetType type = PetType.toEnum(req.getType());
         PetSex sex = PetSex.toEnum(req.getSex());
 
-        PetInfo petInfo = PetInfo.of(req.getName(), req.getAge(), type, sex, req.getBio());
+        PetInfo petInfo = PetInfo.builder()
+            .name(req.getName())
+            .age(req.getAge())
+            .type(type)
+            .sex(sex)
+            .bio(req.getBio())
+            .build();
+
         PetTempProtectedInfo petProtectedInfo =
             PetTempProtectedInfo.of(IN_PROGRESS, req.getStartTempProtectedDate());
         return petRepository.save(Pet.of(owner, petInfo, petProtectedInfo));

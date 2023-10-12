@@ -31,16 +31,6 @@ public class Image {
 		this.fileName = fileName;
 	}
 
-	// public static Image of(
-	// 	final String imgUrl,
-	// 	final String fileName
-	// ) {
-	// 	return Image.builder()
-	// 		.imgUrl(imgUrl)
-	// 		.fileName(fileName)
-	// 		.build();
-	// }
-
 	public void deleteImage() {
 		this.imgUrl = null;
 		this.fileName = null;
