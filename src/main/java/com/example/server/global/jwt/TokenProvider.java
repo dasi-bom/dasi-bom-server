@@ -17,7 +17,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
-import com.example.server.domain.member.model.constants.RoleType;
+import com.example.server.domain.member.model.RoleType;
 import com.example.server.global.exception.BusinessException;
 
 import io.jsonwebtoken.Claims;

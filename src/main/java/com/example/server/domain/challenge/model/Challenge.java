@@ -6,6 +6,7 @@ import static lombok.AccessLevel.*;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -32,6 +33,7 @@ public class Challenge {
 	@GeneratedValue(strategy = IDENTITY)
 	private Long id;
 
+	@Column(unique = true)
 	private String name;
 
 	private String description;

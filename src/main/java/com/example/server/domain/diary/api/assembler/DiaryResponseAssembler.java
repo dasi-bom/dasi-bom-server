@@ -26,7 +26,7 @@ public class DiaryResponseAssembler {
 	private static List<String> getStamps(List<DiaryStamp> diaryStamps) {
 		return Optional.ofNullable(diaryStamps)
 			.map(stamps -> stamps.stream()
-				.map(diaryStamp -> diaryStamp.getStamp().getStampType().name())
+				.map(diaryStamp -> diaryStamp.getStamp().getName())
 				.collect(Collectors.toList())
 			)
 			.orElse(null);
