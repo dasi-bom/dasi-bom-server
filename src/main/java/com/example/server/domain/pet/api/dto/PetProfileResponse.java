@@ -1,6 +1,5 @@
 package com.example.server.domain.pet.api.dto;
 
-import static java.time.LocalDateTime.*;
 import static lombok.AccessLevel.*;
 
 import java.time.LocalDateTime;
@@ -26,20 +25,4 @@ public class PetProfileResponse {
 	Boolean isSuccess;
 	LocalDateTime timestamp;
 
-	//== static factory method ==//
-	public static PetProfileResponse of(
-		Long petId,
-		String providerId,
-		PetInfo petInfo,
-		PetTempProtectedInfo petTempProtectedInfo
-	) {
-		return PetProfileResponse.builder()
-			.petId(petId)
-			.providerId(providerId)
-			.petInfo(petInfo)
-			.petTempProtectedInfo(petTempProtectedInfo)
-			.isSuccess(true)
-			.timestamp(now())
-			.build();
-	}
 }
