@@ -45,7 +45,9 @@ public class AuthController {
 	@PostMapping("/re-issue")
 	public ResponseEntity<AccessTokenResponse> reissueAccessToken(@RequestBody AccessTokenRequest accessTokenRequest) {
 		String accessToken = jwtService.getAccessToken(accessTokenRequest);
-		return ApiResponse.created(AccessTokenResponse.of(accessToken));
+		return ApiResponse.created(AccessTokenResponse.builder()
+			.accessToken(accessToken)
+			.build());
 	}
 
 	@PostMapping("/logout")

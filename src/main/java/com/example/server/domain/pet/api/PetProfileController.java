@@ -1,6 +1,7 @@
 package com.example.server.domain.pet.api;
 
 import static com.example.server.domain.pet.api.dto.PetProfileResponse.*;
+import static java.time.LocalDateTime.*;
 import static org.springframework.http.MediaType.*;
 
 import java.io.IOException;
@@ -37,11 +38,15 @@ public class PetProfileController {
 		@AuthenticationPrincipal UserDetails userDetails
 	) {
 		Pet pet = petService.createProfile(reqDto, userDetails.getUsername());
-		return ApiResponse.created(of(
-			pet.getId(),
-			userDetails.getUsername(),
-			pet.getPetInfo(),
-			pet.getPetTempProtectedInfo()));
+		PetProfileResponse response = builder()
+			.petId(pet.getId())
+			.providerId(userDetails.getUsername())
+			.petInfo(pet.getPetInfo())
+			.petTempProtectedInfo(pet.getPetTempProtectedInfo())
+			.isSuccess(true)
+			.timestamp(now())
+			.build();
+		return ApiResponse.created(response);
 	}
 
 	@PostMapping(value = "/profile/images", consumes = MULTIPART_FORM_DATA_VALUE)
