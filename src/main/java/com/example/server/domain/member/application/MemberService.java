@@ -14,7 +14,6 @@ import com.example.server.domain.member.model.Member;
 import com.example.server.domain.member.persistence.MemberRepository;
 import com.example.server.global.exception.BusinessException;
 import com.example.server.global.util.S3Uploader;
-import com.nimbusds.oauth2.sdk.util.StringUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,10 +29,8 @@ public class MemberService {
 	public Member updateProfile(MemberProfileSaveRequest reqDto, String username) {
 		Member member = memberRepository.findByProviderId(username)
 			.orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
-		if (StringUtils.isNotBlank(reqDto.getNickname())) {
-			validateDuplicatedNickname(reqDto.getNickname());
-			member.updateProfileInfo(reqDto.getNickname());
-		}
+		validateDuplicatedNickname(reqDto.getNickname());
+		member.updateProfileInfo(reqDto.getNickname());
 		return member;
 	}
 

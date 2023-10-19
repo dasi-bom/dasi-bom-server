@@ -16,7 +16,6 @@ import com.example.server.domain.challenge.model.Challenge;
 import com.example.server.domain.challenge.persistence.ChallengeRepository;
 import com.example.server.domain.diary.api.dto.DiaryBriefResponse;
 import com.example.server.domain.diary.api.dto.DiarySaveRequest;
-import com.example.server.domain.diary.api.dto.DiaryUpdateRequest;
 import com.example.server.domain.diary.model.Diary;
 import com.example.server.domain.diary.model.DiaryStamp;
 import com.example.server.domain.diary.model.condition.ReadCondition;
@@ -87,7 +86,7 @@ public class DiaryService {
 	public Diary updateDiary(
 		Long diaryId,
 		String username,
-		DiaryUpdateRequest diaryUpdateRequest
+		DiarySaveRequest diarySaveRequest
 	) {
 		Member member = memberRepository.findByProviderId(username)
 			.orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
@@ -96,20 +95,20 @@ public class DiaryService {
 		if (diary.getIsDeleted()) {
 			throw new BusinessException(DIARY_NOT_FOUND);
 		}
-		if (diaryUpdateRequest.getPetId() != null) {
-			Pet pet = petRepository.findPetByIdAndOwner(diaryUpdateRequest.getPetId(), member)
-				.orElseThrow(() -> new BusinessException(PET_NOT_FOUND));
-			diary.updatePet(pet);
-		}
-		if (diaryUpdateRequest.getChallengeId() != null) {
-			Challenge challenge = challengeRepository.findById(diaryUpdateRequest.getChallengeId())
+
+		Pet pet = petRepository.findPetByIdAndOwner(diarySaveRequest.getPetId(), member)
+			.orElseThrow(() -> new BusinessException(PET_NOT_FOUND));
+		diary.updatePet(pet);
+
+		Challenge challenge = null;
+		if (diarySaveRequest.getChallengeId() != null) {
+			challenge = challengeRepository.findById(diarySaveRequest.getChallengeId())
 				.orElseThrow(() -> new BusinessException(CHALLENGE_INVALID));
-			diary.updateChallenge(challenge);
 		}
-		if (!diaryUpdateRequest.getStamps().isEmpty()) { // 새로 요청하지 않으면(null 이면) 그대로 유지
-			List<DiaryStamp> newDiaryStamps = updateStamp(diaryUpdateRequest, diary);
-			diary.updateDiary(diaryUpdateRequest, newDiaryStamps);
-		}
+		diary.updateChallenge(challenge);
+
+		List<DiaryStamp> newDiaryStamps = updateStamp(diarySaveRequest, diary);
+		diary.updateDiary(diarySaveRequest, newDiaryStamps);
 
 		return diary;
 	}
@@ -137,18 +136,18 @@ public class DiaryService {
 		return diaryRepository.getDiaryBriefScroll(cursor, condition, pageRequest);
 	}
 
-	private List<DiaryStamp> updateStamp(DiaryUpdateRequest diaryUpdateRequest, Diary diary) {
+	private List<DiaryStamp> updateStamp(DiarySaveRequest diarySaveRequest, Diary diary) {
 		List<DiaryStamp> oldDiaryStamps = diary.getDiaryStamps();
 
 		// 기존 스탬프 제거
-		if (diaryUpdateRequest.getStamps() != null) { // 새로 요청하지 않으면(null 이면) 그대로 유지
+		if (diarySaveRequest.getStamps() != null) { // 새로 요청하지 않으면(null 이면) 그대로 유지
 			for (DiaryStamp oldDiaryStamp : oldDiaryStamps) {
 				oldDiaryStamp.removeDiaryStamp();
 			}
 		}
 
 		// 새로운 스탬프 생성
-		List<Stamp> stamps = getStamps(diaryUpdateRequest.getStamps());
+		List<Stamp> stamps = getStamps(diarySaveRequest.getStamps());
 		List<DiaryStamp> diaryStamps = generateDiaryStamps(stamps);
 
 		return diaryStamps;
