@@ -14,9 +14,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -27,7 +27,6 @@ import com.example.server.domain.diary.api.assembler.DiaryResponseAssembler;
 import com.example.server.domain.diary.api.dto.DiaryBriefResponse;
 import com.example.server.domain.diary.api.dto.DiaryResponse;
 import com.example.server.domain.diary.api.dto.DiarySaveRequest;
-import com.example.server.domain.diary.api.dto.DiaryUpdateRequest;
 import com.example.server.domain.diary.application.DiaryService;
 import com.example.server.domain.diary.model.Diary;
 import com.example.server.domain.diary.model.condition.ReadCondition;
@@ -68,13 +67,13 @@ public class DiaryController {
 	}
 
 	// 일기 수정
-	@PatchMapping("/{diary-id}")
+	@PutMapping("/{diary-id}")
 	public ResponseEntity<DiaryResponse> updateDiary(
 		@PathVariable("diary-id") Long diaryId,
 		@AuthenticationPrincipal UserDetails userDetails,
-		@RequestBody @Valid DiaryUpdateRequest diaryUpdateRequest
+		@RequestBody @Valid DiarySaveRequest diarySaveRequest
 	) {
-		Diary diary = diaryService.updateDiary(diaryId, userDetails.getUsername(), diaryUpdateRequest);
+		Diary diary = diaryService.updateDiary(diaryId, userDetails.getUsername(), diarySaveRequest);
 		DiaryResponse response = diaryResponseAssembler.toResponse(diary);
 		return ApiResponse.success(response);
 	}
