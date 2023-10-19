@@ -20,12 +20,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.example.server.domain.challenge.model.Challenge;
-import com.example.server.domain.diary.api.dto.DiaryUpdateRequest;
+import com.example.server.domain.diary.api.dto.DiarySaveRequest;
 import com.example.server.domain.image.model.Image;
 import com.example.server.domain.member.model.Member;
 import com.example.server.domain.pet.model.Pet;
 import com.example.server.global.auditing.BaseEntity;
-import com.nimbusds.oauth2.sdk.util.StringUtils;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,6 +44,7 @@ public class Diary extends BaseEntity {
 	private Long id;
 
 	@ManyToOne(fetch = LAZY)
+	// @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "pet_id")
 	private Pet pet;
 
@@ -118,24 +118,23 @@ public class Diary extends BaseEntity {
 		this.pet = pet;
 	}
 
-	public void updateDiary(DiaryUpdateRequest diaryUpdateRequest, List<DiaryStamp> diaryStamps) {
-		if (StringUtils.isNotBlank(diaryUpdateRequest.getContent())) {
-			this.content = diaryUpdateRequest.getContent();
+	public void updateDiary(DiarySaveRequest diarySaveRequest, List<DiaryStamp> diaryStamps) {
+		this.content = diarySaveRequest.getContent();
+		this.diaryStamps.clear();
+		for (DiaryStamp ds : diaryStamps) {
+			addDiaryStamps(ds);
 		}
-		if (diaryStamps != null) {
-			this.diaryStamps.clear();
-			for (DiaryStamp ds : diaryStamps) {
-				addDiaryStamps(ds);
-			}
-		}
-		if (diaryUpdateRequest.getIsPublic() != null) {
-			this.isPublic = diaryUpdateRequest.getIsPublic();
-		}
+		this.isPublic = diarySaveRequest.getIsPublic();
 	}
 
 	public void updateChallenge(Challenge challenge) {
-		this.isChallenge = true;
-		this.challenge = challenge;
+		if (challenge == null) {
+			this.isChallenge = false;
+			this.challenge = null;
+		} else {
+			this.isChallenge = true;
+			this.challenge = challenge;
+		}
 	}
 
 	public void deleteDiary() {
