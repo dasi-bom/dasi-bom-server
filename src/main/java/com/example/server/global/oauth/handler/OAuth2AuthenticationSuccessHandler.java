@@ -46,12 +46,12 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 		Authentication authentication) throws IOException, ServletException {
 		CustomOAuth2User oauth2user = (CustomOAuth2User)authentication.getPrincipal();
 		OAuth2UserInfo oAuth2UserInfo = getOAuth2UserInfo(oauth2user);
-		AuthToken accessToken = createAuthToken(oAuth2UserInfo);
+		AuthToken accessToken = generateAuthToken(oAuth2UserInfo);
 		String targetUrl = createTargetUrl(accessToken.getToken());
 		getRedirectStrategy().sendRedirect(request, response, targetUrl);
 	}
 
-	private AuthToken createAuthToken(OAuth2UserInfo oAuth2UserInfo) {
+	private AuthToken generateAuthToken(OAuth2UserInfo oAuth2UserInfo) {
 		AuthToken accessToken = tokenProvider.generateToken(oAuth2UserInfo.getProviderId(), RoleType.ROLE_USER.name(),
 			true);
 		AuthToken refreshToken = tokenProvider.generateToken(oAuth2UserInfo.getProviderId(), RoleType.ROLE_USER.name(),
