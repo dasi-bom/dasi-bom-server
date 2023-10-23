@@ -2,15 +2,14 @@ package com.example.server.global.util;
 
 import static com.example.server.domain.diary.model.QDiary.*;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.domain.Sort;
 
-import com.example.server.domain.diary.api.dto.DiaryBriefResponse;
-import com.example.server.domain.diary.model.Diary;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 
@@ -44,15 +43,15 @@ public class SliceUtil {
 	/**
 	 * 리스트를 Slice로 변환
 	 */
-	public static SliceImpl<DiaryBriefResponse> toSlice(Pageable pageable, List<Diary> diaryList) {
-		List<DiaryBriefResponse> briefDiaryInfos = new ArrayList<>();
-		for (Diary diary : diaryList) {
-			briefDiaryInfos.add(DiaryBriefResponse.from(diary));
-		}
-		boolean hasNext = briefDiaryInfos.size() > pageable.getPageSize();
+	public static <T, R> SliceImpl<R> toSlice(Pageable pageable, List<T> lst, Function<T, R> mapper) {
+		boolean hasNext = lst.size() > pageable.getPageSize();
 		if (hasNext) {
-			briefDiaryInfos.remove(pageable.getPageSize());
+			lst.remove(pageable.getPageSize());
 		}
-		return new SliceImpl<>(briefDiaryInfos, pageable, hasNext);
+		return new SliceImpl<>(
+			lst.stream().map(mapper).collect(Collectors.toList()),
+			pageable,
+			hasNext
+		);
 	}
 }

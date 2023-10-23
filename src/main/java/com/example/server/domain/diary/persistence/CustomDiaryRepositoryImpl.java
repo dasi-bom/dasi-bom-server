@@ -37,7 +37,7 @@ public class CustomDiaryRepositoryImpl implements CustomDiaryRepository {
 			.orderBy(SliceUtil.sortDiaryList(pageable)) // 최신순 정렬
 			.fetch();
 
-		return SliceUtil.toSlice(pageable, diaryList);
+		return SliceUtil.toSlice(pageable, diaryList, DiaryBriefResponse::from);
 	}
 
 	//동적 쿼리를 위한 BooleanExpression
