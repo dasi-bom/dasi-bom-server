@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -92,7 +93,7 @@ public class DiaryController {
 	@GetMapping("/list")
 	public Slice<DiaryBriefResponse> getAll(
 		Long cursor,
-		@PageableDefault(size = 5, sort = "createdDate") Pageable pageRequest
+		@PageableDefault(size = 5, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageRequest
 	) {
 		return diaryService.getAll(cursor, new ReadCondition(), pageRequest);
 	}

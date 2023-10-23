@@ -2,7 +2,6 @@ package com.example.server.global.oauth.handler;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Optional;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -14,9 +13,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.example.server.domain.member.model.Member;
 import com.example.server.domain.member.model.RoleType;
-import com.example.server.domain.member.persistence.MemberRepository;
 import com.example.server.global.jwt.AuthToken;
 import com.example.server.global.jwt.TokenProvider;
 import com.example.server.global.jwt.application.RefreshTokenService;
@@ -37,59 +34,46 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
+	private static final String SUCCESS_LOGIN = "auth/success-login"; // /auth 아니고 auth
+	private static final String TOKEN = "token";
 	private final TokenProvider tokenProvider;
 	private final RefreshTokenService refreshTokenService;
-	private final MemberRepository userRepository;
-
 	@Value("${callback-url-scheme}")
 	private String callbackUrlScheme;
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 		Authentication authentication) throws IOException, ServletException {
-		writeTokenResponse(request, response, authentication);
+		CustomOAuth2User oauth2user = (CustomOAuth2User)authentication.getPrincipal();
+		OAuth2UserInfo oAuth2UserInfo = getOAuth2UserInfo(oauth2user);
+		AuthToken accessToken = generateAuthToken(oAuth2UserInfo);
+		String targetUrl = createTargetUrl(accessToken.getToken());
+		getRedirectStrategy().sendRedirect(request, response, targetUrl);
 	}
 
-	private void writeTokenResponse(HttpServletRequest request, HttpServletResponse response,
-		Authentication authentication) throws IOException {
-
-		CustomOAuth2User oauth2user = (CustomOAuth2User)authentication.getPrincipal();
-		String userName = oauth2user.getName(); //authentication 의 name
-
-		Optional<Member> oUser = userRepository.findById(Long.parseLong(userName));
-
-		String providerName = oauth2user.getProviderName(); //authentication 의 name
-		OAuth2UserInfo oAuth2UserInfo = null;
-		if (providerName.equals(OAuth2Provider.KAKAO.getProviderName())) {
-			oAuth2UserInfo = new KakaoUserInfo(oauth2user.getAttributes());
-		} else if (providerName.equals(OAuth2Provider.NAVER.getProviderName())) {
-			oAuth2UserInfo = new NaverUserInfo(oauth2user.getAttributes());
-		}
-
-		// JWT 생성
+	private AuthToken generateAuthToken(OAuth2UserInfo oAuth2UserInfo) {
 		AuthToken accessToken = tokenProvider.generateToken(oAuth2UserInfo.getProviderId(), RoleType.ROLE_USER.name(),
 			true);
 		AuthToken refreshToken = tokenProvider.generateToken(oAuth2UserInfo.getProviderId(), RoleType.ROLE_USER.name(),
 			false);
-
 		refreshTokenService.save(oAuth2UserInfo.getProviderId(), refreshToken.getToken());
-
-		String targetUrl;
-		if (oUser.isEmpty()) {
-			targetUrl = createTargetUrl(accessToken.getToken(), Boolean.TRUE);
-		} else {
-			targetUrl = createTargetUrl(accessToken.getToken(), Boolean.FALSE);
-		}
-
-		getRedirectStrategy().sendRedirect(request, response, targetUrl);
+		return accessToken;
 	}
 
-	private String createTargetUrl(String accessToken, Boolean isNewMember)
-		throws UnsupportedEncodingException {
+	private OAuth2UserInfo getOAuth2UserInfo(CustomOAuth2User oauth2user) {
+		String providerName = oauth2user.getProviderName();
+		if (providerName.equals(OAuth2Provider.KAKAO.getProviderName())) {
+			return new KakaoUserInfo(oauth2user.getAttributes());
+		} else if (providerName.equals(OAuth2Provider.NAVER.getProviderName())) {
+			return new NaverUserInfo(oauth2user.getAttributes());
+		}
+		throw new IllegalArgumentException("Unsupported OAuth2 provider: " + providerName);
+	}
+
+	private String createTargetUrl(String accessToken) throws UnsupportedEncodingException {
 		return UriComponentsBuilder
-			.fromUriString(callbackUrlScheme + "auth/success-login") // /auth 아니고 auth
-			.queryParam("token", accessToken)
-			.queryParam("isNewMember", isNewMember)
+			.fromUriString(callbackUrlScheme + SUCCESS_LOGIN)
+			.queryParam(TOKEN, accessToken)
 			.build().toUriString();
 	}
 
