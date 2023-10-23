@@ -2,7 +2,6 @@ package com.example.server.global.oauth.handler;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Optional;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +13,6 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.example.server.domain.member.model.Member;
 import com.example.server.domain.member.model.RoleType;
 import com.example.server.domain.member.persistence.MemberRepository;
 import com.example.server.global.jwt.AuthToken;
@@ -54,10 +52,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 		Authentication authentication) throws IOException {
 
 		CustomOAuth2User oauth2user = (CustomOAuth2User)authentication.getPrincipal();
-		String userName = oauth2user.getName(); //authentication 의 name
-
-		Optional<Member> oUser = userRepository.findById(Long.parseLong(userName));
-
 		String providerName = oauth2user.getProviderName(); //authentication 의 name
 		OAuth2UserInfo oAuth2UserInfo = null;
 		if (providerName.equals(OAuth2Provider.KAKAO.getProviderName())) {
@@ -74,22 +68,15 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
 		refreshTokenService.save(oAuth2UserInfo.getProviderId(), refreshToken.getToken());
 
-		String targetUrl;
-		if (oUser.isEmpty()) {
-			targetUrl = createTargetUrl(accessToken.getToken(), Boolean.TRUE);
-		} else {
-			targetUrl = createTargetUrl(accessToken.getToken(), Boolean.FALSE);
-		}
-
+		String targetUrl = createTargetUrl(accessToken.getToken());
 		getRedirectStrategy().sendRedirect(request, response, targetUrl);
 	}
 
-	private String createTargetUrl(String accessToken, Boolean isNewMember)
+	private String createTargetUrl(String accessToken)
 		throws UnsupportedEncodingException {
 		return UriComponentsBuilder
 			.fromUriString(callbackUrlScheme + "auth/success-login") // /auth 아니고 auth
 			.queryParam("token", accessToken)
-			.queryParam("isNewMember", isNewMember)
 			.build().toUriString();
 	}
 
