@@ -8,12 +8,13 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.SliceImpl;
-import org.springframework.data.domain.Sort;
 
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 
 public class SliceUtil {
+	private static final String ORDER_BY_UPDATED_DATE = "updatedDate";
+
 	/**
 	 * 페이징 정보로부터 limit 값 가져오기
 	 */
@@ -21,23 +22,24 @@ public class SliceUtil {
 		return pageable.getPageSize() + 1;
 	}
 
-	public static OrderSpecifier<?> sortDiaryList(Pageable pageable) {
-		// 서비스에서 보내준 Pageable 객체에 정렬조건 null 값 체크
-		if (pageable.getSort().isEmpty()) {
-			return new OrderSpecifier<>(Order.DESC, diary.createdDate);
-		} else {
-			// 정렬값이 들어 있으면 for 사용하여 값을 가져오기
-			for (Sort.Order order : pageable.getSort()) {
+	/**
+	 * 페이징 정보로부터 정렬 조건 생성
+	 */
+	public static OrderSpecifier<?> getOrderSpecifier(Pageable pageable) {
+		return pageable.getSort().stream()
+			.map(order -> {
 				// 서비스에서 넣어준 DESC or ASC 를 가져오기
 				Order direction = order.getDirection().isAscending() ? Order.ASC : Order.DESC;
 				// 서비스에서 넣어준 정렬 조건을 스위치 케이스 문을 활용하여 세팅
 				switch (order.getProperty()) {
-					case "updatedDate":
+					case ORDER_BY_UPDATED_DATE:
 						return new OrderSpecifier<>(direction, diary.updatedDate);
+					default:
+						return new OrderSpecifier<>(direction, diary.createdDate);
 				}
-			}
-		}
-		return new OrderSpecifier<>(Order.DESC, diary.createdDate);
+			})
+			.findFirst()
+			.orElseGet(() -> new OrderSpecifier<>(Order.DESC, diary.createdDate));
 	}
 
 	/**

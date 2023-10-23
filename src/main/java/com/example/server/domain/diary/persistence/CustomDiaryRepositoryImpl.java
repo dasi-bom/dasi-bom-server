@@ -34,7 +34,7 @@ public class CustomDiaryRepositoryImpl implements CustomDiaryRepository {
 				eqCursorId(cursorId)
 			)
 			.limit(SliceUtil.getLimit(pageable)) // limit 보다 데이터를 1개 더 들고와서, 해당 데이터가 있다면 hasNext 변수에 true 를 넣어 알림
-			.orderBy(SliceUtil.sortDiaryList(pageable)) // 최신순 정렬
+			.orderBy(SliceUtil.getOrderSpecifier(pageable)) // 최신순 정렬
 			.fetch();
 
 		return SliceUtil.toSlice(pageable, diaryList, DiaryBriefResponse::from);
