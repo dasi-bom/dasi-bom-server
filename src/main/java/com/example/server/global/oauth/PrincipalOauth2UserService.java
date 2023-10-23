@@ -28,48 +28,44 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 	@Override
 	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 		OAuth2User oAuth2User = super.loadUser(userRequest);
-		return processOAuth2User(userRequest, oAuth2User);
+		OAuth2UserInfo oAuth2UserInfo = getOAuth2UserInfo(userRequest, oAuth2User);
+		return new CustomOAuth2User(
+			oAuth2UserInfo,
+			getOrCreateMember(oAuth2UserInfo)
+		);
 	}
 
-	private OAuth2User processOAuth2User(OAuth2UserRequest userRequest, OAuth2User oAuth2User) {
-		OAuth2UserInfo oAuth2UserInfo = null;
-
-		Member user;
-
-		// OAuth2 서비스 제공자 구분
+	private OAuth2UserInfo getOAuth2UserInfo(OAuth2UserRequest userRequest, OAuth2User oAuth2User) {
 		String registrationId = userRequest.getClientRegistration().getRegistrationId();
 		if (registrationId.equals(OAuth2Provider.KAKAO.getProviderName())) {
-			oAuth2UserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
+			return new KakaoUserInfo(oAuth2User.getAttributes());
 		} else if (registrationId.equals(OAuth2Provider.NAVER.getProviderName())) {
-			oAuth2UserInfo = new NaverUserInfo(oAuth2User.getAttributes());
+			return new NaverUserInfo(oAuth2User.getAttributes());
 		}
+		return null;
+	}
 
-		Optional<Member> userOptional =
-			memberRepository.findByProviderAndProviderId(oAuth2UserInfo.getProvider(),
-				oAuth2UserInfo.getProviderId());
+	private Member getOrCreateMember(OAuth2UserInfo oAuth2UserInfo) {
+		Member existingMember = getExistingMember(oAuth2UserInfo);
+		return existingMember != null ? existingMember : createMember(oAuth2UserInfo);
+	}
 
-		boolean isFirst; // 최초 로그인 여부
-		if (userOptional.isPresent()) { // 이미 가입한 회원이라면
-			isFirst = false;
-			user = userOptional.get();
-			user.updateEmail(oAuth2UserInfo.getEmail());
-			memberRepository.save(user);
-		} else {
-			isFirst = true;
+	private Member getExistingMember(OAuth2UserInfo oAuth2UserInfo) {
+		Optional<Member> oMember = memberRepository.findByProviderAndProviderId(oAuth2UserInfo.getProvider(),
+			oAuth2UserInfo.getProviderId());
+		return oMember.orElse(null); // 회원이 없으면 null 반환
+	}
 
-			// user의 패스워드가 null이기 때문에 OAuth 유저는 일반적인 로그인을 할 수 없음.
-			user = Member.builder()
-				.name(oAuth2UserInfo.getName())
-				.username(oAuth2UserInfo.getProvider().getProviderName() + "_" + oAuth2UserInfo.getProviderId())
-				.email(oAuth2UserInfo.getEmail())
-				.mobile(oAuth2UserInfo.getMobile())
-				.role(RoleType.ROLE_USER)
-				.provider(oAuth2UserInfo.getProvider())
-				.providerId(oAuth2UserInfo.getProviderId())
-				.build();
-			memberRepository.save(user);
-		}
-
-		return new CustomOAuth2User(oAuth2UserInfo, user, isFirst);
+	private Member createMember(OAuth2UserInfo oAuth2UserInfo) {
+		Member member = Member.builder()
+			.name(oAuth2UserInfo.getName())
+			.username(oAuth2UserInfo.getProvider().getProviderName() + "_" + oAuth2UserInfo.getProviderId())
+			.email(oAuth2UserInfo.getEmail())
+			.mobile(oAuth2UserInfo.getMobile())
+			.role(RoleType.ROLE_USER)
+			.provider(oAuth2UserInfo.getProvider())
+			.providerId(oAuth2UserInfo.getProviderId())
+			.build();
+		return memberRepository.save(member);
 	}
 }
