@@ -1,7 +1,5 @@
 package com.example.server.global.jwt;
 
-import static com.example.server.global.exception.ErrorCode.*;
-
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Base64;
@@ -19,6 +17,7 @@ import org.springframework.security.core.userdetails.User;
 
 import com.example.server.domain.member.model.RoleType;
 import com.example.server.global.exception.BusinessException;
+import com.example.server.global.exception.errorcode.AuthErrorCode;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -76,7 +75,7 @@ public class TokenProvider {
 	public Authentication getAuthentication(AuthToken authToken) {
 
 		if (!authToken.validateToken()) {
-			throw new BusinessException(ACCESS_TOKEN_INVALID);
+			throw new BusinessException(AuthErrorCode.ACCESS_TOKEN_INVALID);
 		}
 
 		Claims claims = authToken.getTokenClaims();

@@ -1,6 +1,5 @@
 package com.example.server.domain.pet.model;
 
-import static com.example.server.global.exception.ErrorCode.*;
 import static java.util.Objects.*;
 import static javax.persistence.EnumType.*;
 import static lombok.AccessLevel.*;
@@ -13,6 +12,7 @@ import javax.persistence.Enumerated;
 
 import com.example.server.domain.pet.model.constants.PetTempProtectedStatus;
 import com.example.server.global.exception.BusinessException;
+import com.example.server.global.exception.errorcode.PetErrorCode;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Builder;
@@ -46,12 +46,12 @@ public class PetTempProtectedInfo {
 
 	private void validateStartTempProtectedDate(final LocalDate tempProtectedDate) {
 		if (isNull(tempProtectedDate)) {
-			throw new BusinessException(PET_TEMP_PROTECTED_SRT_DATE_INVALID);
+			throw new BusinessException(PetErrorCode.PET_TEMP_PROTECTED_SRT_DATE_INVALID);
 		} else if (tempProtectedDate.isBefore(
 			LocalDate.of(2020, 1, 1))) {
-			throw new BusinessException(PET_TEMP_PROTECTED_SRT_DATE_TOO_EARLY);
+			throw new BusinessException(PetErrorCode.PET_TEMP_PROTECTED_SRT_DATE_TOO_EARLY);
 		} else if (tempProtectedDate.isAfter(LocalDate.now())) {
-			throw new BusinessException(PET_TEMP_PROTECTED_SRT_DATE_IN_FUTURE);
+			throw new BusinessException(PetErrorCode.PET_TEMP_PROTECTED_SRT_DATE_IN_FUTURE);
 		}
 	}
 }

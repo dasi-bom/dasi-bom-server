@@ -1,10 +1,9 @@
 package com.example.server.domain.challenge.model;
 
-import static com.example.server.global.exception.ErrorCode.*;
-
 import java.util.Arrays;
 
 import com.example.server.global.exception.BusinessException;
+import com.example.server.global.exception.errorcode.ChallengeErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,7 +23,7 @@ public enum ChallengeType {
 			.findFirst()
 			.orElse(ERROR);
 		if (challenge.equals(ERROR)) {
-			throw new BusinessException(CHALLENGE_INVALID);
+			throw new BusinessException(ChallengeErrorCode.CHALLENGE_INVALID);
 		}
 		return challenge;
 	}

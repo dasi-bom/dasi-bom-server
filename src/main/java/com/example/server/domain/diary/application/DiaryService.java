@@ -1,7 +1,5 @@
 package com.example.server.domain.diary.application;
 
-import static com.example.server.global.exception.ErrorCode.*;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +26,11 @@ import com.example.server.domain.pet.persistence.PetRepository;
 import com.example.server.domain.stamp.model.Stamp;
 import com.example.server.domain.stamp.persistence.StampRepository;
 import com.example.server.global.exception.BusinessException;
+import com.example.server.global.exception.errorcode.ChallengeErrorCode;
+import com.example.server.global.exception.errorcode.DiaryErrorCode;
+import com.example.server.global.exception.errorcode.MemberErrorCode;
+import com.example.server.global.exception.errorcode.PetErrorCode;
+import com.example.server.global.exception.errorcode.StampErrorCode;
 import com.example.server.global.util.S3Uploader;
 
 import lombok.RequiredArgsConstructor;
@@ -53,9 +56,9 @@ public class DiaryService {
 		DiarySaveRequest diarySaveRequest
 	) {
 		Member member = memberRepository.findByProviderId(username)
-			.orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
+			.orElseThrow(() -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND));
 		Pet pet = petRepository.findPetByIdAndOwner(diarySaveRequest.getPetId(), member)
-			.orElseThrow(() -> new BusinessException(PET_NOT_FOUND));
+			.orElseThrow(() -> new BusinessException(PetErrorCode.PET_NOT_FOUND));
 		List<Stamp> stamps = getStamps(diarySaveRequest.getStamps());
 
 		List<DiaryStamp> diaryStamps = generateDiaryStamps(stamps);
@@ -73,9 +76,9 @@ public class DiaryService {
 		List<MultipartFile> multipartFiles
 	) throws IOException {
 		Member member = memberRepository.findByProviderId(username)
-			.orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
+			.orElseThrow(() -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND));
 		Diary diary = diaryRepository.findByIdAndAuthor(diaryId, member)
-			.orElseThrow(() -> new BusinessException(DIARY_NOT_FOUND));
+			.orElseThrow(() -> new BusinessException(DiaryErrorCode.DIARY_NOT_FOUND));
 
 		uploadImages(multipartFiles, diary);
 
@@ -89,21 +92,21 @@ public class DiaryService {
 		DiarySaveRequest diarySaveRequest
 	) {
 		Member member = memberRepository.findByProviderId(username)
-			.orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
+			.orElseThrow(() -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND));
 		Diary diary = diaryRepository.findByIdAndAuthor(diaryId, member)
-			.orElseThrow(() -> new BusinessException(DIARY_NOT_FOUND));
+			.orElseThrow(() -> new BusinessException(DiaryErrorCode.DIARY_NOT_FOUND));
 		if (diary.getIsDeleted()) {
-			throw new BusinessException(DIARY_NOT_FOUND);
+			throw new BusinessException(DiaryErrorCode.DIARY_NOT_FOUND);
 		}
 
 		Pet pet = petRepository.findPetByIdAndOwner(diarySaveRequest.getPetId(), member)
-			.orElseThrow(() -> new BusinessException(PET_NOT_FOUND));
+			.orElseThrow(() -> new BusinessException(PetErrorCode.PET_NOT_FOUND));
 		diary.updatePet(pet);
 
 		Challenge challenge = null;
 		if (diarySaveRequest.getChallengeId() != null) {
 			challenge = challengeRepository.findById(diarySaveRequest.getChallengeId())
-				.orElseThrow(() -> new BusinessException(CHALLENGE_INVALID));
+				.orElseThrow(() -> new BusinessException(ChallengeErrorCode.CHALLENGE_INVALID));
 		}
 		diary.updateChallenge(challenge);
 
@@ -119,11 +122,11 @@ public class DiaryService {
 		String username
 	) {
 		Member member = memberRepository.findByProviderId(username)
-			.orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
+			.orElseThrow(() -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND));
 		Diary diary = diaryRepository.findByIdAndAuthor(diaryId, member)
-			.orElseThrow(() -> new BusinessException(DIARY_NOT_FOUND));
+			.orElseThrow(() -> new BusinessException(DiaryErrorCode.DIARY_NOT_FOUND));
 		if (diary.getIsDeleted()) {
-			throw new BusinessException(DIARY_NOT_FOUND);
+			throw new BusinessException(DiaryErrorCode.DIARY_NOT_FOUND);
 		}
 		diary.deleteDiary();
 	}
@@ -156,11 +159,11 @@ public class DiaryService {
 	private List<Stamp> getStamps(List<Long> stampList) {
 		List<Stamp> stamps = stampList.stream()
 			.map(stampId -> stampRepository.findById(stampId)
-				.orElseThrow(() -> new BusinessException(STAMP_INVALID))
+				.orElseThrow(() -> new BusinessException(StampErrorCode.STAMP_INVALID))
 			)
 			.collect(Collectors.toList());
 		if (stamps.size() < MINIMUM_STAMP_LIST_SIZE) {
-			throw new BusinessException(STAMP_LIST_SIZE_TOO_SHORT);
+			throw new BusinessException(StampErrorCode.STAMP_LIST_SIZE_TOO_SHORT);
 		}
 		// else if (stamps.size() > STAMP_LIST_SIZE) {
 		// 	throw new BusinessException(STAMP_LIST_SIZE_ERROR);
@@ -185,7 +188,7 @@ public class DiaryService {
 		Challenge challenge = null;
 		if (diarySaveRequest.getChallengeId() != null) {
 			challenge = challengeRepository.findById(diarySaveRequest.getChallengeId())
-				.orElseThrow(() -> new BusinessException(CHALLENGE_INVALID));
+				.orElseThrow(() -> new BusinessException(ChallengeErrorCode.CHALLENGE_INVALID));
 		}
 		return Diary.builder()
 			.pet(pet)
@@ -199,7 +202,7 @@ public class DiaryService {
 
 	private void uploadImages(List<MultipartFile> multipartFiles, Diary diary) throws IOException {
 		if (multipartFiles.size() > IMAGE_LIST_SIZE) {
-			throw new BusinessException(MAX_IMAGE_ATTACHMENTS_EXCEEDED);
+			throw new BusinessException(DiaryErrorCode.MAX_IMAGE_ATTACHMENTS_EXCEEDED);
 		}
 		List<Image> images = s3Uploader.uploadMultiImages(multipartFiles, DIARY_DIR_NAME);
 		diary.addImages(images);

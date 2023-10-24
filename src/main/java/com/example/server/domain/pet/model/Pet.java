@@ -1,6 +1,5 @@
 package com.example.server.domain.pet.model;
 
-import static com.example.server.global.exception.ErrorCode.*;
 import static java.util.Objects.*;
 import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
@@ -25,6 +24,7 @@ import com.example.server.domain.image.model.Image;
 import com.example.server.domain.member.model.Member;
 import com.example.server.global.auditing.BaseEntity;
 import com.example.server.global.exception.BusinessException;
+import com.example.server.global.exception.errorcode.PetErrorCode;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -76,7 +76,7 @@ public class Pet extends BaseEntity {
 	//== validation method ==//
 	private void validateOwner(final Member owner) {
 		if (isNull(owner)) {
-			throw new BusinessException(PET_OWNER_NULL);
+			throw new BusinessException(PetErrorCode.PET_OWNER_NULL);
 		}
 	}
 

@@ -1,7 +1,5 @@
 package com.example.server.domain.member.api;
 
-import static com.example.server.global.exception.ErrorCode.*;
-
 import java.io.IOException;
 
 import org.springframework.http.MediaType;
@@ -27,6 +25,8 @@ import com.example.server.domain.member.model.Member;
 import com.example.server.domain.member.persistence.MemberRepository;
 import com.example.server.global.dto.ApiResponse;
 import com.example.server.global.exception.BusinessException;
+import com.example.server.global.exception.errorcode.ImageErrorCode;
+import com.example.server.global.exception.errorcode.MemberErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -51,7 +51,7 @@ public class MemberController {
 	public ResponseEntity<MemberProfileSaveResponse> uploadProfileImage(@RequestParam MultipartFile multipartFile,
 		@AuthenticationPrincipal UserDetails userDetails) throws IOException {
 		if (multipartFile == null) {
-			throw new BusinessException(FILE_NOT_EXIST_ERROR);
+			throw new BusinessException(ImageErrorCode.FILE_NOT_EXIST_ERROR);
 		}
 		Member member = memberService.uploadProfileImage(userDetails.getUsername(), multipartFile);
 		return ApiResponse.success(memberProfileSaveResponseAssembler.toResponse(member));
@@ -60,7 +60,7 @@ public class MemberController {
 	@GetMapping("/profile")
 	public ResponseEntity<MemberProfileResponse> getProfile(@AuthenticationPrincipal UserDetails userDetails) {
 		Member member = memberRepository.findByProviderId(userDetails.getUsername())
-			.orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
+			.orElseThrow(() -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND));
 		return ApiResponse.success(memberProfileResponseAssembler.toResponse(member));
 	}
 }
