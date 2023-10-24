@@ -1,11 +1,10 @@
 package com.example.server.global.jwt;
 
-import static com.example.server.global.exception.ErrorCode.*;
-
 import java.security.Key;
 import java.util.Date;
 
 import com.example.server.global.exception.BusinessException;
+import com.example.server.global.exception.errorcode.AuthErrorCode;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -19,10 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class AuthToken {
-
 	@Getter
 	private final String token;
-
 	private final Key key;
 
 	@Builder
@@ -57,7 +54,7 @@ public class AuthToken {
 		} catch (ExpiredJwtException expiredJwtException) {
 			throw expiredJwtException;
 		} catch (Exception exception) {
-			throw new BusinessException(ACCESS_TOKEN_INVALID);
+			throw new BusinessException(AuthErrorCode.ACCESS_TOKEN_INVALID);
 		}
 	}
 

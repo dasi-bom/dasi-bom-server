@@ -1,7 +1,5 @@
 package com.example.server.global.util;
 
-import static com.example.server.global.exception.ErrorCode.*;
-
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -19,6 +17,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.example.server.domain.image.model.Image;
 import com.example.server.domain.image.persistence.ImageRepository;
 import com.example.server.global.exception.BusinessException;
+import com.example.server.global.exception.errorcode.ImageErrorCode;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -93,7 +92,7 @@ public class S3Uploader {
 		if (fileExtension.equals(".jpeg") || fileExtension.equals(".jpg") || fileExtension.equals(".png")) {
 			return fileExtension;
 		} else {
-			throw new BusinessException(INVALID_IMAGE_EXTENSION);
+			throw new BusinessException(ImageErrorCode.INVALID_IMAGE_EXTENSION);
 		}
 	}
 

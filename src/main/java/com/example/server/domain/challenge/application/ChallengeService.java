@@ -1,7 +1,5 @@
 package com.example.server.domain.challenge.application;
 
-import static com.example.server.global.exception.ErrorCode.*;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +10,8 @@ import com.example.server.domain.challenge.persistence.ChallengeRepository;
 import com.example.server.domain.member.model.Member;
 import com.example.server.domain.member.persistence.MemberRepository;
 import com.example.server.global.exception.BusinessException;
+import com.example.server.global.exception.errorcode.ChallengeErrorCode;
+import com.example.server.global.exception.errorcode.MemberErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,10 +25,10 @@ public class ChallengeService {
 	@Transactional
 	public Challenge createChallenge(String username, ChallengeSaveRequest challengeSaveRequest) {
 		Member member = memberRepository.findByProviderId(username)
-			.orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
+			.orElseThrow(() -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND));
 		ChallengeType challengeType = ChallengeType.toEnum(challengeSaveRequest.getChallengeType());
 		if (challengeRepository.existsByChallengeType(challengeType)) {
-			throw new BusinessException(CONFLICT_CHALLENGE);
+			throw new BusinessException(ChallengeErrorCode.CONFLICT_CHALLENGE);
 		}
 		Challenge challenge = Challenge.builder()
 			.name(challengeSaveRequest.getName())

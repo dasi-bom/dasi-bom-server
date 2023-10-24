@@ -4,7 +4,10 @@ import static java.time.LocalDateTime.*;
 
 import java.time.LocalDateTime;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import com.example.server.global.exception.errorcode.ErrorCode;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -13,8 +16,8 @@ import lombok.Getter;
 @Builder
 public class ErrorResponse {
 	private final int status;
-	private final String message;
-	private final String code;
+	private final String description;
+	private final int code;
 	private final LocalDateTime timestamp;
 
 	public static ResponseEntity<ErrorResponse> toResponseEntity(ErrorCode errorCode) {
@@ -22,20 +25,20 @@ public class ErrorResponse {
 			.status(errorCode.getHttpStatus())
 			.body(ErrorResponse.builder()
 				.status(errorCode.getHttpStatus().value())
-				.message(errorCode.getMessage())
+				.description(errorCode.getDescription())
 				.code(errorCode.getCode())
 				.timestamp(now())
 				.build()
 			);
 	}
 
-	public static ResponseEntity<ErrorResponse> toResponseEntity(ErrorCode errorCode, String errorMessage) {
+	public static ResponseEntity<ErrorResponse> toResponseEntity(String errorMessage) {
 		return ResponseEntity
-			.status(errorCode.getHttpStatus())
+			.status(HttpStatus.INTERNAL_SERVER_ERROR)
 			.body(ErrorResponse.builder()
-				.status(errorCode.getHttpStatus().value())
-				.message(errorMessage)
-				.code(errorCode.getCode())
+				.status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+				.description(errorMessage)
+				.code(0000)
 				.timestamp(now())
 				.build()
 			);

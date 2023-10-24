@@ -1,7 +1,5 @@
 package com.example.server.global.oauth.handler;
 
-import static com.example.server.global.exception.ErrorCode.*;
-
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -13,6 +11,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.stereotype.Component;
 
 import com.example.server.global.exception.BusinessException;
+import com.example.server.global.exception.errorcode.MemberErrorCode;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,6 +24,6 @@ public class OAuth2AuthenticationFailureHandler implements AuthenticationFailure
 		//        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		//        response.getWriter().write("소셜 로그인 실패! 서버 로그를 확인해주세요.");
 		log.info("소셜 로그인에 실패했습니다. 에러 메시지 : {}", exception.getMessage());
-		throw new BusinessException(SOCIAL_LOGIN_ERROR);
+		throw new BusinessException(MemberErrorCode.SOCIAL_LOGIN_ERROR);
 	}
 }

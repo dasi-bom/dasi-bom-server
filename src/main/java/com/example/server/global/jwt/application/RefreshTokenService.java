@@ -1,11 +1,10 @@
 package com.example.server.global.jwt.application;
 
-import static com.example.server.global.exception.ErrorCode.*;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.server.global.exception.BusinessException;
+import com.example.server.global.exception.errorcode.AuthErrorCode;
 import com.example.server.global.jwt.dao.RefreshTokenDao;
 
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,8 @@ public class RefreshTokenService {
 	public String findById(String providerId) {
 		return refreshTokenDao.getRefreshToken(providerId)
 			.orElseThrow(() -> {
-				throw new BusinessException(REFRESH_TOKEN_NOT_FOUND);
+
+				throw new BusinessException(AuthErrorCode.REFRESH_TOKEN_NOT_FOUND);
 			}).toString();
 	}
 
