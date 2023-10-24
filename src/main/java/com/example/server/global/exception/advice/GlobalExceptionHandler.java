@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.example.server.global.exception.BusinessException;
-import com.example.server.global.exception.ErrorCode;
 import com.example.server.global.exception.ErrorResponse;
 
 import lombok.extern.slf4j.Slf4j;
@@ -15,15 +14,15 @@ import lombok.extern.slf4j.Slf4j;
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler(BusinessException.class)
-	protected ResponseEntity<ErrorResponse> handleCustomException(BusinessException e) {
-		log.error("handleCustomException throw BusinessException : {}", e.getErrorCode());
-		return ErrorResponse.toResponseEntity(e.getErrorCode());
+	protected ResponseEntity<ErrorResponse> handleCustomException(BusinessException ex) {
+		log.error("handleCustomException throw BusinessException : {}", ex.getErrorCode());
+		return ErrorResponse.toResponseEntity(ex.getErrorCode());
 	}
 
 	@ExceptionHandler(Exception.class)
-	protected ResponseEntity<ErrorResponse> handleGlobalException(Exception e) {
-		log.error("handleException", e);
-		return ErrorResponse.toResponseEntity(ErrorCode.GLOBAL_INTERNAL_SERVER_ERROR, e.getLocalizedMessage());
+	protected ResponseEntity<ErrorResponse> handleGlobalException(Exception ex) {
+		log.error("handleException", ex);
+		return ErrorResponse.toResponseEntity(ex.getLocalizedMessage());
 	}
 
 }

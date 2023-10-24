@@ -1,7 +1,6 @@
 package com.example.server.domain.pet.application;
 
 import static com.example.server.domain.pet.model.constants.PetTempProtectedStatus.*;
-import static com.example.server.global.exception.ErrorCode.*;
 
 import java.io.IOException;
 
@@ -19,6 +18,9 @@ import com.example.server.domain.pet.model.constants.PetSex;
 import com.example.server.domain.pet.model.constants.PetType;
 import com.example.server.domain.pet.persistence.PetRepository;
 import com.example.server.global.exception.BusinessException;
+import com.example.server.global.exception.errorcode.ImageErrorCode;
+import com.example.server.global.exception.errorcode.MemberErrorCode;
+import com.example.server.global.exception.errorcode.PetErrorCode;
 import com.example.server.global.util.S3Uploader;
 
 import lombok.RequiredArgsConstructor;
@@ -45,7 +47,7 @@ public class PetService {
 		String username
 	) {
 		Member owner = memberRepository.findByProviderId(username)
-			.orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
+			.orElseThrow(() -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND));
 
 		PetType type = PetType.toEnum(req.getType());
 		PetSex sex = PetSex.toEnum(req.getSex());
@@ -78,13 +80,13 @@ public class PetService {
 		MultipartFile multipartFile
 	) throws IOException {
 		if (multipartFile == null) {
-			throw new BusinessException(FILE_NOT_EXIST_ERROR);
+			throw new BusinessException(ImageErrorCode.FILE_NOT_EXIST_ERROR);
 		}
 		Pet pet = petRepository.findPetById(petId)
-			.orElseThrow(() -> new BusinessException(PET_NOT_FOUND));
+			.orElseThrow(() -> new BusinessException(PetErrorCode.PET_NOT_FOUND));
 		String foundUsername = pet.getOwner().getUsername();
 		if (!foundUsername.equals(username)) {
-			throw new BusinessException(PET_OWNER_INVALID);
+			throw new BusinessException(PetErrorCode.PET_OWNER_INVALID);
 		}
 		pet.updateProfileImage(s3Uploader.uploadSingleImage(multipartFile, DIR_NAME));
 		return pet;

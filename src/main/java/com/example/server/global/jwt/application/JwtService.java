@@ -1,12 +1,11 @@
 package com.example.server.global.jwt.application;
 
-import static com.example.server.global.exception.ErrorCode.*;
-
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.example.server.domain.member.model.RoleType;
 import com.example.server.global.exception.BusinessException;
+import com.example.server.global.exception.errorcode.AuthErrorCode;
 import com.example.server.global.jwt.AuthToken;
 import com.example.server.global.jwt.TokenProvider;
 import com.example.server.global.jwt.api.dto.AccessTokenRequest;
@@ -73,11 +72,11 @@ public class JwtService {
 			tokenProvider.convertRefreshToken(refreshTokenValue).validateToken();
 
 			if (!providerId.equals(refreshToken.getProviderId())) {
-				throw new BusinessException(ACCESS_TOKEN_INVALID);
+				throw new BusinessException(AuthErrorCode.ACCESS_TOKEN_INVALID);
 			}
 
 		} catch (ExpiredJwtException expiredJwtException) {
-			throw new BusinessException(REFRESH_TOKEN_EXPIRED);
+			throw new BusinessException(AuthErrorCode.REFRESH_TOKEN_EXPIRED);
 		}
 	}
 

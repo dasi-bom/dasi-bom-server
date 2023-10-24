@@ -1,10 +1,9 @@
 package com.example.server.domain.pet.model.constants;
 
-import static com.example.server.global.exception.ErrorCode.*;
-
 import java.util.Arrays;
 
 import com.example.server.global.exception.BusinessException;
+import com.example.server.global.exception.errorcode.PetErrorCode;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,7 @@ public enum PetTempProtectedStatus {
 			.findFirst()
 			.orElse(ERROR);
 		if (enumStatus.equals(ERROR)) {
-			throw new BusinessException(PET_TEMP_PROTECTED_SRT_DATE_INVALID);
+			throw new BusinessException(PetErrorCode.PET_TEMP_PROTECTED_SRT_DATE_INVALID);
 		}
 		return enumStatus;
 	}
