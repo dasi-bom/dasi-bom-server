@@ -5,8 +5,10 @@ import java.util.Arrays;
 import com.example.server.global.exception.BusinessException;
 import com.example.server.global.exception.errorcode.ChallengeErrorCode;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+@Getter
 @RequiredArgsConstructor
 public enum ChallengeType {
 

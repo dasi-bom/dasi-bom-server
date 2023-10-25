@@ -10,7 +10,6 @@ import com.example.server.domain.challenge.persistence.ChallengeRepository;
 import com.example.server.domain.member.model.Member;
 import com.example.server.domain.member.persistence.MemberRepository;
 import com.example.server.global.exception.BusinessException;
-import com.example.server.global.exception.errorcode.ChallengeErrorCode;
 import com.example.server.global.exception.errorcode.MemberErrorCode;
 
 import lombok.RequiredArgsConstructor;
@@ -27,9 +26,6 @@ public class ChallengeService {
 		Member member = memberRepository.findByProviderId(username)
 			.orElseThrow(() -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND));
 		ChallengeType challengeType = ChallengeType.toEnum(challengeSaveRequest.getChallengeType());
-		if (challengeRepository.existsByChallengeType(challengeType)) {
-			throw new BusinessException(ChallengeErrorCode.CONFLICT_CHALLENGE);
-		}
 		Challenge challenge = Challenge.builder()
 			.name(challengeSaveRequest.getName())
 			.description(challengeSaveRequest.getDescription())
