@@ -34,6 +34,7 @@ public class StampController {
 		Stamp stamp = stampService.createStamp(userDetails.getUsername(), stampSaveRequest);
 		return ApiResponse.created(StampResponse.builder()
 			.name(stamp.getName())
+			.registeredBy(stamp.getAdmin().getName())
 			.build());
 	}
 }

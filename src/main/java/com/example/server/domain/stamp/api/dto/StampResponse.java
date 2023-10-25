@@ -17,5 +17,6 @@ import lombok.NoArgsConstructor;
 public class StampResponse {
 
 	private String name;
+	private String registeredBy;
 
 }
