@@ -35,7 +35,8 @@ public class ChallengeController {
 		Challenge challenge = challengeService.createChallenge(userDetails.getUsername(), challengeSaveRequest);
 		return ApiResponse.created(ChallengeResponse.builder()
 			.name(challenge.getName())
-			.challengeType(challenge.getChallengeType())
+			.challengeType(challenge.getChallengeType().getMessage())
+			.registeredBy(challenge.getAdmin().getName())
 			.build());
 	}
 }

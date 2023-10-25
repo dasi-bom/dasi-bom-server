@@ -1,6 +1,5 @@
 package com.example.server.member.application;
 
-import static com.example.server.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -21,6 +20,7 @@ import com.example.server.domain.member.application.MemberService;
 import com.example.server.domain.member.model.Member;
 import com.example.server.domain.member.persistence.MemberRepository;
 import com.example.server.global.exception.BusinessException;
+import com.example.server.global.exception.errorcode.MemberErrorCode;
 import com.example.server.global.util.S3Uploader;
 
 @ExtendWith(MockitoExtension.class)
@@ -93,7 +93,8 @@ public class MemberServiceTest {
 			.isInstanceOf(BusinessException.class);
 
 		verify(memberQueryRepository, atLeastOnce()).findByProviderId("stranger");
-		verify(memberQueryRepository, description(MEMBER_NOT_FOUND.getMessage())).findByProviderId("stranger");
+		verify(memberQueryRepository, description(MemberErrorCode.MEMBER_NOT_FOUND.getDescription()))
+			.findByProviderId("stranger");
 	}
 
 	// @Test
