@@ -21,4 +21,7 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
 	Optional<Pet> findPetById(Long petId);
 
 	Optional<Pet> findPetByIdAndOwner(Long petId, Member owner);
+
+	@Query("SELECT MAX(p.id) FROM Pet p")
+	Long getLastId();
 }

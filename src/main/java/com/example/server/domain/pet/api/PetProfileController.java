@@ -9,6 +9,7 @@ import java.io.IOException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,6 +61,14 @@ public class PetProfileController {
 			petId,
 			multipartFile);
 		return ApiResponse.success(pet.getProfile());
+	}
+
+	/**
+	 * 다음 PET ID 발급 (동물 프로필 이미지 저장 시 필요)
+	 */
+	@GetMapping("/issue-id")
+	public ResponseEntity<Long> issueId() {
+		return ApiResponse.success(petService.issueId());
 	}
 
 }
