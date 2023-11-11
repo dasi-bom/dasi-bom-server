@@ -91,4 +91,8 @@ public class PetService {
 		pet.updateProfileImage(s3Uploader.uploadSingleImage(multipartFile, DIR_NAME));
 		return pet;
 	}
+
+	public Long issueId() {
+		return petRepository.getLastId() + 1L;
+	}
 }
