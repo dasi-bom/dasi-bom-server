@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,12 +35,13 @@ public class PetProfileController {
 
 	private final PetService petService;
 
-	@PostMapping("/profile")
+	@PostMapping("/profile/{pet-id}")
 	public ResponseEntity<PetProfileResponse> createPetProfile(
+		@PathVariable("pet-id") Long petId,
 		@RequestBody PetProfileCreateRequest reqDto,
 		@AuthenticationPrincipal UserDetails userDetails
 	) {
-		Pet pet = petService.createProfile(reqDto, userDetails.getUsername());
+		Pet pet = petService.createProfile(petId, reqDto, userDetails.getUsername());
 		PetProfileResponse response = builder()
 			.petId(pet.getId())
 			.providerId(userDetails.getUsername())
@@ -51,11 +53,12 @@ public class PetProfileController {
 		return ApiResponse.created(response);
 	}
 
-	@PostMapping(value = "/profile/images", consumes = MULTIPART_FORM_DATA_VALUE)
+	// [동물 신규 생성 시 프로필 이미지 등록] 또는 [프로필 이미지 업데이트] 모두에 활용
+	@PostMapping(value = "/profile/images/{pet-id}", consumes = MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Image> uploadPetProfileImage(
+		@PathVariable("pet-id") Long petId,
 		@RequestParam MultipartFile multipartFile,
-		@AuthenticationPrincipal UserDetails userDetails,
-		@RequestParam Long petId
+		@AuthenticationPrincipal UserDetails userDetails
 	) throws IOException {
 		Pet pet = petService.uploadProfileImage(
 			userDetails.getUsername(),
