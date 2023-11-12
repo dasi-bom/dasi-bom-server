@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.server.domain.image.model.Image;
+import com.example.server.domain.pet.api.dto.PetIdResponse;
 import com.example.server.domain.pet.api.dto.PetProfileCreateRequest;
 import com.example.server.domain.pet.api.dto.PetProfileResponse;
 import com.example.server.domain.pet.application.PetService;
@@ -67,7 +68,7 @@ public class PetProfileController {
 	 * 다음 PET ID 발급 (동물 프로필 이미지 저장 시 필요)
 	 */
 	@GetMapping("/issue-id")
-	public ResponseEntity<Long> issueId() {
+	public ResponseEntity<PetIdResponse> issueId() {
 		return ApiResponse.success(petService.issueId());
 	}
 
