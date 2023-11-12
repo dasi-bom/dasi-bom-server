@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.server.domain.member.model.Member;
 import com.example.server.domain.member.persistence.MemberRepository;
+import com.example.server.domain.pet.api.dto.PetIdResponse;
 import com.example.server.domain.pet.api.dto.PetProfileCreateRequest;
 import com.example.server.domain.pet.model.Pet;
 import com.example.server.domain.pet.model.PetInfo;
@@ -92,7 +93,9 @@ public class PetService {
 		return pet;
 	}
 
-	public Long issueId() {
-		return petRepository.getLastId() + 1L;
+	public PetIdResponse issueId() {
+		return PetIdResponse.builder()
+			.petId(petRepository.getLastId() + 1L)
+			.build();
 	}
 }
