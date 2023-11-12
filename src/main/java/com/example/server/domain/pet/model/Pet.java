@@ -88,4 +88,16 @@ public class Pet extends BaseEntity {
 	public void updateProfileImage(Image image) {
 		this.profile = image;
 	}
+
+	public void updateOwner(Member owner) {
+		this.owner = owner;
+	}
+
+	public void updatePetInfo(PetInfo petInfo) {
+		this.petInfo = petInfo;
+	}
+
+	public void updatePetTempProtectedInfo(PetTempProtectedInfo petTempProtectedInfo) {
+		this.petTempProtectedInfo = petTempProtectedInfo;
+	}
 }

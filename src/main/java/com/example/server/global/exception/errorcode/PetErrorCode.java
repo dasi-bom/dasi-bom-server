@@ -24,7 +24,8 @@ public enum PetErrorCode implements ErrorCode {
 	PET_TEMP_PROTECTED_SRT_DATE_IN_FUTURE(3011, "반려동물 임시보호 시작일은 미래일 수 없습니다.", BAD_REQUEST),
 	PET_TEMP_PROTECTED_SRT_DATE_INVALID(3012, "반려동물 임시보호 시작일이 유효하지 않습니다.", BAD_REQUEST),
 	PET_NOT_FOUND(3013, "반려 동물 정보를 찾을 수 없습니다.", NOT_FOUND),
-	PET_SEX_INVALID(3014, "반려 동물 성별이 유효하지 않습니다.", NOT_FOUND);
+	PET_SEX_INVALID(3014, "반려 동물 성별이 유효하지 않습니다.", NOT_FOUND),
+	PET_ALREADY_EXIST(3015, "이미 존재하는 동물입니다.", CONFLICT);
 
 	private final int code;
 	private final String description;

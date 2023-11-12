@@ -3,6 +3,7 @@ package com.example.server.domain.pet.application;
 import static com.example.server.domain.pet.model.constants.PetTempProtectedStatus.*;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,11 +45,14 @@ public class PetService {
 	 * @return : savedPet
 	 */
 	public Pet createProfile(
+		Long petId,
 		PetProfileCreateRequest req,
 		String username
 	) {
 		Member owner = memberRepository.findByProviderId(username)
 			.orElseThrow(() -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND));
+		Optional<Pet> oPet = petRepository.findById(petId);
+		Pet pet;
 
 		PetType type = PetType.toEnum(req.getType());
 		PetSex sex = PetSex.toEnum(req.getSex());
@@ -66,13 +70,22 @@ public class PetService {
 			.startTempProtectedDate(req.getStartTempProtectedDate())
 			.build();
 
-		Pet pet = Pet.builder()
-			.owner(owner)
-			.petInfo(petInfo)
-			.petTempProtectedInfo(petProtectedInfo)
-			.build();
+		if (oPet.isPresent()) { // pet이 이미 존재하는 경우 - 사용자가 이미지 등록을 먼저 호출한 경우
+			pet = oPet.get();
+			pet.updateOwner(owner);
+			pet.updatePetInfo(petInfo);
+			pet.updatePetTempProtectedInfo(petProtectedInfo);
+		} else { // 신규 생성
+			pet = Pet.builder()
+				.id(petId)
+				.owner(owner)
+				.petInfo(petInfo)
+				.petTempProtectedInfo(petProtectedInfo)
+				.build();
+			petRepository.save(pet);
+		}
 
-		return petRepository.save(pet);
+		return pet;
 	}
 
 	public Pet uploadProfileImage(
@@ -83,13 +96,22 @@ public class PetService {
 		if (multipartFile == null) {
 			throw new BusinessException(ImageErrorCode.FILE_NOT_EXIST_ERROR);
 		}
-		Pet pet = petRepository.findPetById(petId)
-			.orElseThrow(() -> new BusinessException(PetErrorCode.PET_NOT_FOUND));
-		String foundUsername = pet.getOwner().getUsername();
-		if (!foundUsername.equals(username)) {
-			throw new BusinessException(PetErrorCode.PET_OWNER_INVALID);
+		Optional<Pet> oPet = petRepository.findById(petId);
+		Pet pet;
+		if (oPet.isPresent()) { // 이미 펫이 존재하면 펫 프로필 이미지 업데이트
+			pet = oPet.get();
+			String foundUsername = pet.getOwner().getUsername();
+			if (!foundUsername.equals(username)) {
+				throw new BusinessException(PetErrorCode.PET_OWNER_INVALID);
+			}
+			pet.updateProfileImage(s3Uploader.uploadSingleImage(multipartFile, DIR_NAME));
+		} else { // 펫이 존재하지 않으면 신규 생성
+			pet = Pet.builder()
+				.id(petId)
+				.build();
+			pet.updateProfileImage(s3Uploader.uploadSingleImage(multipartFile, DIR_NAME));
+			petRepository.save(pet);
 		}
-		pet.updateProfileImage(s3Uploader.uploadSingleImage(multipartFile, DIR_NAME));
 		return pet;
 	}
 
