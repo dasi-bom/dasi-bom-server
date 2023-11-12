@@ -44,7 +44,7 @@ public class DiaryController {
 	private final DiaryResponseAssembler diaryResponseAssembler;
 
 	// 일기 작성
-	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+	@PostMapping()
 	public ResponseEntity<DiaryResponse> createDiaryExceptForImage(
 		@AuthenticationPrincipal UserDetails userDetails,
 		@RequestBody @Valid DiarySaveRequest diarySaveRequest
@@ -55,8 +55,8 @@ public class DiaryController {
 	}
 
 	// 이미지 업로드
-	@PostMapping(value = "/img/{diary-id}", consumes = {MediaType.APPLICATION_JSON_VALUE,
-		MediaType.MULTIPART_FORM_DATA_VALUE})
+	@PostMapping(value = "/img/{diary-id}",
+		consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity<DiaryResponse> uploadImage(
 		@PathVariable("diary-id") Long diaryId,
 		@AuthenticationPrincipal UserDetails userDetails,
