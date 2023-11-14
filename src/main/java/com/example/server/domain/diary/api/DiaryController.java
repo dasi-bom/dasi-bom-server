@@ -72,8 +72,7 @@ public class DiaryController {
 		@AuthenticationPrincipal UserDetails userDetails,
 		@RequestPart(required = false) List<MultipartFile> multipartFiles
 	) throws IOException {
-		Diary diary = diaryService.uploadImage(diaryId, userDetails.getUsername(), multipartFiles);
-		DiaryResponse response = diaryResponseAssembler.toResponse(diary);
+		DiaryResponse response = diaryService.uploadImage(diaryId, userDetails.getUsername(), multipartFiles);
 		return ApiResponse.created(response);
 	}
 

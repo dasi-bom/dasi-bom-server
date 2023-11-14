@@ -107,6 +107,24 @@ public class Diary extends BaseEntity {
 		return (challenge == null) ? false : true;
 	}
 
+	public Diary createDiary(
+		Pet pet,
+		Challenge challenge,
+		Member member,
+		String content,
+		List<DiaryStamp> diaryStamps,
+		Boolean isPublic
+	) {
+		this.pet = pet;
+		this.challenge = challenge;
+		this.author = member;
+		this.content = content;
+		this.diaryStamps = diaryStamps;
+		this.isPublic = isPublic;
+
+		return this;
+	}
+
 	public void addImages(List<Image> images) {
 		this.images.addAll(images);
 	}
