@@ -70,7 +70,7 @@ public class DiaryController {
 	public ResponseEntity<DiaryResponse> uploadImage(
 		@PathVariable("diary-id") Long diaryId,
 		@AuthenticationPrincipal UserDetails userDetails,
-		@RequestPart List<MultipartFile> multipartFiles
+		@RequestPart(required = false) List<MultipartFile> multipartFiles
 	) throws IOException {
 		Diary diary = diaryService.uploadImage(diaryId, userDetails.getUsername(), multipartFiles);
 		DiaryResponse response = diaryResponseAssembler.toResponse(diary);
