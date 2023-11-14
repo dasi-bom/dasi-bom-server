@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.server.domain.diary.api.assembler.DiaryResponseAssembler;
 import com.example.server.domain.diary.api.dto.DiaryBriefResponse;
+import com.example.server.domain.diary.api.dto.DiaryIdResponse;
 import com.example.server.domain.diary.api.dto.DiaryResponse;
 import com.example.server.domain.diary.api.dto.DiarySaveRequest;
 import com.example.server.domain.diary.application.DiaryService;
@@ -43,13 +44,22 @@ public class DiaryController {
 	private final DiaryService diaryService;
 	private final DiaryResponseAssembler diaryResponseAssembler;
 
+	/**
+	 * 다음 DIARY ID 발급 (동물 일기 저장 시 필요)
+	 */
+	@GetMapping("/issue-id")
+	public ResponseEntity<DiaryIdResponse> issueId() {
+		return ApiResponse.success(diaryService.issueId());
+	}
+
 	// 일기 작성
-	@PostMapping()
-	public ResponseEntity<DiaryResponse> createDiaryExceptForImage(
+	@PostMapping("/{diary-id}")
+	public ResponseEntity<DiaryResponse> createDiary(
+		@PathVariable("diary-id") Long diaryId,
 		@AuthenticationPrincipal UserDetails userDetails,
 		@RequestBody @Valid DiarySaveRequest diarySaveRequest
 	) {
-		Diary diary = diaryService.createDiaryExceptForImage(userDetails.getUsername(), diarySaveRequest);
+		Diary diary = diaryService.createDiary(diaryId, userDetails.getUsername(), diarySaveRequest);
 		DiaryResponse response = diaryResponseAssembler.toResponse(diary);
 		return ApiResponse.created(response);
 	}
