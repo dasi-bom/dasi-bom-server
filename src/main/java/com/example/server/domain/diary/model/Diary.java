@@ -74,6 +74,7 @@ public class Diary extends BaseEntity {
 
 	@Builder
 	private Diary(
+		final Long id,
 		final Pet pet,
 		final Challenge challenge,
 		final List<Image> images,
@@ -82,6 +83,7 @@ public class Diary extends BaseEntity {
 		final List<DiaryStamp> diaryStamps,
 		final Boolean isPublic
 	) {
+		this.id = id;
 		this.pet = pet;
 		this.isChallenge = validateIsChallenge(challenge);
 		this.challenge = challenge;

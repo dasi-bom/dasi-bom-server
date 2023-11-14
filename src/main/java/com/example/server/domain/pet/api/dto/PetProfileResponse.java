@@ -24,5 +24,6 @@ public class PetProfileResponse {
 	PetTempProtectedInfo petTempProtectedInfo;
 	Boolean isSuccess;
 	LocalDateTime timestamp;
+	String imageUrl;
 
 }

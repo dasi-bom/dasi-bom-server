@@ -14,22 +14,6 @@ import com.example.server.domain.pet.api.dto.PetProfileResponse;
 
 @Component
 public class MemberProfileResponseAssembler {
-	private static List<PetProfileResponse> getPetProfileResponses(Member member) {
-		return member.getPets().stream()
-			.map(pet -> PetProfileResponse.builder()
-				.petId(pet.getId())
-				.providerId(member.getProviderId())
-				.petInfo(pet.getPetInfo())
-				.petTempProtectedInfo(pet.getPetTempProtectedInfo())
-				.isSuccess(true)
-				.timestamp(now())
-				.build())
-			.collect(Collectors.toList());
-	}
-
-	private static String getImage(Image image) {
-		return (image != null) ? image.getImgUrl() : null;
-	}
 
 	public MemberProfileResponse toResponse(Member member) {
 		return MemberProfileResponse.builder()
@@ -43,5 +27,23 @@ public class MemberProfileResponseAssembler {
 			.nickname(member.getNickname())
 			.petProfileResponses(getPetProfileResponses(member))
 			.build();
+	}
+
+	private List<PetProfileResponse> getPetProfileResponses(Member member) {
+		return member.getPets().stream()
+			.map(pet -> PetProfileResponse.builder()
+				.petId(pet.getId())
+				.providerId(member.getProviderId())
+				.petInfo(pet.getPetInfo())
+				.petTempProtectedInfo(pet.getPetTempProtectedInfo())
+				.isSuccess(true)
+				.timestamp(now())
+				.imageUrl(getImage(pet.getProfile()))
+				.build())
+			.collect(Collectors.toList());
+	}
+
+	private String getImage(Image image) {
+		return (image != null) ? image.getImgUrl() : null;
 	}
 }

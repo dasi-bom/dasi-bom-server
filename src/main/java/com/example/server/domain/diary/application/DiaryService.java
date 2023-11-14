@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.server.domain.challenge.model.Challenge;
 import com.example.server.domain.challenge.persistence.ChallengeRepository;
 import com.example.server.domain.diary.api.dto.DiaryBriefResponse;
+import com.example.server.domain.diary.api.dto.DiaryIdResponse;
 import com.example.server.domain.diary.api.dto.DiarySaveRequest;
 import com.example.server.domain.diary.model.Diary;
 import com.example.server.domain.diary.model.DiaryStamp;
@@ -50,8 +51,15 @@ public class DiaryService {
 	private final ChallengeRepository challengeRepository;
 	private final S3Uploader s3Uploader;
 
+	public DiaryIdResponse issueId() {
+		return DiaryIdResponse.builder()
+			.diaryId(diaryRepository.getLastId() + 1L)
+			.build();
+	}
+
 	@Transactional
-	public Diary createDiaryExceptForImage(
+	public Diary createDiary(
+		Long diaryId,
 		String username,
 		DiarySaveRequest diarySaveRequest
 	) {
@@ -62,7 +70,7 @@ public class DiaryService {
 		List<Stamp> stamps = getStamps(diarySaveRequest.getStamps());
 
 		List<DiaryStamp> diaryStamps = generateDiaryStamps(stamps);
-		Diary diary = generateDiary(diarySaveRequest, member, pet, diaryStamps);
+		Diary diary = generateDiary(diaryId, diarySaveRequest, member, pet, diaryStamps);
 
 		diaryRepository.save(diary);
 
@@ -180,6 +188,7 @@ public class DiaryService {
 	}
 
 	private Diary generateDiary(
+		Long diaryId,
 		DiarySaveRequest diarySaveRequest,
 		Member member,
 		Pet pet,
@@ -191,6 +200,7 @@ public class DiaryService {
 				.orElseThrow(() -> new BusinessException(ChallengeErrorCode.CHALLENGE_INVALID));
 		}
 		return Diary.builder()
+			.id(diaryId)
 			.pet(pet)
 			.challenge(challenge)
 			.author(member)
