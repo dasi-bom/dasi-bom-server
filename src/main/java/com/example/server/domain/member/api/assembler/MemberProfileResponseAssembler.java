@@ -23,6 +23,7 @@ public class MemberProfileResponseAssembler {
 				.petTempProtectedInfo(pet.getPetTempProtectedInfo())
 				.isSuccess(true)
 				.timestamp(now())
+				.imageUrl(pet.getProfile().getImgUrl())
 				.build())
 			.collect(Collectors.toList());
 	}
