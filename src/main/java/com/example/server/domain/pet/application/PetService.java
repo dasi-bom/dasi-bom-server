@@ -116,8 +116,9 @@ public class PetService {
 	}
 
 	public PetIdResponse issueId() {
+		Optional<Long> lastId = petRepository.getLastId();
 		return PetIdResponse.builder()
-			.petId(petRepository.getLastId() + 1L)
+			.petId(lastId.isEmpty() ? 1L : lastId.get() + 1L)
 			.build();
 	}
 }

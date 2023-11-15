@@ -16,5 +16,5 @@ public interface DiaryRepository extends JpaRepository<Diary, Long>, CustomDiary
 	Optional<Diary> findByIdAndAuthor(Long id, Member author);
 
 	@Query("SELECT MAX(d.id) FROM Diary d")
-	Long getLastId();
+	Optional<Long> getLastId();
 }

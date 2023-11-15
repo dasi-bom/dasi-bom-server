@@ -54,8 +54,9 @@ public class DiaryService {
 	private final S3Uploader s3Uploader;
 
 	public DiaryIdResponse issueId() {
+		Optional<Long> lastId = diaryRepository.getLastId();
 		return DiaryIdResponse.builder()
-			.diaryId(diaryRepository.getLastId() + 1L)
+			.diaryId(lastId.isEmpty() ? 1L : lastId.get() + 1L)
 			.build();
 	}
 
