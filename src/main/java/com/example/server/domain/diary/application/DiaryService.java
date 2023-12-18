@@ -124,22 +124,23 @@ public class DiaryService {
 		Member member = memberRepository.findByProviderId(username)
 			.orElseThrow(() -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND));
 		Optional<Diary> oDiary = diaryRepository.findByIdAndAuthor(diaryId, member);
-		Diary diary;
+		Diary savedDiary;
 		if (oDiary.isPresent()) {
-			diary = oDiary.get();
+			savedDiary = oDiary.get();
 		} else {
-			diary = Diary.builder()
+			Diary diary = Diary.builder()
 				.id(diaryId)
 				.author(member)
 				.build();
-			diaryRepository.save(diary);
+			savedDiary = diaryRepository.save(diary);
 		}
 
-		uploadImages(multipartFiles, diary);
+		uploadImages(multipartFiles, savedDiary);
 
 		return DiaryResponse.builder()
-			.author(member.getNickname())
-			.images(diary.getImages().stream()
+			.id(savedDiary.getId())
+			.author(savedDiary.getAuthor().getNickname())
+			.images(savedDiary.getImages().stream()
 				.map(img -> img.getImgUrl())
 				.collect(Collectors.toList())
 			)

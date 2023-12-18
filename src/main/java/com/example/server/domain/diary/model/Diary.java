@@ -126,6 +126,9 @@ public class Diary extends BaseEntity {
 	}
 
 	public void addImages(List<Image> images) {
+		if (this.images == null) {
+			this.images = new ArrayList<>();
+		}
 		this.images.addAll(images);
 	}
 
