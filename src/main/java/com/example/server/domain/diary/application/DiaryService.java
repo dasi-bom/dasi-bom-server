@@ -2,6 +2,7 @@ package com.example.server.domain.diary.application;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Pageable;
@@ -14,6 +15,7 @@ import com.example.server.domain.challenge.model.Challenge;
 import com.example.server.domain.challenge.persistence.ChallengeRepository;
 import com.example.server.domain.diary.api.dto.DiaryBriefResponse;
 import com.example.server.domain.diary.api.dto.DiaryIdResponse;
+import com.example.server.domain.diary.api.dto.DiaryResponse;
 import com.example.server.domain.diary.api.dto.DiarySaveRequest;
 import com.example.server.domain.diary.model.Diary;
 import com.example.server.domain.diary.model.DiaryStamp;
@@ -52,8 +54,9 @@ public class DiaryService {
 	private final S3Uploader s3Uploader;
 
 	public DiaryIdResponse issueId() {
+		Optional<Long> lastId = diaryRepository.getLastId();
 		return DiaryIdResponse.builder()
-			.diaryId(diaryRepository.getLastId() + 1L)
+			.diaryId(lastId.isEmpty() ? 1L : lastId.get() + 1L)
 			.build();
 	}
 
@@ -70,27 +73,75 @@ public class DiaryService {
 		List<Stamp> stamps = getStamps(diarySaveRequest.getStamps());
 
 		List<DiaryStamp> diaryStamps = generateDiaryStamps(stamps);
-		Diary diary = generateDiary(diaryId, diarySaveRequest, member, pet, diaryStamps);
+		Diary diary = diaryRepository.findByIdAndAuthor(diaryId, member)
+			.orElseThrow(() -> new BusinessException(DiaryErrorCode.DIARY_NOT_FOUND));
 
-		diaryRepository.save(diary);
+		Challenge challenge = null;
+		if (diarySaveRequest.getChallengeId() != null) {
+			challenge = challengeRepository.findById(diarySaveRequest.getChallengeId())
+				.orElseThrow(() -> new BusinessException(ChallengeErrorCode.CHALLENGE_INVALID));
+		}
+		diary.createDiary(
+			pet,
+			challenge,
+			member,
+			diarySaveRequest.getContent(),
+			diaryStamps,
+			diarySaveRequest.getIsPublic()
+		);
 
 		return diary;
 	}
 
+	// @Transactional
+	// public Diary createDiary(
+	// 	Long diaryId,
+	// 	String username,
+	// 	DiarySaveRequest diarySaveRequest
+	// ) {
+	// 	Member member = memberRepository.findByProviderId(username)
+	// 		.orElseThrow(() -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND));
+	// 	Pet pet = petRepository.findPetByIdAndOwner(diarySaveRequest.getPetId(), member)
+	// 		.orElseThrow(() -> new BusinessException(PetErrorCode.PET_NOT_FOUND));
+	// 	List<Stamp> stamps = getStamps(diarySaveRequest.getStamps());
+	//
+	// 	List<DiaryStamp> diaryStamps = generateDiaryStamps(stamps);
+	// 	Diary diary = generateDiary(diaryId, diarySaveRequest, member, pet, diaryStamps);
+	//
+	// 	diaryRepository.save(diary);
+	//
+	// 	return diary;
+	// }
+
 	@Transactional
-	public Diary uploadImage(
+	public DiaryResponse uploadImage(
 		Long diaryId,
 		String username,
 		List<MultipartFile> multipartFiles
 	) throws IOException {
 		Member member = memberRepository.findByProviderId(username)
 			.orElseThrow(() -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND));
-		Diary diary = diaryRepository.findByIdAndAuthor(diaryId, member)
-			.orElseThrow(() -> new BusinessException(DiaryErrorCode.DIARY_NOT_FOUND));
+		Optional<Diary> oDiary = diaryRepository.findByIdAndAuthor(diaryId, member);
+		Diary diary;
+		if (oDiary.isPresent()) {
+			diary = oDiary.get();
+		} else {
+			diary = Diary.builder()
+				.id(diaryId)
+				.author(member)
+				.build();
+			diaryRepository.save(diary);
+		}
 
 		uploadImages(multipartFiles, diary);
 
-		return diary;
+		return DiaryResponse.builder()
+			.author(member.getNickname())
+			.images(diary.getImages().stream()
+				.map(img -> img.getImgUrl())
+				.collect(Collectors.toList())
+			)
+			.build();
 	}
 
 	@Transactional
@@ -187,28 +238,28 @@ public class DiaryService {
 			.collect(Collectors.toList());
 	}
 
-	private Diary generateDiary(
-		Long diaryId,
-		DiarySaveRequest diarySaveRequest,
-		Member member,
-		Pet pet,
-		List<DiaryStamp> diaryStamps
-	) {
-		Challenge challenge = null;
-		if (diarySaveRequest.getChallengeId() != null) {
-			challenge = challengeRepository.findById(diarySaveRequest.getChallengeId())
-				.orElseThrow(() -> new BusinessException(ChallengeErrorCode.CHALLENGE_INVALID));
-		}
-		return Diary.builder()
-			.id(diaryId)
-			.pet(pet)
-			.challenge(challenge)
-			.author(member)
-			.content(diarySaveRequest.getContent())
-			.diaryStamps(diaryStamps)
-			.isPublic(diarySaveRequest.getIsPublic())
-			.build();
-	}
+	// private Diary generateDiary(
+	// 	Long diaryId,
+	// 	DiarySaveRequest diarySaveRequest,
+	// 	Member member,
+	// 	Pet pet,
+	// 	List<DiaryStamp> diaryStamps
+	// ) {
+	// 	Challenge challenge = null;
+	// 	if (diarySaveRequest.getChallengeId() != null) {
+	// 		challenge = challengeRepository.findById(diarySaveRequest.getChallengeId())
+	// 			.orElseThrow(() -> new BusinessException(ChallengeErrorCode.CHALLENGE_INVALID));
+	// 	}
+	// 	return Diary.builder()
+	// 		.id(diaryId)
+	// 		.pet(pet)
+	// 		.challenge(challenge)
+	// 		.author(member)
+	// 		.content(diarySaveRequest.getContent())
+	// 		.diaryStamps(diaryStamps)
+	// 		.isPublic(diarySaveRequest.getIsPublic())
+	// 		.build();
+	// }
 
 	private void uploadImages(List<MultipartFile> multipartFiles, Diary diary) throws IOException {
 		if (multipartFiles.size() > IMAGE_LIST_SIZE) {
