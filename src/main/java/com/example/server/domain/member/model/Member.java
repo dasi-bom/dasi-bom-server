@@ -20,8 +20,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.example.server.domain.folder.model.Folder;
 import com.example.server.domain.image.model.Image;
-import com.example.server.domain.pet.model.Pet;
 import com.example.server.global.auditing.BaseEntity;
 import com.example.server.global.oauth.provider.constants.OAuth2Provider;
 
@@ -68,7 +68,7 @@ public class Member extends BaseEntity {
 	private String nickname;
 
 	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
-	private List<Pet> pets = new ArrayList<>();
+	private List<Folder> folders = new ArrayList<>();
 
 	//== static factory method ==//
 

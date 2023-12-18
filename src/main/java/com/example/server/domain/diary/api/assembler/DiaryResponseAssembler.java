@@ -35,7 +35,7 @@ public class DiaryResponseAssembler {
 	public DiaryResponse toResponse(Diary diary) {
 		return DiaryResponse.builder()
 			.id(diary.getId())
-			.pet(diary.getPet().getPetInfo().getName())
+			.folder(diary.getFolder().getName())
 			.isChallenge(diary.getIsChallenge())
 			.challenge(getChallengeName(diary.getChallenge()))
 			.images(getImages(diary.getImages()))

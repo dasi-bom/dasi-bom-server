@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class DiaryResponse {
 
 	private Long id;
-	private String pet;
+	private String folder;
 	private Boolean isChallenge; // false 이면 일상 일기 (챌린지 X)
 	private String challenge; // 일상 일기라면 null
 	private List<String> images;

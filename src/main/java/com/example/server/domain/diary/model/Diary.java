@@ -21,9 +21,9 @@ import javax.persistence.Table;
 
 import com.example.server.domain.challenge.model.Challenge;
 import com.example.server.domain.diary.api.dto.DiarySaveRequest;
+import com.example.server.domain.folder.model.Folder;
 import com.example.server.domain.image.model.Image;
 import com.example.server.domain.member.model.Member;
-import com.example.server.domain.pet.model.Pet;
 import com.example.server.global.auditing.BaseEntity;
 
 import lombok.AllArgsConstructor;
@@ -36,7 +36,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "diary_tb")
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
-// @Builder
+@Builder
 public class Diary extends BaseEntity {
 
 	@Id
@@ -45,8 +45,8 @@ public class Diary extends BaseEntity {
 
 	@ManyToOne(fetch = LAZY)
 	// @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "pet_id")
-	private Pet pet;
+	@JoinColumn(name = "folder_id")
+	private Folder folder;
 
 	private Boolean isChallenge; // false 이면 일상 일기 (챌린지 X)
 
@@ -72,28 +72,28 @@ public class Diary extends BaseEntity {
 
 	private Boolean isPublic;
 
-	@Builder
-	private Diary(
-		final Long id,
-		final Pet pet,
-		final Challenge challenge,
-		final List<Image> images,
-		final Member author,
-		final String content,
-		final List<DiaryStamp> diaryStamps,
-		final Boolean isPublic
-	) {
-		this.id = id;
-		this.pet = pet;
-		this.isChallenge = validateIsChallenge(challenge);
-		this.challenge = challenge;
-		this.images = validateAndInitializeImages(images);
-		this.author = author;
-		this.content = content;
-		this.isDeleted = false;
-		this.diaryStamps = validateAndInitializeDiaryStamps(diaryStamps);
-		this.isPublic = isPublic;
-	}
+	// @Builder
+	// private Diary(
+	// 	final Long id,
+	// 	final Pet pet,
+	// 	final Challenge challenge,
+	// 	final List<Image> images,
+	// 	final Member author,
+	// 	final String content,
+	// 	final List<DiaryStamp> diaryStamps,
+	// 	final Boolean isPublic
+	// ) {
+	// 	this.id = id;
+	// 	this.pet = pet;
+	// 	this.isChallenge = validateIsChallenge(challenge);
+	// 	this.challenge = challenge;
+	// 	this.images = validateAndInitializeImages(images);
+	// 	this.author = author;
+	// 	this.content = content;
+	// 	this.isDeleted = false;
+	// 	this.diaryStamps = validateAndInitializeDiaryStamps(diaryStamps);
+	// 	this.isPublic = isPublic;
+	// }
 
 	private static List<Image> validateAndInitializeImages(List<Image> images) {
 		return (images != null) ? images : new ArrayList<>();
@@ -108,14 +108,14 @@ public class Diary extends BaseEntity {
 	}
 
 	public Diary createDiary(
-		Pet pet,
+		Folder folder,
 		Challenge challenge,
 		Member member,
 		String content,
 		List<DiaryStamp> diaryStamps,
 		Boolean isPublic
 	) {
-		this.pet = pet;
+		this.folder = folder;
 		this.challenge = challenge;
 		this.author = member;
 		this.content = content;
@@ -134,8 +134,8 @@ public class Diary extends BaseEntity {
 		diaryStamp.updateDiary(this);
 	}
 
-	public void updatePet(Pet pet) {
-		this.pet = pet;
+	public void updateFolder(Folder folder) {
+		this.folder = folder;
 	}
 
 	public void updateDiary(DiarySaveRequest diarySaveRequest, List<DiaryStamp> diaryStamps) {
