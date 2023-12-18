@@ -4,14 +4,20 @@ import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.example.server.domain.diary.model.Diary;
 import com.example.server.domain.member.model.Member;
 
 import lombok.AllArgsConstructor;
@@ -32,8 +38,13 @@ public class Folder {
 	private Long id;
 	private String name;
 	private Integer cnt;
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<Diary> diaryList = new ArrayList<>();
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "owner_id")
 	private Member owner;
 
+	public void addDiaryList(Diary diary) {
+		diaryList.add(diary);
+	}
 }
