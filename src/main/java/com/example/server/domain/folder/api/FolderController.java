@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.server.domain.diary.api.dto.DiaryResponse;
 import com.example.server.domain.folder.api.dto.FolderCreateRequest;
 import com.example.server.domain.folder.api.dto.FolderResponse;
+import com.example.server.domain.folder.api.dto.FolderUpdateRequest;
 import com.example.server.domain.folder.application.FolderService;
 import com.example.server.global.dto.ApiResponse;
 
@@ -36,6 +38,17 @@ public class FolderController {
 	) {
 		FolderResponse response = folderService.createFolder(userDetails.getUsername(), folderCreateRequest);
 		return ApiResponse.created(response);
+	}
+
+	// 폴더 수정
+	@PutMapping("/{folder-id}")
+	public ResponseEntity<FolderResponse> updateFolder(
+		@PathVariable("folder-id") Long folderId,
+		@AuthenticationPrincipal UserDetails userDetails,
+		@RequestBody @Valid FolderUpdateRequest folderUpdateRequest
+	) {
+		FolderResponse response = folderService.updateFolder(folderId, userDetails.getUsername(), folderUpdateRequest);
+		return ApiResponse.success(response);
 	}
 
 	// 폴더에 있는 일기 조회

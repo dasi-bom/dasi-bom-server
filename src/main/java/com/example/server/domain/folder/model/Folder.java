@@ -47,4 +47,8 @@ public class Folder {
 	public void addDiaryList(Diary diary) {
 		diaryList.add(diary);
 	}
+
+	public void updateFolderName(String name) {
+		this.name = name;
+	}
 }

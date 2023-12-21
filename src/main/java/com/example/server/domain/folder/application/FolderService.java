@@ -10,6 +10,7 @@ import com.example.server.domain.diary.api.dto.DiaryResponse;
 import com.example.server.domain.diary.model.Diary;
 import com.example.server.domain.folder.api.dto.FolderCreateRequest;
 import com.example.server.domain.folder.api.dto.FolderResponse;
+import com.example.server.domain.folder.api.dto.FolderUpdateRequest;
 import com.example.server.domain.folder.model.Folder;
 import com.example.server.domain.folder.persistence.FolderRepository;
 import com.example.server.domain.member.model.Member;
@@ -42,6 +43,25 @@ public class FolderService {
 		return FolderResponse.builder()
 			.id(savedFolder.getId())
 			.name(savedFolder.getName())
+			.build();
+	}
+
+	public FolderResponse updateFolder(
+		Long folderId,
+		String username,
+		FolderUpdateRequest folderUpdateRequest
+	) {
+		Member owner = memberRepository.findByProviderId(username)
+			.orElseThrow(() -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND));
+		Folder folder = folderRepository.findById(folderId)
+			.orElseThrow(() -> new BusinessException(FolderErrorCode.FOLDER_NOT_FOUND));
+		if (!folder.getOwner().equals(owner)) {
+			throw new BusinessException(FolderErrorCode.FOLDER_CANNOT_ACCESS);
+		}
+		folder.updateFolderName(folderUpdateRequest.getName());
+		return FolderResponse.builder()
+			.id(folder.getId())
+			.name(folder.getName())
 			.build();
 	}
 
