@@ -28,18 +28,18 @@ import lombok.NoArgsConstructor;
 @Table(name = "challenge_tb")
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
+@Builder
 public class Challenge {
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	private Long id;
-
 	@Column(unique = true)
 	private String name;
-
 	private String description;
-
+	private String rewards;
+	private String howToParticipate;
+	private String precautions;
 	private LocalDate startDate;
-
 	private LocalDate endDate;
 
 	@Enumerated(EnumType.STRING)
@@ -50,20 +50,4 @@ public class Challenge {
 	private Member admin; // 등록한 사람
 	// private Admin admin;
 
-	@Builder
-	private Challenge(
-		final String name,
-		final String description,
-		final LocalDate startDate,
-		final LocalDate endDate,
-		final ChallengeType challengeType,
-		final Member admin
-	) {
-		this.name = name;
-		this.description = description;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.challengeType = challengeType;
-		this.admin = admin;
-	}
 }

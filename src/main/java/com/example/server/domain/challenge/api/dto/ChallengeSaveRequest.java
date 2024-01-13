@@ -14,9 +14,10 @@ public class ChallengeSaveRequest {
 	@NotNull(message = "챌린지 이름은 필수 값입니다.")
 	private String name;
 	private String description;
-	@NotNull(message = "시작일은 필수 값입니다.")
+	private String rewards;
+	private String howToParticipate;
+	private String precautions;
 	private LocalDate startDate;
-	@NotNull(message = "종료일은 필수 값입니다.")
 	private LocalDate endDate;
 	@NotNull(message = "챌린지 타입은 필수 값입니다.")
 	private String challengeType;
