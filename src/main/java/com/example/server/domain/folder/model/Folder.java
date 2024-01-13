@@ -40,6 +40,7 @@ public class Folder {
 	private Integer cnt;
 	private LocalDateTime deletedDate;
 	private Boolean isDeleted;
+	@Builder.Default
 	@OneToMany
 	private List<Diary> diaryList = new ArrayList<>();
 	@ManyToOne(fetch = LAZY)

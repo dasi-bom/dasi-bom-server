@@ -42,34 +42,26 @@ public class Diary extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	private Long id;
-
 	@ManyToOne(fetch = LAZY)
 	// @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "folder_id")
 	private Folder folder;
-
 	private Boolean isChallenge; // false 이면 일상 일기 (챌린지 X)
-
 	@OneToOne(fetch = LAZY)
 	@JoinColumn(name = "challenge_id")
 	private Challenge challenge; // 일상 일기라면 null
-
+	@Builder.Default
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Image> images = new ArrayList<>();
-
 	@ManyToOne(fetch = LAZY)
 	private Member author;
-
 	@Column(length = 1200)
 	private String content;
-
 	private LocalDateTime deletedDate;
-
 	private Boolean isDeleted;
-
+	@Builder.Default
 	@OneToMany(mappedBy = "diary", cascade = CascadeType.ALL)
 	private List<DiaryStamp> diaryStamps = new ArrayList<>();
-
 	private Boolean isPublic;
 
 	// @Builder

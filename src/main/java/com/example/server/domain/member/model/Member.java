@@ -42,31 +42,21 @@ public class Member extends BaseEntity {
 	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "member_id")
 	private Long id;
-
 	private String name; // Username
-
 	private String username; // Spring Security ID
-
 	private String password;
-
 	private String email;
-
 	private String mobile;
-
 	@Enumerated(EnumType.STRING)
 	private RoleType role;
-
 	@Enumerated(EnumType.STRING)
 	private OAuth2Provider provider;
-
 	private String providerId;
-
 	@OneToOne(fetch = LAZY, cascade = REMOVE)
 	@JoinColumn(name = "image_id")
 	private Image profileImage;
-
 	private String nickname;
-
+	@Builder.Default
 	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
 	private List<Folder> folders = new ArrayList<>();
 
