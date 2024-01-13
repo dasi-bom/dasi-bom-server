@@ -27,7 +27,6 @@ public class ChallengeController {
 
 	// 챌린지 등록
 	// @PreAuthorize("hasRole('ROLE_ADMIN')") // todo: ADMIN 만 가능
-
 	@PostMapping()
 	public ResponseEntity<ChallengeResponse> createStamp(
 		@AuthenticationPrincipal UserDetails userDetails,

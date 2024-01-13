@@ -14,8 +14,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class DiarySaveRequest {
 
-	@NotNull(message = "대상 동물은 필수 입력 값입니다.")
-	private Long petId;
+	@NotNull(message = "폴더는 필수 입력 값입니다.")
+	private Long folderId;
 
 	private Long challengeId;
 

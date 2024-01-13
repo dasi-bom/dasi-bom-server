@@ -21,18 +21,18 @@ import com.example.server.domain.diary.model.Diary;
 import com.example.server.domain.diary.model.DiaryStamp;
 import com.example.server.domain.diary.model.condition.ReadCondition;
 import com.example.server.domain.diary.persistence.DiaryRepository;
+import com.example.server.domain.folder.model.Folder;
+import com.example.server.domain.folder.persistence.FolderRepository;
 import com.example.server.domain.image.model.Image;
 import com.example.server.domain.member.model.Member;
 import com.example.server.domain.member.persistence.MemberRepository;
-import com.example.server.domain.pet.model.Pet;
-import com.example.server.domain.pet.persistence.PetRepository;
 import com.example.server.domain.stamp.model.Stamp;
 import com.example.server.domain.stamp.persistence.StampRepository;
 import com.example.server.global.exception.BusinessException;
 import com.example.server.global.exception.errorcode.ChallengeErrorCode;
 import com.example.server.global.exception.errorcode.DiaryErrorCode;
+import com.example.server.global.exception.errorcode.FolderErrorCode;
 import com.example.server.global.exception.errorcode.MemberErrorCode;
-import com.example.server.global.exception.errorcode.PetErrorCode;
 import com.example.server.global.exception.errorcode.StampErrorCode;
 import com.example.server.global.util.S3Uploader;
 
@@ -47,7 +47,7 @@ public class DiaryService {
 	static final int MAXIMUM_STAMP_LIST_SIZE = 5;
 	static final String DIARY_DIR_NAME = "Diary";
 	private final MemberRepository memberRepository;
-	private final PetRepository petRepository;
+	private final FolderRepository folderRepository;
 	private final DiaryRepository diaryRepository;
 	private final StampRepository stampRepository;
 	private final ChallengeRepository challengeRepository;
@@ -68,8 +68,10 @@ public class DiaryService {
 	) {
 		Member member = memberRepository.findByProviderId(username)
 			.orElseThrow(() -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND));
-		Pet pet = petRepository.findPetByIdAndOwner(diarySaveRequest.getPetId(), member)
-			.orElseThrow(() -> new BusinessException(PetErrorCode.PET_NOT_FOUND));
+
+		Folder folder = folderRepository.findById(diarySaveRequest.getFolderId())
+			.orElseThrow(() -> new BusinessException(FolderErrorCode.FOLDER_NOT_FOUND));
+
 		List<Stamp> stamps = getStamps(diarySaveRequest.getStamps());
 
 		List<DiaryStamp> diaryStamps = generateDiaryStamps(stamps);
@@ -82,7 +84,7 @@ public class DiaryService {
 				.orElseThrow(() -> new BusinessException(ChallengeErrorCode.CHALLENGE_INVALID));
 		}
 		diary.createDiary(
-			pet,
+			folder,
 			challenge,
 			member,
 			diarySaveRequest.getContent(),
@@ -122,22 +124,24 @@ public class DiaryService {
 		Member member = memberRepository.findByProviderId(username)
 			.orElseThrow(() -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND));
 		Optional<Diary> oDiary = diaryRepository.findByIdAndAuthor(diaryId, member);
-		Diary diary;
+    
+		Diary savedDiary;
 		if (oDiary.isPresent()) {
-			diary = oDiary.get();
+			savedDiary = oDiary.get();
 		} else {
-			diary = Diary.builder()
+			Diary diary = Diary.builder()
 				.id(diaryId)
 				.author(member)
 				.build();
-			diaryRepository.save(diary);
+			savedDiary = diaryRepository.save(diary);
 		}
 
-		uploadImages(multipartFiles, diary);
+		uploadImages(multipartFiles, savedDiary);
 
 		return DiaryResponse.builder()
-			.author(member.getNickname())
-			.images(diary.getImages().stream()
+			.id(savedDiary.getId())
+			.author(savedDiary.getAuthor().getNickname())
+			.images(savedDiary.getImages().stream()
 				.map(img -> img.getImgUrl())
 				.collect(Collectors.toList())
 			)
@@ -158,9 +162,9 @@ public class DiaryService {
 			throw new BusinessException(DiaryErrorCode.DIARY_NOT_FOUND);
 		}
 
-		Pet pet = petRepository.findPetByIdAndOwner(diarySaveRequest.getPetId(), member)
-			.orElseThrow(() -> new BusinessException(PetErrorCode.PET_NOT_FOUND));
-		diary.updatePet(pet);
+		Folder folder = folderRepository.findById(diarySaveRequest.getFolderId())
+			.orElseThrow(() -> new BusinessException(FolderErrorCode.FOLDER_NOT_FOUND));
+		diary.updateFolder(folder);
 
 		Challenge challenge = null;
 		if (diarySaveRequest.getChallengeId() != null) {

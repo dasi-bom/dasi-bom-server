@@ -2,13 +2,9 @@ package com.example.server.domain.member.api.dto;
 
 import static lombok.AccessLevel.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
-import com.example.server.domain.pet.api.dto.PetProfileResponse;
 import com.example.server.global.oauth.provider.constants.OAuth2Provider;
 
 import lombok.AllArgsConstructor;
@@ -42,6 +38,6 @@ public class MemberProfileResponse {
 
 	private String nickname;
 
-	private List<PetProfileResponse> petProfileResponses = new ArrayList<>();
+	// private List<PetProfileResponse> petProfileResponses = new ArrayList<>();
 
 }
