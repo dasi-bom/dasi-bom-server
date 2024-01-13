@@ -117,11 +117,13 @@ public class Diary extends BaseEntity {
 	) {
 		this.folder = folder;
 		folder.addDiaryList(this);
+		folder.addCnt();
 		this.challenge = challenge;
 		this.author = member;
 		this.content = content;
 		this.diaryStamps = diaryStamps;
 		this.isPublic = isPublic;
+		this.isDeleted = Boolean.FALSE;
 
 		return this;
 	}

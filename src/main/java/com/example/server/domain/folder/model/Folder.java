@@ -4,10 +4,10 @@ import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,7 +38,9 @@ public class Folder {
 	private Long id;
 	private String name;
 	private Integer cnt;
-	@OneToMany(cascade = CascadeType.ALL)
+	private LocalDateTime deletedDate;
+	private Boolean isDeleted;
+	@OneToMany
 	private List<Diary> diaryList = new ArrayList<>();
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "owner_id")
@@ -50,5 +52,17 @@ public class Folder {
 
 	public void updateFolderName(String name) {
 		this.name = name;
+	}
+
+	public void addCnt() {
+		if (cnt == null) {
+			cnt = 0;
+		}
+		this.cnt += 1;
+	}
+
+	public void deleteFolder() {
+		this.isDeleted = true;
+		this.deletedDate = LocalDateTime.now();
 	}
 }

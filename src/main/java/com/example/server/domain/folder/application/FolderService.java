@@ -3,6 +3,8 @@ package com.example.server.domain.folder.application;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
 
 import com.example.server.domain.diary.api.assembler.DiaryResponseAssembler;
@@ -63,6 +65,24 @@ public class FolderService {
 			.id(folder.getId())
 			.name(folder.getName())
 			.build();
+	}
+
+	@Transactional // 만약 해당 메소드가 트랜잭션 안에서 실행되지 않는다면, 변경 내용은 데이터베이스에 반영되지 않습니다.
+	public void deleteFolder(
+		Long folderId,
+		String username
+	) {
+		Member owner = memberRepository.findByProviderId(username)
+			.orElseThrow(() -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND));
+		Folder folder = folderRepository.findById(folderId)
+			.orElseThrow(() -> new BusinessException(FolderErrorCode.FOLDER_NOT_FOUND));
+		if (!folder.getOwner().equals(owner)) {
+			throw new BusinessException(FolderErrorCode.FOLDER_CANNOT_ACCESS);
+		}
+		folder.deleteFolder();
+		for (Diary diary : folder.getDiaryList()) {
+			diary.deleteDiary();
+		}
 	}
 
 	public List<DiaryResponse> fetchFolder(
