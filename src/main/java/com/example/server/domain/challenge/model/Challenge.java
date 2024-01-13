@@ -32,14 +32,13 @@ public class Challenge {
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	private Long id;
-
 	@Column(unique = true)
 	private String name;
-
 	private String description;
-
+	private String rewards;
+	private String howToParticipate;
+	private String precautions;
 	private LocalDate startDate;
-
 	private LocalDate endDate;
 
 	@Enumerated(EnumType.STRING)
