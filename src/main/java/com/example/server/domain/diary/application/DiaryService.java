@@ -124,6 +124,7 @@ public class DiaryService {
 		Member member = memberRepository.findByProviderId(username)
 			.orElseThrow(() -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND));
 		Optional<Diary> oDiary = diaryRepository.findByIdAndAuthor(diaryId, member);
+    
 		Diary savedDiary;
 		if (oDiary.isPresent()) {
 			savedDiary = oDiary.get();
